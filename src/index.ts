@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const tstlWorker = new (TSTLWorker as any)();
 
-    let timerVar: number;
+    let timerVar: NodeJS.Timeout;
 
     tsEditor.onDidChangeModelContent((e => {
       clearInterval(timerVar);
