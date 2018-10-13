@@ -10,7 +10,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (container && exampleLua) {
     let tsEditor = editor.create(container, {
-      value: 'class Test {};',
+      value:
+`class Greeter {
+  greeting: string;
+  constructor(message: string) {
+      this.greeting = message;
+  }
+  greet() {
+      return "Hello, " + this.greeting;
+  }
+}
+
+let greeter = new Greeter("world");
+
+let button = document.createElement('button');
+button.textContent = "Say Hello";
+button.onclick = function() {
+  alert(greeter.greet());
+}
+
+document.body.appendChild(button);
+`,
       language: 'typescript',
       minimap: {enabled: false},
       theme: 'vs-dark',
@@ -29,13 +49,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     const tstlWorker = new (TSTLWorker as any)();
+    tstlWorker.postMessage({tsStr: tsEditor.getValue()});
 
     let timerVar: NodeJS.Timeout;
 
     tsEditor.onDidChangeModelContent((e => {
       clearInterval(timerVar);
       // wait one second before submitting work
-      timerVar = setTimeout(() => tstlWorker.postMessage({tsStr: tsEditor.getValue()}), 1000);      
+      timerVar = setTimeout(() => tstlWorker.postMessage({tsStr: tsEditor.getValue()}), 500);      
     }))
 
     tstlWorker.onmessage = (event: MessageEvent) => {
