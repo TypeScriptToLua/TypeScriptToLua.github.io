@@ -41,6 +41,7 @@ document.body.appendChild(button);
       language: 'lua',
       minimap: {enabled: false},
       theme: 'vs-dark',
+      readOnly: true
     });
 
     window.onresize = () => {
