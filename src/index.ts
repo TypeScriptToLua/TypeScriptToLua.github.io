@@ -8,25 +8,33 @@ document.addEventListener('DOMContentLoaded', () => {
   const container = document.getElementById('example-ts');
   const exampleLua = document.getElementById('example-lua');
 
-  let example = `class Greeter {
-    greeting: string;
-    constructor(message: string) {
-        this.greeting = message;
-    }
-    greet() {
-        return "Hello, " + this.greeting;
-    }
+  let example = `// Declare exposed API
+  type Vector = [number, number, number];
+  
+  declare interface OnSpellStartEvent {
+      caster: Unit;
+      targetLocation: Vector;
   }
   
-  let greeter = new Greeter("world");
-  
-  let button = document.createElement('button');
-  button.textContent = "Say Hello";
-  button.onclick = function() {
-    alert(greeter.greet());
+  declare class Unit {
+      getLevel(): number;
+      isEnemy(other: Unit): boolean;
+      kill(): void;
   }
   
-  document.body.appendChild(button);
+  declare function print(...messages: any[]): void;
+  declare function FindUnitsInRadius(location: Vector, radius: number): Unit[];
+  
+  // Use declared API in code
+  function onSpellStart(event: OnSpellStartEvent): void {
+      const units = FindUnitsInRadius(event.targetLocation, 500);
+      const enemies = units.filter(unit => event.caster.isEnemy(unit));
+  
+      for (const unit of enemies) {
+          print(unit, unit.getLevel());
+          unit.kill();
+      }
+  }
   `;
   
   var queryStringSrcStart = window.location.hash.indexOf("#src=");
@@ -67,7 +75,7 @@ document.addEventListener('DOMContentLoaded', () => {
       // wait one second before submitting work
       timerVar = setTimeout(() => {
         tstlWorker.postMessage({tsStr: tsEditor.getValue()});
-        window.location.hash = "#src=" + encodeURIComponent(tsEditor.getValue());
+        window.location.replace("#src=" + encodeURIComponent(tsEditor.getValue()));
         ignoreHashChange = true;
       }, 500);      
     }))
