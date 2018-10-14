@@ -4,8 +4,6 @@ import {editor} from 'monaco-editor/esm/vs/editor/editor.api';
 
 import TSTLWorker = require('worker-loader!./tstlWorker');
 
-import * as URL from "url-parse";
-
 document.addEventListener('DOMContentLoaded', () => {
   const container = document.getElementById('example-ts');
   const exampleLua = document.getElementById('example-lua');
@@ -31,9 +29,10 @@ document.addEventListener('DOMContentLoaded', () => {
   document.body.appendChild(button);
   `;
   
-  let windowUrl = new URL(window.location.href, window.location, true);
-  if (windowUrl.query.src) {
-    example = decodeURIComponent(windowUrl.query.src);
+  var queryStringSrcStart = window.location.hash.indexOf("#src=");
+  if (queryStringSrcStart == 0) {
+    var encoded = window.location.hash.substring("#src=".length);
+    example = decodeURIComponent(encoded);
   }
 
   if (container && exampleLua) {
@@ -61,15 +60,24 @@ document.addEventListener('DOMContentLoaded', () => {
     tstlWorker.postMessage({tsStr: tsEditor.getValue()});
 
     let timerVar: any;
+    let ignoreHashChange = false;
 
     tsEditor.onDidChangeModelContent((e => {
       clearInterval(timerVar);
       // wait one second before submitting work
       timerVar = setTimeout(() => {
         tstlWorker.postMessage({tsStr: tsEditor.getValue()});
-        window.location.replace("?src=" + encodeURIComponent(tsEditor.getValue()));
+        window.location.hash = "#src=" + encodeURIComponent(tsEditor.getValue());
+        ignoreHashChange = true;
       }, 500);      
     }))
+
+    window.onhashchange = () => {
+      if (ignoreHashChange) {
+        ignoreHashChange = false;
+        return;
+      }
+    }
 
     tstlWorker.onmessage = (event: MessageEvent) => {
       luaEditor.setValue(event.data.luaStr);

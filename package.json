@@ -32,7 +32,6 @@
     "@types/url-parse": "^1.4.1",
     "fengari": "^0.1.2",
     "monaco-editor": "^0.14.3",
-    "typescript-to-lua": "file:../typescript-to-lua-0.9.0.tgz",
-    "url-parse": "^1.4.3"
+    "typescript-to-lua": "file:../typescript-to-lua-0.9.0.tgz"
   }
 }
