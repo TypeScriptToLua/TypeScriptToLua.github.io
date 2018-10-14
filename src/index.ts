@@ -67,7 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
       // wait one second before submitting work
       timerVar = setTimeout(() => {
         tstlWorker.postMessage({tsStr: tsEditor.getValue()});
-        history.pushState(null, "", "/?src=" + encodeURIComponent(tsEditor.getValue()));
+        window.location.replace("?src=" + encodeURIComponent(tsEditor.getValue()));
       }, 500);      
     }))
 
