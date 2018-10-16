@@ -13,3 +13,5 @@ interface FSDummy {
 interface Window {
     fs: FSDummy
 }
+
+declare module 'fengari-web';

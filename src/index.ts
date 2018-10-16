@@ -4,8 +4,11 @@ import {editor} from 'monaco-editor/esm/vs/editor/editor.api';
 
 import TSTLWorker = require('worker-loader!./tstlWorker');
 
+import FengariWorker = require('worker-loader!./fengariWorker');
+
 document.addEventListener('DOMContentLoaded', () => {
   const container = document.getElementById('example-ts');
+  const output = document.getElementById('example-output');
   const exampleLua = document.getElementById('example-lua');
 
   let example = `// Declare exposed API
@@ -87,8 +90,17 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
+    const fengariWorker = new (FengariWorker as any)();
+
     tstlWorker.onmessage = (event: MessageEvent) => {
       luaEditor.setValue(event.data.luaStr);
+      fengariWorker.postMessage({luaStr: event.data.luaStr});
+    }
+
+    fengariWorker.onmessage = (event: MessageEvent) => {
+      if (output) {
+        output.innerText = event.data.luaPrint;
+      }
     }
   }
 });
