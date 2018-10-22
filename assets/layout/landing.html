@@ -1,0 +1,73 @@
+<header>
+    <nav>
+        <a href="https://github.com/Perryvw/TypescriptToLua/wiki">
+            <div class="nav-item">
+                Docs
+            </div>
+        </a>
+        <a href="https://github.com/Perryvw/TypescriptToLua">
+            <div class="nav-item">
+                Code
+            </div>
+        </a>
+        <a href="play.html">
+            <div class="nav-item">
+                Playground
+            </div>
+        </a>
+    </nav>
+    <div id="title"><span class="title-bold">Type</span>ScriptTo<span class="title-bold">Lua</span></div>
+    <div id="headline">Write Lua in TypeScript</div>
+</header>
+<main>
+    <div id="example">
+        <div id="ts">
+            <div class="example-item" id="ts-declarations"><b>// TS Declarations</b>
+
+type Vector = [number, number, number];
+
+declare class Unit {
+    getLevel(): number;
+    isEnemy(other: Unit): boolean;
+    kill(): void;
+    FindUnitsInRadius(radius: number): Unit[];
+}</div>
+            <div class="example-item" id="ts-source"><b>// TS Source</b>
+
+function onSpellStart(caster: Unit, targetLocation: Vector): void {
+    const units = caster.FindUnitsInRadius(event.targetLocation, 500);
+    const enemies = units.filter(unit => event.caster.isEnemy(unit));
+
+    for (const enemy of enemies) {
+        enemy.kill();
+    }
+}</div>
+        </div>
+        <div class="example-item" id="lua"><b>-- Lua Output</b>
+
+function onSpellStart(caster, targetLocation)
+    local units = FindUnitsInRadius(targetLocation, 500);
+    local enemies = __TS__ArrayFilter(units, function(unit) return caster:isEnemy(unit) end);
+    for _, enemy in ipairs(enemies) do
+        do
+            enemy:kill();
+        end
+    end
+end</div>
+    </div>
+    <div id="features">
+        <div class="feature-item">
+            <div class="feature-header">Extend existing APIs</div>
+            This project is useful in any environment where Lua code is accepted,
+            with the powerful option of simply declaring any existing API using TypeScript declaration files.
+        </div>
+        <div class="feature-item">
+            <div class="feature-header">Type Safety</div>
+            Large projects written in lua can become hard to maintain and make it easy to make mistakes.
+        </div>
+        <div class="feature-item">
+            <div class="feature-header">IDE Support</div>
+            Types enable JavaScript developers to use highly-productive development tools and practices like static checking and code refactoring when developing JavaScript applications.
+        </div>
+    </div>
+</main>
