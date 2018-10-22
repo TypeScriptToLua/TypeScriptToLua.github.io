@@ -1,6 +1,5 @@
 {
     "compilerOptions": {
-      "outDir": "./dist/",
       "sourceMap": true,
       "noImplicitAny": true,
       "module": "commonjs",
@@ -8,5 +7,8 @@
       "lib": ["es5", "scripthost", "dom", "webworker"],
       "allowJs": true,
       "strict": true
-    }
+    },
+    "exclude": [
+      "webpack*.js"
+    ]
   }

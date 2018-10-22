@@ -1,44 +1,45 @@
-import './assets/styles/main.scss';
+import '../../assets/styles/play.scss';
 
 import {editor} from 'monaco-editor/esm/vs/editor/editor.api';
 
-import TSTLWorker = require('worker-loader!./tstlWorker');
+// @ts-ignore
+import TSTLWorker = require('worker-loader?name=tstl.worker.js!./tstlWorker');
 
-import FengariWorker = require('worker-loader!./fengariWorker');
+// @ts-ignore
+import FengariWorker = require('worker-loader?name=fengari.worker.js!./fengariWorker');
 
 document.addEventListener('DOMContentLoaded', () => {
-  const container = document.getElementById('example-ts');
-  const output = document.getElementById('example-output');
-  const exampleLua = document.getElementById('example-lua');
+  const container = document.getElementById('editor-ts');
+  const output = document.getElementById('editor-output-content');
+  const exampleLua = document.getElementById('editor-lua');
 
   let example = `// Declare exposed API
-  type Vector = [number, number, number];
-  
-  declare interface OnSpellStartEvent {
-      caster: Unit;
-      targetLocation: Vector;
-  }
-  
-  declare class Unit {
-      getLevel(): number;
-      isEnemy(other: Unit): boolean;
-      kill(): void;
-  }
-  
-  declare function print(...messages: any[]): void;
-  declare function FindUnitsInRadius(location: Vector, radius: number): Unit[];
-  
-  // Use declared API in code
-  function onSpellStart(event: OnSpellStartEvent): void {
-      const units = FindUnitsInRadius(event.targetLocation, 500);
-      const enemies = units.filter(unit => event.caster.isEnemy(unit));
-  
-      for (const unit of enemies) {
-          print(unit, unit.getLevel());
-          unit.kill();
-      }
-  }
-  `;
+type Vector = [number, number, number];
+
+declare interface OnSpellStartEvent {
+    caster: Unit;
+    targetLocation: Vector;
+}
+
+declare class Unit {
+    getLevel(): number;
+    isEnemy(other: Unit): boolean;
+    kill(): void;
+}
+
+declare function print(...messages: any[]): void;
+declare function FindUnitsInRadius(location: Vector, radius: number): Unit[];
+
+// Use declared API in code
+function onSpellStart(event: OnSpellStartEvent): void {
+    const units = FindUnitsInRadius(event.targetLocation, 500);
+    const enemies = units.filter(unit => event.caster.isEnemy(unit));
+
+    for (const unit of enemies) {
+        print(unit, unit.getLevel());
+        unit.kill();
+    }
+}`;
   
   var queryStringSrcStart = window.location.hash.indexOf("#src=");
   if (queryStringSrcStart == 0) {
