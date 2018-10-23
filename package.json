@@ -8,7 +8,8 @@
     "dev-playground": "webpack-dev-server --content-base dist/ --config src/playground/webpack.config.js --mode development",
     "build-landing": "webpack --config ./src/landing/webpack.config.js --mode production",
     "dev-landing": "webpack-dev-server --content-base dist/ --config src/landing/webpack.config.js --mode development",
-    "build": "npm run build-playground && npm run build-landing"
+    "build": "npx rimraf dist && npm run build-playground && npm run build-landing",
+    "deploy": "npm run build && npx gh-pages -d dist -b master"
   },
   "keywords": [],
   "author": "",
@@ -24,6 +25,7 @@
     "monaco-editor-webpack-plugin": "^1.5.4",
     "node-sass": "^4.9.3",
     "raw-loader": "^0.5.1",
+    "rimraf": "^2.6.2",
     "sass-loader": "^7.1.0",
     "style-loader": "^0.23.1",
     "ts-loader": "^5.2.1",
