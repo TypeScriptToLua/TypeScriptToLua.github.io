@@ -1,4 +1,4 @@
-$header-height: 40px;
+$header-height: 50px;
 $output-height: 120px;
 
 @import 'base';
@@ -11,14 +11,13 @@ $output-height: 120px;
     //background: linear-gradient(135deg, $ts-blue, $lua-purple);
     //-webkit-clip-path: polygon(100% 0, 100% 70%, 80% 90%, 50% 100%, 20% 90%, 0% 70%, 0 0);
     //clip-path: polygon(100% 0, 100% 70%, 80% 90%, 50% 100%, 20% 90%, 0% 70%, 0 0);
-    background-color: $grey-accent;
-    box-shadow: 0px 3px 5px 0px rgba(0,0,0,0.75);
+    //box-shadow: 0px 3px 5px 0px rgba(0,0,0,0.75);
     z-index: 10;
 }
 
 #logo {
     position: absolute;
-    top: 7px;
+    top: 10px;
     left: 10px;
     font-weight: 300;
     font-size: 20px;
