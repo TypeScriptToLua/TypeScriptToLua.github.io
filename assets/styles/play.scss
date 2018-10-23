@@ -15,6 +15,11 @@ $output-height: 120px;
     z-index: 10;
 }
 
+// hide monaco shadow
+.monaco-editor .scroll-decoration {
+    box-shadow: #00000066 0 1px 2px -1px inset !important;
+}
+
 #logo {
     position: absolute;
     top: 10px;
