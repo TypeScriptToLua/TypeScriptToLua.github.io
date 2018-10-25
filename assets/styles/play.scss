@@ -51,12 +51,14 @@ $output-height: 120px;
         border-bottom: 1px $grey-accent solid;
     }
 
-    #editor-ts {
+    #editor-ts, #editor-lua {
         flex: 50%;
     }
 
-    #editor-lua {
-        flex: 50%;
+    @media screen and (max-width: 600px) {
+        #editor-ts, #editor-lua {
+            flex: 100%;
+        }
     }
     
     #editor-output {

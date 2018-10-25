@@ -7,44 +7,42 @@ main, header {
     margin-right: auto;
 }
 
-header {
-    #title {
-        margin-top: 30px;
-        font-size: 72px;
-        width: 100%;
-        text-align: center;
-        font-weight: 300;
+#title {
+    margin-top: 30px;
+    font-size: 72px;
+    width: 100%;
+    text-align: center;
+    font-weight: 300;
+}
+
+.title-bold {
+    font-weight: 400;
+}
+
+#headline {
+    font-size: 24px;
+    text-align: center;
+}
+
+nav {
+    margin-top: 20px;
+    text-align: center;
+    color: #5690fc;
+    width: auto;
+    font-size: 28px;
+    font-weight: 400;
+
+    a:hover {
+        color: $grey-accent;
     }
 
-    .title-bold {
-        font-weight: 400;
+    .nav-item {
+        display: inline-block;
+        margin-right: 20px;
     }
 
-    #headline {
-        font-size: 24px;
-        text-align: center;
-    }
-
-    nav {
-        margin-top: 20px;
-        text-align: center;
-        color: #5690fc;
-        width: auto;
-        font-size: 28px;
-        font-weight: 400;
-
-        a:hover {
-            color: $grey-accent;
-        }
-
-        .nav-item {
-            display: inline-block;
-            margin-right: 20px;
-        }
-
-        a:last-child .nav-item {
-            margin-right: 0px;
-        }
+    a:last-child .nav-item {
+        margin-right: 0px;
     }
 }
 
@@ -52,6 +50,7 @@ header {
     margin-top: 30px;
     margin-bottom: 20px;
     display: flex;
+    flex-wrap: wrap;    
 }
 
 .feature-item {
@@ -81,18 +80,53 @@ header {
 #example {
     margin-top: 70px;
     width: 100%;
+}
 
-    #ts-declarations, #ts-source {
-        display: inline-block;
-        overflow: hidden;
+#ts-declarations, #ts-source {
+    display: inline-block;
+    overflow: hidden;
+}
+
+#ts-declarations {
+    flex: 40%;
+}
+
+#ts-source {
+    flex: 60%;
+    border-left: solid 2px #5690fc;
+}
+
+@media screen and (max-width: 900px) {
+    main, header {
+        width: 100%;
     }
 
-    #ts-declarations {
-        flex: 40%;
+    nav {
+        font-size: 24px;
     }
 
-    #ts-source {
-        flex: 60%;
-        border-left: solid 2px #5690fc;
+    #title {
+        font-size: 42px;
+        margin-top: 15px;
+    }
+
+    .example-item {
+        font-size: 9px;
+    }
+
+    #example {
+        margin-top: 25px;
+    }
+
+    #features {
+        margin-top: 10px;
+    }
+
+    .feature-header {
+        font-size: 16px;
+    }
+
+    .feature-item {
+        flex: 100%;
     }
 }
