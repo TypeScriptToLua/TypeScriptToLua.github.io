@@ -117,7 +117,7 @@ function onSpellStart(event: OnSpellStartEvent): void {
 
     tstlWorker.onmessage = (event: MessageEvent) => {
       luaEditor.setValue(event.data.luaStr);
-      console.log(event.data.luaAST);
+      astLua.innerText = "";
       astLua.appendChild(
         renderjson
           .set_show_to_level(1)
