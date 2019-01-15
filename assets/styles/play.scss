@@ -32,6 +32,28 @@ $output-height: 120px;
     font-weight: 400;
 }
 
+#lua-tabs {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    height: $header-height;
+    font-weight: 300;
+    font-size: 20px;
+}
+
+.lua-tab {
+    display: inline-block;
+    width: 40px;
+    height: $header-height;
+    color: $grey-accent;
+    margin-left: 10px;
+}
+
+.lua-tab-active {
+    font-weight: 400;
+    color: $body-font-color;
+}
+
 #content {
     height: calc(100% - #{$header-height});
 }
@@ -49,10 +71,21 @@ $output-height: 120px;
         display: inline-block;
         overflow: hidden;
         border-bottom: 1px $grey-accent solid;
+        flex: 50%;
+        display: none;
     }
 
-    #editor-ts, #editor-lua {
+    #editor-ts {
         flex: 50%;
+        display: block;
+    }
+
+    .editor-lua-active {
+        display: block;
+    }
+
+    #editor-lua-ast {
+        overflow: scroll;
     }
 
     @media screen and (max-width: 600px) {

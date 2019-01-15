@@ -8,11 +8,33 @@ import TSTLWorker = require('worker-loader?name=tstl.worker.js!./tstlWorker');
 // @ts-ignore
 import FengariWorker = require('worker-loader?name=fengari.worker.js!./fengariWorker');
 
+import * as tstl from 'typescript-to-lua/dist/LuaAST';
+
+const renderjson = require("renderjson");
+
 document.addEventListener('DOMContentLoaded', () => {
   const container = document.getElementById('editor-ts');
   const output = document.getElementById('editor-output-content');
   const exampleLua = document.getElementById('editor-lua');
+  const astLua = document.getElementById('editor-lua-ast');
 
+
+  // Layout stuff
+  const luaTabText = document.getElementById("lua-tab-text") as HTMLDivElement | null;
+  const luaTabAst = document.getElementById("lua-tab-ast") as HTMLDivElement | null;
+  if (luaTabText && luaTabAst && exampleLua && astLua) {
+    const tabOnclick = () => {
+      luaTabText.classList.toggle("lua-tab-active");
+      luaTabAst.classList.toggle("lua-tab-active");
+      exampleLua.classList.toggle("editor-lua-active");
+      astLua.classList.toggle("editor-lua-active");
+    };
+    luaTabText.onclick = tabOnclick;
+    luaTabAst.onclick = tabOnclick;
+  }
+
+
+  // Actual editor and transpilation
   let example = `// Declare exposed API
 type Vector = [number, number, number];
 
@@ -47,7 +69,7 @@ function onSpellStart(event: OnSpellStartEvent): void {
     example = decodeURIComponent(encoded);
   }
 
-  if (container && exampleLua) {
+  if (container && exampleLua && astLua) {
     let tsEditor = editor.create(container, {
       value: example,
       language: 'typescript',
@@ -95,6 +117,16 @@ function onSpellStart(event: OnSpellStartEvent): void {
 
     tstlWorker.onmessage = (event: MessageEvent) => {
       luaEditor.setValue(event.data.luaStr);
+      console.log(event.data.luaAST);
+      astLua.appendChild(
+        renderjson
+          .set_show_to_level(1)
+          .set_replacer((name: string, val: any) => {
+            if (name === "kind") {
+              return tstl.SyntaxKind[val];
+            }
+            return val;
+          })(event.data.luaAST));
       fengariWorker.postMessage({luaStr: event.data.luaStr});
     }
 

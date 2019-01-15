@@ -2,12 +2,22 @@
     <div id="logo">
         <a href="/"><span class="logo-bold">Type</span>ScriptTo<span class="logo-bold">Lua</span></a> Playground
     </div>
+    <div id="lua-tabs">
+        <div id="lua-tab-text" class="lua-tab lua-tab-active">
+            TEXT
+        </div>
+        <div id="lua-tab-ast" class="lua-tab">
+            AST
+        </div>
+    </div>
 </div>
 <div id="content">
     <div id="editor-container">
         <div id="editor-ts" class="editor">
         </div>
-        <div id="editor-lua" class="editor">
+        <div id="editor-lua" class="editor editor-lua-active">
+        </div>
+        <div id="editor-lua-ast" class="editor">
         </div>
         <div id="editor-output" class="editor">
             <div id="editor-output-linenumbers">

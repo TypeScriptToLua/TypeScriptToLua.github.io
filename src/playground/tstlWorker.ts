@@ -1,6 +1,7 @@
-import {LuaLibImportKind, LuaTarget} from 'typescript-to-lua/dist/Transpiler';
-import {CompilerOptions} from 'typescript-to-lua/dist/CompilerOptions';
-import {createTranspiler} from 'typescript-to-lua/dist/TranspilerFactory';
+import {CompilerOptions, LuaTarget, LuaLibImportKind} from 'typescript-to-lua/dist/CompilerOptions';
+import {LuaTranspiler} from "typescript-to-lua/dist/LuaTranspiler";
+
+import * as tstl from 'typescript-to-lua/dist/LuaAST';
 
 import * as ts from "typescript";
 
@@ -40,13 +41,14 @@ self.fs = {
 const libSource = require('!raw-loader!../../node_modules/typescript/lib/lib.es6.d.ts');
 
 onmessage = (event: MessageEvent) => {
-    postMessage({luaStr: transpileString(event.data.tsStr)});
+    const [luaAST, luaStr] = transpileString(event.data.tsStr);
+    postMessage({luaAST, luaStr});
 };
 
 function transpileString(str: string, options: CompilerOptions = {
   luaLibImport: LuaLibImportKind.Inline,
   luaTarget: LuaTarget.Lua53,
-}): string {
+}): [tstl.Block, string] {
   const compilerHost = {
     directoryExists: () => true,
     fileExists: (fileName: string): boolean => true,
@@ -76,9 +78,7 @@ function transpileString(str: string, options: CompilerOptions = {
   };
   const program = ts.createProgram(['file.ts'], options as ts.CompilerOptions, compilerHost);
 
-  const result =
-      createTranspiler(
-          program.getTypeChecker(), options, program.getSourceFile('file.ts') as ts.SourceFile)
-          .transpileSourceFile();
-  return result.trim();
+  const transpiler = new LuaTranspiler(program);
+
+  return transpiler.transpileSourceFileKeepAST(program.getSourceFile("file.ts") as ts.SourceFile);
 }
