@@ -26,7 +26,6 @@ const luaLib: { [key: string]: string } = {
     Set: require("raw-loader!../../node_modules/typescript-to-lua/dist/lualib/Set.lua"),
     StringReplace: require("raw-loader!../../node_modules/typescript-to-lua/dist/lualib/StringReplace.lua"),
     StringSplit: require("raw-loader!../../node_modules/typescript-to-lua/dist/lualib/StringSplit.lua"),
-    Ternary: require("raw-loader!../../node_modules/typescript-to-lua/dist/lualib/Ternary.lua"),
 }
 
 declare var self: any;
