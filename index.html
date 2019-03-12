@@ -51,8 +51,8 @@ declare class Unit {
             <div class="example-item" id="ts-source"><b>// TS Source</b>
 
 function onSpellStart(caster: Unit, targetLocation: Vector): void {
-    const units = caster.FindUnitsInRadius(event.targetLocation, 500);
-    const enemies = units.filter(unit => event.caster.isEnemy(unit));
+    const units = caster.FindUnitsInRadius(targetLocation, 500);
+    const enemies = units.filter(unit => caster.isEnemy(unit));
 
     for (const enemy of enemies) {
         enemy.kill();
@@ -62,7 +62,7 @@ function onSpellStart(caster: Unit, targetLocation: Vector): void {
         <div class="example-item" id="lua"><b>-- Lua Output</b>
 
 function onSpellStart(caster, targetLocation)
-    local units = FindUnitsInRadius(targetLocation, 500);
+    local units = caster:FindUnitsInRadius(targetLocation, 500);
     local enemies = __TS__ArrayFilter(units, function(unit) return caster:isEnemy(unit) end);
     for _, enemy in ipairs(enemies) do
         do
