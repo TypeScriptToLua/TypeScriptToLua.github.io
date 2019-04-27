@@ -36,7 +36,6 @@ $output-height: 120px;
     position: absolute;
     top: 10px;
     right: 10px;
-    height: $header-height;
     font-weight: 300;
     font-size: 20px;
 }
@@ -111,9 +110,21 @@ $output-height: 120px;
         padding-right: 10px;
     }
 
-    #editor-output-content {
+    #editor-output-terminal {
         padding-top: 10px;
         padding-left: 10px;
-        width: calc(100% - 20px);
+        width: calc(100% - 40px);
+    }
+
+    #editor-output-terminal-header {
+        width: 100%;
+        font-weight: bold;
+        padding-bottom: 10px;
+        font-size: 14px;
+    }
+
+    #editor-output-terminal-content {
+        width: 100%;
+        font-size: 13px;
     }
 }

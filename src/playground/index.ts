@@ -14,7 +14,7 @@ const renderjson = require("renderjson");
 
 document.addEventListener('DOMContentLoaded', () => {
   const container = document.getElementById('editor-ts');
-  const output = document.getElementById('editor-output-content');
+  const outputTerminalContent = document.getElementById('editor-output-terminal-content');
   const exampleLua = document.getElementById('editor-lua');
   const astLua = document.getElementById('editor-lua-ast');
 
@@ -131,8 +131,8 @@ function onSpellStart(event: OnSpellStartEvent): void {
     }
 
     fengariWorker.onmessage = (event: MessageEvent) => {
-      if (output) {
-        output.innerText = event.data.luaPrint;
+      if (outputTerminalContent) {
+        outputTerminalContent.innerText = event.data.luaPrint;
       }
     }
   }
