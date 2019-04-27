@@ -1,7 +1,5 @@
 import {CompilerOptions, LuaTarget, LuaLibImportKind} from 'typescript-to-lua/dist/CompilerOptions';
-import {LuaTranspiler} from "typescript-to-lua/dist/LuaTranspiler";
-
-import * as tstl from 'typescript-to-lua/dist/LuaAST';
+import {LuaTranspiler, TranspileResult} from "typescript-to-lua/dist/LuaTranspiler";
 
 import * as ts from "typescript";
 
@@ -21,8 +19,11 @@ const luaLib: { [key: string]: string } = {
     ArraySlice: require("raw-loader!../../node_modules/typescript-to-lua/dist/lualib/ArraySlice.lua"),
     ArraySome: require("raw-loader!../../node_modules/typescript-to-lua/dist/lualib/ArraySome.lua"),
     ArraySplice: require("raw-loader!../../node_modules/typescript-to-lua/dist/lualib/ArraySplice.lua"),
-    //ClassIndex: require("raw-loader!../../node_modules/typescript-to-lua/dist/lualib/ClassIndex.lua"),
-    //ClassNewIndex: require("raw-loader!../../node_modules/typescript-to-lua/dist/lualib/ClassNewIndex.lua"),
+    ArrayFlat: require("raw-loader!../../node_modules/typescript-to-lua/dist/lualib/ArrayFlat.lua"),
+    ArrayFlatMap: require("raw-loader!../../node_modules/typescript-to-lua/dist/lualib/ArrayFlatMap.lua"),
+    ArraySetLength: require("raw-loader!../../node_modules/typescript-to-lua/dist/lualib/ArraySetLength.lua"),
+    ClassIndex: require("raw-loader!../../node_modules/typescript-to-lua/dist/lualib/ClassIndex.lua"),
+    ClassNewIndex: require("raw-loader!../../node_modules/typescript-to-lua/dist/lualib/ClassNewIndex.lua"),
     FunctionApply: require("raw-loader!../../node_modules/typescript-to-lua/dist/lualib/FunctionApply.lua"),
     FunctionBind: require("raw-loader!../../node_modules/typescript-to-lua/dist/lualib/FunctionBind.lua"),
     FunctionCall: require("raw-loader!../../node_modules/typescript-to-lua/dist/lualib/FunctionCall.lua"),
@@ -33,11 +34,13 @@ const luaLib: { [key: string]: string } = {
     NewIndex: require("raw-loader!../../node_modules/typescript-to-lua/dist/lualib/NewIndex.lua"),
     ObjectAssign: require("raw-loader!../../node_modules/typescript-to-lua/dist/lualib/ObjectAssign.lua"),
     ObjectEntries: require("raw-loader!../../node_modules/typescript-to-lua/dist/lualib/ObjectEntries.lua"),
+    ObjectFromEntries: require("raw-loader!../../node_modules/typescript-to-lua/dist/lualib/ObjectFromEntries.lua"),
     ObjectKeys: require("raw-loader!../../node_modules/typescript-to-lua/dist/lualib/ObjectKeys.lua"),
     ObjectValues: require("raw-loader!../../node_modules/typescript-to-lua/dist/lualib/ObjectValues.lua"),
     Set: require("raw-loader!../../node_modules/typescript-to-lua/dist/lualib/Set.lua"),
     WeakMap: require("raw-loader!../../node_modules/typescript-to-lua/dist/lualib/WeakMap.lua"),
     WeakSet: require("raw-loader!../../node_modules/typescript-to-lua/dist/lualib/WeakSet.lua"),
+    SourceMapTraceBack: require("raw-loader!../../node_modules/typescript-to-lua/dist/lualib/SourceMapTraceBack.lua"),
     StringReplace: require("raw-loader!../../node_modules/typescript-to-lua/dist/lualib/StringReplace.lua"),
     StringSplit: require("raw-loader!../../node_modules/typescript-to-lua/dist/lualib/StringSplit.lua"),
     StringConcat: require("raw-loader!../../node_modules/typescript-to-lua/dist/lualib/StringConcat.lua"),
@@ -57,14 +60,14 @@ self.fs = {
 const libSource = require('!raw-loader!../../node_modules/typescript/lib/lib.es6.d.ts');
 
 onmessage = (event: MessageEvent) => {
-    const [luaAST, luaStr] = transpileString(event.data.tsStr);
-    postMessage({luaAST, luaStr});
+    const result = transpileString(event.data.tsStr);
+    postMessage({luaAST: result.luaAST, luaStr: result.lua});
 };
 
 function transpileString(str: string, options: CompilerOptions = {
   luaLibImport: LuaLibImportKind.Inline,
   luaTarget: LuaTarget.Lua53,
-}): [tstl.Block, string] {
+}): TranspileResult {
   const compilerHost = {
     directoryExists: () => true,
     fileExists: (fileName: string): boolean => true,
@@ -96,5 +99,5 @@ function transpileString(str: string, options: CompilerOptions = {
 
   const transpiler = new LuaTranspiler(program);
 
-  return transpiler.transpileSourceFileKeepAST(program.getSourceFile("file.ts") as ts.SourceFile);
+  return transpiler.transpileSourceFile(program.getSourceFile("file.ts") as ts.SourceFile);
 }

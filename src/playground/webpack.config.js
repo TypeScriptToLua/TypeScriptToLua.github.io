@@ -9,21 +9,20 @@ const common = require('../webpack.common.js');
 
 // hack to patch fs because i cant get externals to work and dont know wtf is
 // going on in webpack
-const transpilerFilePath = path.resolve(
-    __dirname, '../../node_modules/typescript-to-lua/dist/LuaTranspiler.js');
-fs.writeFileSync(
-    transpilerFilePath,
-    fs.readFileSync(transpilerFilePath)
-        .toString()
-        .replace('const fs = require("fs");', ''));
+const replaceFsInPaths =
+[
+  path.resolve( __dirname, '../../node_modules/typescript-to-lua/dist/LuaTranspiler.js'),
+  path.resolve(__dirname, '../../node_modules/typescript-to-lua/dist/LuaLib.js'),
+  path.resolve(__dirname, '../../node_modules/typescript-to-lua/node_modules/source-map/lib/read-wasm.js')
+];
 
-const luaLibFilePath = path.resolve(
-    __dirname, '../../node_modules/typescript-to-lua/dist/LuaLib.js');
-fs.writeFileSync(
-    luaLibFilePath,
-    fs.readFileSync(luaLibFilePath)
+replaceFsInPaths.forEach(p => {
+  fs.writeFileSync(
+    p,
+    fs.readFileSync(p)
         .toString()
         .replace('const fs = require("fs");', ''));
+})
 
 module.exports = merge( common, {
   entry: path.resolve(__dirname, './index.ts'),
