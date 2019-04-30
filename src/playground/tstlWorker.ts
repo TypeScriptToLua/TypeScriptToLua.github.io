@@ -57,8 +57,6 @@ self.fs = {
     }
 }
 
-const libSource = require('!raw-loader!../../node_modules/typescript/lib/lib.es6.d.ts');
-
 onmessage = (event: MessageEvent) => {
     const result = transpileString(event.data.tsStr);
     postMessage({luaAST: result.luaAST, luaStr: result.lua});
@@ -78,13 +76,14 @@ function transpileString(str: string, options: CompilerOptions = {
     getNewLine: () => '\n',
 
     getSourceFile: (filename: string, languageVersion: any) => {
+      console.log(filename);
       if (filename === 'file.ts') {
         return ts.createSourceFile(
             filename, str, ts.ScriptTarget.Latest, false);
       }
-      if (filename === 'lib.es6.d.ts') {
+      if (filename.startsWith('lib.') && filename.endsWith('.d.ts')) {
         return ts.createSourceFile(
-            filename, libSource, ts.ScriptTarget.Latest, false);
+            filename, require(`!raw-loader!../../node_modules/typescript/lib/${filename}`), ts.ScriptTarget.Latest, false);
       }
       return undefined;
     },
