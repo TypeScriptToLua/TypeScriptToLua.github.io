@@ -83,7 +83,7 @@ function transpileString(str: string, options: CompilerOptions = {
       }
       if (filename.startsWith('lib.') && filename.endsWith('.d.ts')) {
         return ts.createSourceFile(
-            filename, require(`!raw-loader!../../node_modules/typescript/lib/${filename}`), ts.ScriptTarget.Latest, false);
+            filename, require(`!raw-loader!../../node_modules/typescript/lib/lib.${filename.slice(4)}`), ts.ScriptTarget.Latest, false);
       }
       return undefined;
     },
