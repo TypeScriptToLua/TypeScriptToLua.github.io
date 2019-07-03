@@ -12,7 +12,6 @@ const common = require('../webpack.common.js');
 // going on in webpack
 const replaceFsInPaths =
 [
-  path.resolve( __dirname, '../../node_modules/typescript-to-lua/dist/LuaTranspiler.js'),
   path.resolve(__dirname, '../../node_modules/typescript-to-lua/dist/LuaLib.js'),
   path.resolve(__dirname, '../../node_modules/typescript-to-lua/node_modules/source-map/lib/read-wasm.js')
 ];
@@ -27,6 +26,7 @@ replaceFsInPaths.forEach(p => {
 
 module.exports = merge( common, {
   entry: path.resolve(__dirname, './index.ts'),
+  node: { fs: "empty" },
   plugins: [
     new MonacoWebpackPlugin({languages: ['javascript', 'typescript', 'lua']}),
     new HtmlWebpackPlugin({

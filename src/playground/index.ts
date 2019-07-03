@@ -118,18 +118,23 @@ function onSpellStart(event: OnSpellStartEvent): void {
     const fengariWorker = new (FengariWorker as any)();
 
     tstlWorker.onmessage = (event: MessageEvent) => {
-      luaEditor.setValue(event.data.luaStr);
-      astLua.innerText = "";
-      astLua.appendChild(
-        renderjson
-          .set_show_to_level(1)
-          .set_replacer((name: string, val: any) => {
-            if (name === "kind") {
-              return tstl.SyntaxKind[val];
-            }
-            return val;
-          })(event.data.luaAST));
-      fengariWorker.postMessage({luaStr: event.data.luaStr});
+      if (event.data.luaStr) {
+        luaEditor.setValue(event.data.luaStr);
+
+        astLua.innerText = "";
+        astLua.appendChild(
+          renderjson
+            .set_show_to_level(1)
+            .set_replacer((name: string, val: any) => {
+              if (name === "kind") {
+                return tstl.SyntaxKind[val];
+              }
+              return val;
+            })(event.data.luaAST));
+        fengariWorker.postMessage({luaStr: event.data.luaStr});
+      } else {
+        luaEditor.setValue(event.data.diagnostics);
+      }
     }
 
     fengariWorker.onmessage = (event: MessageEvent) => {

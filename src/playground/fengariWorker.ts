@@ -48,6 +48,12 @@ end
 }
 
 onmessage = (event: MessageEvent) => {
-    executeLua(event.data.luaStr);
-    postMessage({luaPrint: self.printStream});
+    if (event.data.luaStr) {
+        try {
+            executeLua(event.data.luaStr);
+            postMessage({luaPrint: self.printStream});
+        } catch (e) {
+            postMessage({luaPrint: e.toString()});
+        }
+    }
 };

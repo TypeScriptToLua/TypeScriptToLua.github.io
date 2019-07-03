@@ -1,27 +1,28 @@
 import {CompilerOptions, LuaTarget, LuaLibImportKind} from 'typescript-to-lua/dist/CompilerOptions';
-import {LuaTranspiler, TranspileResult} from "typescript-to-lua/dist/LuaTranspiler";
-
+import * as tstl from "typescript-to-lua";
 import * as ts from "typescript";
-
-declare var self: any;
-
-/** Dummy fs for lualib compatibility */
-self.fs = {
-    readFileSync: (fileName: string) => {
-        let featureName = fileName.replace("/dist/lualib/", "").replace(".lua", "");
-        return new Buffer(require(`raw-loader!../../node_modules/typescript-to-lua/dist/lualib/${featureName}.lua`));
-    }
-}
 
 onmessage = (event: MessageEvent) => {
     const result = transpileString(event.data.tsStr);
-    postMessage({luaAST: result.luaAST, luaStr: result.lua});
+    const errors = result.diagnostics.filter(d => d.category === ts.DiagnosticCategory.Error);
+    if (errors.length == 0) {
+      console.log(result);
+      postMessage({luaAST: result.transpiledFiles[0].luaAst, luaStr: result.transpiledFiles[0].lua});
+    } else {
+      const formatHost: ts.FormatDiagnosticsHost = {
+        getCanonicalFileName: path => path,
+        getCurrentDirectory: () => "",
+        getNewLine: () => "\n"
+      }
+      postMessage({diagnostics: ts.formatDiagnostics(errors, formatHost)});
+    }
 };
 
 function transpileString(str: string, options: CompilerOptions = {
   luaLibImport: LuaLibImportKind.Inline,
   luaTarget: LuaTarget.Lua53,
-}): TranspileResult {
+}): tstl.TranspileResult {
+
   const compilerHost = {
     directoryExists: () => true,
     fileExists: (fileName: string): boolean => true,
@@ -32,7 +33,7 @@ function transpileString(str: string, options: CompilerOptions = {
     getNewLine: () => '\n',
 
     getSourceFile: (filename: string, languageVersion: any) => {
-      if (filename === 'file.ts') {
+      if (filename === 'source.ts') {
         return ts.createSourceFile(
             filename, str, ts.ScriptTarget.Latest, false);
       }
@@ -49,9 +50,11 @@ function transpileString(str: string, options: CompilerOptions = {
     // Don't write output
     writeFile: (name: string, text: string , writeByteOrderMark: any) => null,
   };
-  const program = ts.createProgram(['file.ts'], options as ts.CompilerOptions, compilerHost);
-
-  const transpiler = new LuaTranspiler(program);
-
-  return transpiler.transpileSourceFile(program.getSourceFile("file.ts") as ts.SourceFile);
+  
+  const emitHost = { readFile: (fileName: string) => {
+    let featureName = fileName.replace("/dist/lualib/", "").replace(".lua", "");
+    return require(`raw-loader!../../node_modules/typescript-to-lua/dist/lualib/${featureName}.lua`);
+  } };
+  const program = ts.createProgram(['source.ts'], options as ts.CompilerOptions, compilerHost);
+  return tstl.transpile({ program, emitHost });
 }

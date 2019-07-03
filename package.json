@@ -16,7 +16,7 @@
   "license": "",
   "devDependencies": {
     "@types/highlight.js": "^9.12.3",
-    "@types/node": "^10.14.6",
+    "@types/node": "^10.14.10",
     "compression-webpack-plugin": "^2.0.0",
     "css-loader": "^1.0.0",
     "file-loader": "^2.0.0",
@@ -29,13 +29,13 @@
     "rimraf": "^2.6.3",
     "sass-loader": "^7.1.0",
     "style-loader": "^0.23.1",
-    "ts-loader": "^5.4.4",
-    "typescript": "^3.4.5",
+    "ts-loader": "^5.4.5",
+    "typescript": "^3.5.2",
     "url-loader": "^1.1.2",
-    "webpack": "^4.30.0",
+    "webpack": "^4.35.0",
     "webpack-bundle-analyzer": "^3.3.2",
-    "webpack-cli": "^3.3.1",
-    "webpack-dev-server": "^3.3.1",
+    "webpack-cli": "^3.3.5",
+    "webpack-dev-server": "^3.7.2",
     "webpack-merge": "^4.2.1",
     "worker-loader": "^2.0.0"
   },
@@ -44,6 +44,6 @@
     "highlight.js": "^9.15.6",
     "monaco-editor": "^0.15.1",
     "renderjson": "^1.4.0",
-    "typescript-to-lua": "^0.18.0"
+    "typescript-to-lua": "^0.23.0"
   }
 }
