@@ -11,13 +11,17 @@ import FengariWorker = require('worker-loader?name=fengari.worker.js!./fengariWo
 import * as tstl from 'typescript-to-lua/dist/LuaAST';
 
 const renderjson = require("renderjson");
+const tstlPackageJson = require("typescript-to-lua/package.json");
 
 document.addEventListener('DOMContentLoaded', () => {
   const container = document.getElementById('editor-ts');
+  const outputTerminalHeader = document.getElementById('editor-output-terminal-header');
   const outputTerminalContent = document.getElementById('editor-output-terminal-content');
   const exampleLua = document.getElementById('editor-lua');
   const astLua = document.getElementById('editor-lua-ast');
 
+  // Set tstl version
+  outputTerminalHeader!.textContent = `TypescriptToLua version ${tstlPackageJson.version}`;
 
   // Layout stuff
   const luaTabText = document.getElementById("lua-tab-text") as HTMLDivElement | null;
