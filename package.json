@@ -44,6 +44,6 @@
     "highlight.js": "^9.15.6",
     "monaco-editor": "^0.15.1",
     "renderjson": "^1.4.0",
-    "typescript-to-lua": "^0.23.0"
+    "typescript-to-lua": "^0.27.0"
   }
 }
