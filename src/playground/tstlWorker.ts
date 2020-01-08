@@ -52,9 +52,11 @@ function transpileString(str: string, options: CompilerOptions = {
   };
   
   const emitHost = { readFile: (fileName: string) => {
-    let featureName = fileName.replace("/dist/lualib/", "").replace(".lua", "");
-    return require(`raw-loader!../../node_modules/typescript-to-lua/dist/lualib/${featureName}.lua`);
-  } };
+      let featureName = fileName.replace("/dist/lualib/", "").replace(".lua", "");
+      return require(`raw-loader!../../node_modules/typescript-to-lua/dist/lualib/${featureName}.lua`);
+    },
+    getCurrentDirectory: () => "."
+  };
   const program = ts.createProgram(['source.ts'], options as ts.CompilerOptions, compilerHost);
   return tstl.transpile({ program, emitHost });
 }
