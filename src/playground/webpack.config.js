@@ -2,7 +2,6 @@ const path = require('path');
 const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const fs = require('fs');
-const CompressionPlugin = require('compression-webpack-plugin');
 
 const merge = require('webpack-merge');
 const common = require('../webpack.common.js');
@@ -35,10 +34,6 @@ module.exports = merge( common, {
       inject: 'head',
       filename: 'play.html',
       contentFile: 'play.html'
-    }),
-    new CompressionPlugin({
-      test: /\.js$|\.css$|\.html$/,
-      threshold: 8192,
     }),
   ],
   output:{filename: 'play_bundle.js'},
