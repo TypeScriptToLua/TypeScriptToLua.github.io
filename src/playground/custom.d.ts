@@ -1,9 +1,9 @@
-declare module 'worker-loader!*' {
-  class WebpackWorker extends Worker {
-    constructor();
-  }
+declare module "worker-loader!*" {
+    class WebpackWorker extends Worker {
+        constructor();
+    }
 
-  export default WebpackWorker;
+    export default WebpackWorker;
 }
 
 interface FSDummy {
@@ -11,7 +11,7 @@ interface FSDummy {
 }
 
 interface Window {
-    fs: FSDummy
+    fs: FSDummy;
 }
 
-declare module 'fengari-web';
+declare module "fengari-web";

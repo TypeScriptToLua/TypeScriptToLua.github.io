@@ -1,4 +1,4 @@
-import {lauxlib, lua, lualib, to_jsstring, to_luastring, interop } from "fengari-web";
+import { lauxlib, lua, lualib, to_jsstring, to_luastring, interop } from "fengari-web";
 
 declare var self: any;
 
@@ -51,9 +51,9 @@ onmessage = (event: MessageEvent) => {
     if (event.data.luaStr) {
         try {
             executeLua(event.data.luaStr);
-            postMessage({luaPrint: self.printStream});
+            postMessage({ luaPrint: self.printStream });
         } catch (e) {
-            postMessage({luaPrint: e.toString()});
+            postMessage({ luaPrint: e.toString() });
         }
     }
 };

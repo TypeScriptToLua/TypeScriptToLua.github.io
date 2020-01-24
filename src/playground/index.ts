@@ -1,45 +1,44 @@
-import '../../assets/styles/play.scss';
+import "../../assets/styles/play.scss";
 
-import {editor} from 'monaco-editor/esm/vs/editor/editor.api';
-
-// @ts-ignore
-import TSTLWorker = require('worker-loader?name=tstl.worker.js!./tstlWorker');
+import { editor } from "monaco-editor/esm/vs/editor/editor.api";
 
 // @ts-ignore
-import FengariWorker = require('worker-loader?name=fengari.worker.js!./fengariWorker');
+import TSTLWorker = require("worker-loader?name=tstl.worker.js!./tstlWorker");
 
-import * as tstl from 'typescript-to-lua/dist/LuaAST';
+// @ts-ignore
+import FengariWorker = require("worker-loader?name=fengari.worker.js!./fengariWorker");
+
+import * as tstl from "typescript-to-lua/dist/LuaAST";
 
 const renderjson = require("renderjson");
 const tstlPackageJson = require("typescript-to-lua/package.json");
 
-document.addEventListener('DOMContentLoaded', () => {
-  const container = document.getElementById('editor-ts');
-  const outputTerminalHeader = document.getElementById('editor-output-terminal-header');
-  const outputTerminalContent = document.getElementById('editor-output-terminal-content');
-  const exampleLua = document.getElementById('editor-lua');
-  const astLua = document.getElementById('editor-lua-ast');
+document.addEventListener("DOMContentLoaded", () => {
+    const container = document.getElementById("editor-ts");
+    const outputTerminalHeader = document.getElementById("editor-output-terminal-header");
+    const outputTerminalContent = document.getElementById("editor-output-terminal-content");
+    const exampleLua = document.getElementById("editor-lua");
+    const astLua = document.getElementById("editor-lua-ast");
 
-  // Set tstl version
-  outputTerminalHeader!.textContent = `TypescriptToLua version ${tstlPackageJson.version}`;
+    // Set tstl version
+    outputTerminalHeader!.textContent = `TypescriptToLua version ${tstlPackageJson.version}`;
 
-  // Layout stuff
-  const luaTabText = document.getElementById("lua-tab-text") as HTMLDivElement | null;
-  const luaTabAst = document.getElementById("lua-tab-ast") as HTMLDivElement | null;
-  if (luaTabText && luaTabAst && exampleLua && astLua) {
-    const tabOnclick = () => {
-      luaTabText.classList.toggle("lua-tab-active");
-      luaTabAst.classList.toggle("lua-tab-active");
-      exampleLua.classList.toggle("editor-lua-active");
-      astLua.classList.toggle("editor-lua-active");
-    };
-    luaTabText.onclick = tabOnclick;
-    luaTabAst.onclick = tabOnclick;
-  }
+    // Layout stuff
+    const luaTabText = document.getElementById("lua-tab-text") as HTMLDivElement | null;
+    const luaTabAst = document.getElementById("lua-tab-ast") as HTMLDivElement | null;
+    if (luaTabText && luaTabAst && exampleLua && astLua) {
+        const tabOnclick = () => {
+            luaTabText.classList.toggle("lua-tab-active");
+            luaTabAst.classList.toggle("lua-tab-active");
+            exampleLua.classList.toggle("editor-lua-active");
+            astLua.classList.toggle("editor-lua-active");
+        };
+        luaTabText.onclick = tabOnclick;
+        luaTabAst.onclick = tabOnclick;
+    }
 
-
-  // Actual editor and transpilation
-  let example = `/** @noSelfInFile */
+    // Actual editor and transpilation
+    let example = `/** @noSelfInFile */
 
 // Declare exposed API
 type Vector = [number, number, number];
@@ -68,83 +67,82 @@ function onSpellStart(event: OnSpellStartEvent): void {
         unit.kill();
     }
 }`;
-  
-  var queryStringSrcStart = window.location.hash.indexOf("#src=");
-  if (queryStringSrcStart == 0) {
-    var encoded = window.location.hash.substring("#src=".length);
-    example = decodeURIComponent(encoded);
-  }
 
-  if (container && exampleLua && astLua) {
-    let tsEditor = editor.create(container, {
-      value: example,
-      language: 'typescript',
-      minimap: {enabled: false},
-      theme: 'vs-dark',
-    });
-
-    let luaEditor = editor.create(exampleLua, {
-      value: '',
-      language: 'lua',
-      minimap: {enabled: false},
-      theme: 'vs-dark',
-      readOnly: true
-    });
-
-    window.onresize = () => {
-      tsEditor.layout();
-      luaEditor.layout();
+    var queryStringSrcStart = window.location.hash.indexOf("#src=");
+    if (queryStringSrcStart == 0) {
+        var encoded = window.location.hash.substring("#src=".length);
+        example = decodeURIComponent(encoded);
     }
 
-    const tstlWorker = new (TSTLWorker as any)();
-    tstlWorker.postMessage({tsStr: tsEditor.getValue()});
+    if (container && exampleLua && astLua) {
+        let tsEditor = editor.create(container, {
+            value: example,
+            language: "typescript",
+            minimap: { enabled: false },
+            theme: "vs-dark",
+        });
 
-    let timerVar: any;
-    let ignoreHashChange = false;
+        let luaEditor = editor.create(exampleLua, {
+            value: "",
+            language: "lua",
+            minimap: { enabled: false },
+            theme: "vs-dark",
+            readOnly: true,
+        });
 
-    tsEditor.onDidChangeModelContent((e => {
-      clearInterval(timerVar);
-      // wait one second before submitting work
-      timerVar = setTimeout(() => {
-        tstlWorker.postMessage({tsStr: tsEditor.getValue()});
-        window.location.replace("#src=" + encodeURIComponent(tsEditor.getValue()));
-        ignoreHashChange = true;
-      }, 500);      
-    }))
+        window.onresize = () => {
+            tsEditor.layout();
+            luaEditor.layout();
+        };
 
-    window.onhashchange = () => {
-      if (ignoreHashChange) {
-        ignoreHashChange = false;
-        return;
-      }
+        const tstlWorker = new (TSTLWorker as any)();
+        tstlWorker.postMessage({ tsStr: tsEditor.getValue() });
+
+        let timerVar: any;
+        let ignoreHashChange = false;
+
+        tsEditor.onDidChangeModelContent(e => {
+            clearInterval(timerVar);
+            // wait one second before submitting work
+            timerVar = setTimeout(() => {
+                tstlWorker.postMessage({ tsStr: tsEditor.getValue() });
+                window.location.replace("#src=" + encodeURIComponent(tsEditor.getValue()));
+                ignoreHashChange = true;
+            }, 500);
+        });
+
+        window.onhashchange = () => {
+            if (ignoreHashChange) {
+                ignoreHashChange = false;
+                return;
+            }
+        };
+
+        const fengariWorker = new (FengariWorker as any)();
+
+        tstlWorker.onmessage = (event: MessageEvent) => {
+            if (event.data.luaStr) {
+                luaEditor.setValue(event.data.luaStr);
+
+                astLua.innerText = "";
+                astLua.appendChild(
+                    renderjson.set_show_to_level(1).set_replacer((name: string, val: any) => {
+                        if (name === "kind") {
+                            return tstl.SyntaxKind[val];
+                        }
+                        return val;
+                    })(event.data.luaAST),
+                );
+                fengariWorker.postMessage({ luaStr: event.data.luaStr });
+            } else {
+                luaEditor.setValue(event.data.diagnostics);
+            }
+        };
+
+        fengariWorker.onmessage = (event: MessageEvent) => {
+            if (outputTerminalContent) {
+                outputTerminalContent.innerText = event.data.luaPrint;
+            }
+        };
     }
-
-    const fengariWorker = new (FengariWorker as any)();
-
-    tstlWorker.onmessage = (event: MessageEvent) => {
-      if (event.data.luaStr) {
-        luaEditor.setValue(event.data.luaStr);
-
-        astLua.innerText = "";
-        astLua.appendChild(
-          renderjson
-            .set_show_to_level(1)
-            .set_replacer((name: string, val: any) => {
-              if (name === "kind") {
-                return tstl.SyntaxKind[val];
-              }
-              return val;
-            })(event.data.luaAST));
-        fengariWorker.postMessage({luaStr: event.data.luaStr});
-      } else {
-        luaEditor.setValue(event.data.diagnostics);
-      }
-    }
-
-    fengariWorker.onmessage = (event: MessageEvent) => {
-      if (outputTerminalContent) {
-        outputTerminalContent.innerText = event.data.luaPrint;
-      }
-    }
-  }
 });
