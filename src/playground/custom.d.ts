@@ -6,12 +6,4 @@ declare module "worker-loader!*" {
     export default WebpackWorker;
 }
 
-interface FSDummy {
-    readFileSync(fileName: string): Buffer;
-}
-
-interface Window {
-    fs: FSDummy;
-}
-
 declare module "fengari-web";
