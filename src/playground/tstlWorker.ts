@@ -41,7 +41,7 @@ function transpileString(
             if (filename.startsWith("lib.") && filename.endsWith(".d.ts")) {
                 return ts.createSourceFile(
                     filename,
-                    require(`!raw-loader!../../node_modules/typescript/lib/lib.${filename.slice(4)}`),
+                    require(`!raw-loader!../../node_modules/typescript/lib/lib.${filename.slice(4)}`).default,
                     ts.ScriptTarget.Latest,
                     false,
                 );
@@ -59,7 +59,7 @@ function transpileString(
     const emitHost = {
         readFile: (fileName: string) => {
             let featureName = fileName.replace("/dist/lualib/", "").replace(".lua", "");
-            return require(`raw-loader!../../node_modules/typescript-to-lua/dist/lualib/${featureName}.lua`);
+            return require(`raw-loader!../../node_modules/typescript-to-lua/dist/lualib/${featureName}.lua`).default;
         },
         getCurrentDirectory: () => ".",
     };

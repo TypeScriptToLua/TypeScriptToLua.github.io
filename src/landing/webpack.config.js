@@ -10,7 +10,6 @@ module.exports = merge(common, {
         new HtmlWebpackPlugin({
             title: "TypeScriptToLua",
             template: path.resolve(__dirname, "../../assets/layout/template.html"),
-            inject: "head",
             filename: "index.html",
             contentFile: "landing.html",
         }),

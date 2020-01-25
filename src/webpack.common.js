@@ -12,6 +12,7 @@ module.exports = {
                 loader: "url-loader",
                 options: { esModule: false, name: "[path][name].[ext]?hash=[hash:20]", limit: 8192 },
             },
+            { test: /\.ttf$/, loader: "file-loader" },
             { test: /\.scss$/, use: ["style-loader", "css-loader", "sass-loader"] },
             { test: /\.webmanifest?$/, loader: "file-loader", options: { esModule: false } },
         ],

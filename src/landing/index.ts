@@ -5,9 +5,4 @@ import { configure, highlightBlock } from "highlight.js";
 
 configure({ languages: ["typescript", "lua"] });
 
-document.addEventListener("DOMContentLoaded", () => {
-    let codeBlocks = document.getElementsByClassName("example-item");
-    for (let i = 0; i < codeBlocks.length; i++) {
-        highlightBlock(codeBlocks[i]);
-    }
-});
+document.querySelectorAll(".example-item").forEach(highlightBlock);

@@ -31,7 +31,6 @@ module.exports = merge(common, {
         new HtmlWebpackPlugin({
             title: "TypeScriptToLua - Online Compiler",
             template: path.resolve(__dirname, "../../assets/layout/template.html"),
-            inject: "head",
             filename: "play.html",
             contentFile: "play.html",
         }),
