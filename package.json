@@ -3,12 +3,8 @@
     "version": "1.0.0",
     "description": "",
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
-        "build-playground": "webpack --config ./src/playground/webpack.config.js --mode production",
-        "dev-playground": "webpack-dev-server --content-base dist/ --config src/playground/webpack.config.js --mode development",
-        "build-landing": "webpack --config ./src/landing/webpack.config.js --mode production",
-        "dev-landing": "webpack-dev-server --content-base dist/ --config src/landing/webpack.config.js --mode development",
-        "build": "npx rimraf dist && npm run build-playground && npm run build-landing",
+        "build": "rimraf dist && webpack --mode production",
+        "dev": "webpack-dev-server --mode development",
         "deploy": "npm run build && npx gh-pages -d dist -b master",
         "lint": "npm run lint:prettier",
         "lint:prettier": "prettier --check \"**/*.{js,ts,yml,json,md}\""
@@ -42,7 +38,6 @@
         "webpack-bundle-analyzer": "^3.6.0",
         "webpack-cli": "^3.3.10",
         "webpack-dev-server": "^3.10.1",
-        "webpack-merge": "^4.2.2",
         "worker-loader": "^2.0.0"
     },
     "dependencies": {
