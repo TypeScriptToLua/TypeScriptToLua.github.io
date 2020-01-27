@@ -1,6 +1,5 @@
-import { CompilerOptions, LuaTarget, LuaLibImportKind } from "typescript-to-lua/dist/CompilerOptions";
-import * as tstl from "typescript-to-lua";
 import * as ts from "typescript";
+import * as tstl from "typescript-to-lua";
 
 onmessage = (event: MessageEvent) => {
     const result = transpileString(event.data.tsStr);
@@ -20,9 +19,9 @@ onmessage = (event: MessageEvent) => {
 
 function transpileString(
     str: string,
-    options: CompilerOptions = {
-        luaLibImport: LuaLibImportKind.Inline,
-        luaTarget: LuaTarget.Lua53,
+    options: tstl.CompilerOptions = {
+        luaLibImport: tstl.LuaLibImportKind.Inline,
+        luaTarget: tstl.LuaTarget.Lua53,
     },
 ): tstl.TranspileResult {
     const compilerHost = {

@@ -1,3 +1,6 @@
+declare module "fengari-web";
+declare module "highlight.js/lib/*";
+declare module "renderjson";
 declare module "worker-loader*" {
     class WebpackWorker extends Worker {
         constructor();
@@ -5,6 +8,3 @@ declare module "worker-loader*" {
 
     export = WebpackWorker;
 }
-
-declare module "fengari-web";
-declare module "highlight.js/lib/*";

@@ -1,12 +1,10 @@
-import "../../assets/styles/play.scss";
-
 import { editor } from "monaco-editor/esm/vs/editor/editor.api";
+import renderjson from "renderjson";
 import * as lua from "typescript-to-lua/dist/LuaAST";
-import TSTLWorker = require("worker-loader?name=tstl.worker.js!./tstlWorker");
-import FengariWorker = require("worker-loader?name=fengari.worker.js!./fengariWorker");
-
-const renderjson = require("renderjson");
-const tstlPackageJson = require("typescript-to-lua/package.json");
+import { version as tstlVersion } from "typescript-to-lua/package.json";
+import FengariWorker from "worker-loader?name=fengari.worker.js!./fengariWorker";
+import TSTLWorker from "worker-loader?name=tstl.worker.js!./tstlWorker";
+import "../../assets/styles/play.scss";
 
 const container = document.getElementById("editor-ts");
 const outputTerminalHeader = document.getElementById("editor-output-terminal-header");
@@ -15,7 +13,7 @@ const exampleLua = document.getElementById("editor-lua");
 const astLua = document.getElementById("editor-lua-ast");
 
 // Set tstl version
-outputTerminalHeader!.textContent = `TypescriptToLua version ${tstlPackageJson.version}`;
+outputTerminalHeader!.textContent = `TypescriptToLua version ${tstlVersion}`;
 
 // Layout stuff
 const luaTabText = document.getElementById("lua-tab-text") as HTMLDivElement | null;

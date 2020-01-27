@@ -1,11 +1,12 @@
 {
     "compilerOptions": {
+        "module": "esnext",
+        "moduleResolution": "node",
+        "allowSyntheticDefaultImports": true,
+        "resolveJsonModule": true,
         "sourceMap": true,
-        "noImplicitAny": true,
-        "module": "commonjs",
         "target": "es5",
         "lib": ["es5", "scripthost", "dom", "webworker"],
-        "allowJs": true,
         "strict": true
     }
 }
