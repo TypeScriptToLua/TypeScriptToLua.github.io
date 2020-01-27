@@ -1,9 +1,12 @@
+const webpack = require("webpack");
 const path = require("path");
 const MonacoWebpackPlugin = require("monaco-editor-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const PnpWebpackPlugin = require("pnp-webpack-plugin");
 
 const resolve = query => path.resolve(__dirname, query);
 
+/** @type {import("webpack").Configuration} */
 module.exports = {
     devtool: "source-map",
     entry: {
@@ -11,11 +14,17 @@ module.exports = {
         play_bundle: resolve("src/playground/index.ts"),
     },
     output: { path: resolve("dist") },
-    resolve: { extensions: [".tsx", ".ts", ".js"] },
-    node: { fs: "empty" },
+    node: { fs: "empty", module: "empty" },
+    resolve: {
+        extensions: [".tsx", ".ts", ".js"],
+        plugins: [PnpWebpackPlugin],
+    },
+    resolveLoader: {
+        plugins: [PnpWebpackPlugin.moduleLoader(module)],
+    },
     module: {
         rules: [
-            { test: /\.tsx?$/, use: "ts-loader", exclude: /node_modules/ },
+            { test: /\.tsx?$/, use: "ts-loader" },
             { test: /\.css$/, use: ["style-loader", "css-loader"] },
             {
                 test: /\.(png|svg|jpg|gif|ico)$/,
@@ -44,5 +53,8 @@ module.exports = {
             filename: "play.html",
             contentFile: "play.html",
         }),
+
+        // Ignore pnpapi reference in patched typescript source
+        new webpack.IgnorePlugin(/pnpapi/),
     ],
 };

@@ -1,21 +1,4 @@
-node_modules/
-yarn.lock
-
-coverage/
-.nyc*
-*.js.map
-
-# Release
-*.tgz
-
-# OSX
-.DS_Store
-*.lcov
-
-# IDEA IDEs
-.idea/
-
-typescript_lualib.lua
-lualib_bundle.lua
-
-dist/*
+.pnp.*
+.yarn/unplugged
+.yarn/build-state.yml
+/dist
