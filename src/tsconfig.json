@@ -5,8 +5,9 @@
         "allowSyntheticDefaultImports": true,
         "resolveJsonModule": true,
         "sourceMap": true,
-        "target": "es5",
-        "lib": ["es5", "scripthost", "dom", "webworker"],
+        // TODO: Bump to latest once Edge 18 support would end
+        "target": "es2017",
+        "lib": ["es2017", "dom", "dom.iterable", "webworker"],
         "strict": true
     }
 }
