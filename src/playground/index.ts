@@ -8,7 +8,7 @@ import TSTLWorker = require("worker-loader?name=tstl.worker.js!./tstlWorker");
 // @ts-ignore
 import FengariWorker = require("worker-loader?name=fengari.worker.js!./fengariWorker");
 
-import * as tstl from "typescript-to-lua/dist/LuaAST";
+import * as lua from "typescript-to-lua/dist/LuaAST";
 
 const renderjson = require("renderjson");
 const tstlPackageJson = require("typescript-to-lua/package.json");
@@ -127,7 +127,7 @@ if (container && exampleLua && astLua) {
             astLua.appendChild(
                 renderjson.set_show_to_level(1).set_replacer((name: string, val: any) => {
                     if (name === "kind") {
-                        return tstl.SyntaxKind[val];
+                        return lua.SyntaxKind[val];
                     }
                     return val;
                 })(event.data.luaAST),

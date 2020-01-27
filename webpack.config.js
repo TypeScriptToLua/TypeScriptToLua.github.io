@@ -5,6 +5,7 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const PnpWebpackPlugin = require("pnp-webpack-plugin");
 
 const resolve = query => path.resolve(__dirname, query);
+const emptyModulePath = require.resolve("node-libs-browser/mock/empty.js");
 
 /** @type {import("webpack").Configuration} */
 module.exports = {
@@ -56,5 +57,13 @@ module.exports = {
 
         // Ignore pnpapi reference in patched typescript source
         new webpack.IgnorePlugin(/pnpapi/),
+
+        // Exclude `typescript` from `play_bundle` referenced from `typescript-to-lua/dist/LuaAST`
+        new webpack.NormalModuleReplacementPlugin(/typescript/, resource => {
+            const { issuer, compiler } = (resource.resourceResolveData && resource.resourceResolveData.context) || {};
+            if (issuer === require.resolve("typescript-to-lua/dist/LuaAST") && compiler !== "worker") {
+                resource.resource = emptyModulePath;
+            }
+        }),
     ],
 };

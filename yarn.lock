@@ -6353,6 +6353,7 @@ resolve@^1.13.1:
     html-webpack-plugin: ^3.2.0
     monaco-editor: ^0.19.3
     monaco-editor-webpack-plugin: ^1.8.2
+    node-libs-browser: ^2.2.1
     pnp-webpack-plugin: ^1.5.0
     prettier: ^1.19.1
     raw-loader: ^4.0.0
