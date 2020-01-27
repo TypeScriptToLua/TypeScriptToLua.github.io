@@ -1,14 +1,9 @@
 import "../../assets/styles/play.scss";
 
 import { editor } from "monaco-editor/esm/vs/editor/editor.api";
-
-// @ts-ignore
-import TSTLWorker = require("worker-loader?name=tstl.worker.js!./tstlWorker");
-
-// @ts-ignore
-import FengariWorker = require("worker-loader?name=fengari.worker.js!./fengariWorker");
-
 import * as lua from "typescript-to-lua/dist/LuaAST";
+import TSTLWorker = require("worker-loader?name=tstl.worker.js!./tstlWorker");
+import FengariWorker = require("worker-loader?name=fengari.worker.js!./fengariWorker");
 
 const renderjson = require("renderjson");
 const tstlPackageJson = require("typescript-to-lua/package.json");
@@ -94,7 +89,7 @@ if (container && exampleLua && astLua) {
         luaEditor.layout();
     };
 
-    const tstlWorker = new (TSTLWorker as any)();
+    const tstlWorker = new TSTLWorker();
     tstlWorker.postMessage({ tsStr: tsEditor.getValue() });
 
     let timerVar: any;
@@ -117,7 +112,7 @@ if (container && exampleLua && astLua) {
         }
     };
 
-    const fengariWorker = new (FengariWorker as any)();
+    const fengariWorker = new FengariWorker();
 
     tstlWorker.onmessage = (event: MessageEvent) => {
         if (event.data.luaStr) {
