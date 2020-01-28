@@ -3945,18 +3945,6 @@ fsevents@~2.1.2:
   languageName: node
   linkType: hard
 
-"monaco-editor-webpack-plugin@npm:^1.8.2":
-  version: 1.8.2
-  resolution: "monaco-editor-webpack-plugin@npm:1.8.2"
-  dependencies:
-    loader-utils: ^1.2.3
-  peerDependencies:
-    monaco-editor: ^0.19.1
-    webpack: ^4.5.0
-  checksum: 44bcc76dfe7fae0cf57138435b87deb1b71bd0bcdd5792c97891bc84406305a2a6f96c82f0fc4a0735da34db5d6a1e6bfcea240de7f1f6110849fd3259b4904f
-  languageName: node
-  linkType: hard
-
 "monaco-editor@npm:^0.19.3":
   version: 0.19.3
   resolution: "monaco-editor@npm:0.19.3"
@@ -6352,7 +6340,6 @@ resolve@^1.13.1:
     html-loader: ^0.5.5
     html-webpack-plugin: ^3.2.0
     monaco-editor: ^0.19.3
-    monaco-editor-webpack-plugin: ^1.8.2
     node-libs-browser: ^2.2.1
     pnp-webpack-plugin: ^1.5.0
     prettier: ^1.19.1

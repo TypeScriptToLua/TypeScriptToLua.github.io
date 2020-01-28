@@ -1,10 +1,28 @@
-import { editor } from "monaco-editor/esm/vs/editor/editor.api";
+import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
+import "monaco-editor/esm/vs/basic-languages/lua/lua.contribution";
+import "monaco-editor/esm/vs/basic-languages/typescript/typescript.contribution";
+import "monaco-editor/esm/vs/editor/edcore.main";
+import "monaco-editor/esm/vs/language/typescript/monaco.contribution";
 import renderjson from "renderjson";
 import * as lua from "typescript-to-lua/dist/LuaAST";
 import { version as tstlVersion } from "typescript-to-lua/package.json";
-import FengariWorker from "worker-loader?name=fengari.worker.js!./fengariWorker";
-import TSTLWorker from "worker-loader?name=tstl.worker.js!./tstlWorker";
+import EditorWorker from "worker-loader?name=editor.worker.js!monaco-editor/esm/vs/editor/editor.worker.js";
+import FengariWorker from "worker-loader?name=fengari.worker.js!./fengari.worker";
+import TsWorker from "worker-loader?name=ts.worker.js!./ts.worker";
 import "../../assets/styles/play.scss";
+
+// TODO: Use TypeScript 3.8 type imports
+type CustomTypeScriptWorker = import("./ts.worker").CustomTypeScriptWorker;
+
+(globalThis as any).MonacoEnvironment = {
+    getWorker(_workerId: any, label: string) {
+        if (label === "typescript") {
+            return new TsWorker();
+        }
+
+        return new EditorWorker();
+    },
+};
 
 const container = document.getElementById("editor-ts");
 const outputTerminalHeader = document.getElementById("editor-output-terminal-header");
@@ -67,14 +85,35 @@ if (queryStringSrcStart == 0) {
 }
 
 if (container && exampleLua && astLua) {
-    let tsEditor = editor.create(container, {
+    renderjson.set_show_to_level(1);
+    renderjson.set_replacer((key: string, value: any) => {
+        if (key === "kind") {
+            return lua.SyntaxKind[value];
+        }
+
+        return value;
+    });
+
+    async function compileLua() {
+        const model = tsEditor.getModel()!;
+        const getWorker = await monaco.languages.typescript.getTypeScriptWorker();
+        const client = (await getWorker(model.uri)) as CustomTypeScriptWorker;
+        const { code, ast } = await client.getTranspileOutput();
+
+        luaEditor.setValue(code);
+        astLua!.innerText = "";
+        astLua!.appendChild(renderjson(ast));
+        fengariWorker.postMessage({ luaStr: code });
+    }
+
+    let tsEditor = monaco.editor.create(container, {
         value: example,
         language: "typescript",
         minimap: { enabled: false },
         theme: "vs-dark",
     });
 
-    let luaEditor = editor.create(exampleLua, {
+    let luaEditor = monaco.editor.create(exampleLua, {
         value: "",
         language: "lua",
         minimap: { enabled: false },
@@ -87,20 +126,19 @@ if (container && exampleLua && astLua) {
         luaEditor.layout();
     };
 
-    const tstlWorker = new TSTLWorker();
-    tstlWorker.postMessage({ tsStr: tsEditor.getValue() });
+    compileLua();
 
     let timerVar: any;
     let ignoreHashChange = false;
 
     tsEditor.onDidChangeModelContent(e => {
         clearInterval(timerVar);
-        // wait one second before submitting work
+        // Update transpile result only once per 250s
         timerVar = setTimeout(() => {
-            tstlWorker.postMessage({ tsStr: tsEditor.getValue() });
+            compileLua();
             window.location.replace("#src=" + encodeURIComponent(tsEditor.getValue()));
             ignoreHashChange = true;
-        }, 500);
+        }, 250);
     });
 
     window.onhashchange = () => {
@@ -111,26 +149,6 @@ if (container && exampleLua && astLua) {
     };
 
     const fengariWorker = new FengariWorker();
-
-    tstlWorker.onmessage = (event: MessageEvent) => {
-        if (event.data.luaStr) {
-            luaEditor.setValue(event.data.luaStr);
-
-            astLua.innerText = "";
-            astLua.appendChild(
-                renderjson.set_show_to_level(1).set_replacer((name: string, val: any) => {
-                    if (name === "kind") {
-                        return lua.SyntaxKind[val];
-                    }
-                    return val;
-                })(event.data.luaAST),
-            );
-            fengariWorker.postMessage({ luaStr: event.data.luaStr });
-        } else {
-            luaEditor.setValue(event.data.diagnostics);
-        }
-    };
-
     fengariWorker.onmessage = (event: MessageEvent) => {
         if (outputTerminalContent) {
             outputTerminalContent.innerText = event.data.luaPrint;

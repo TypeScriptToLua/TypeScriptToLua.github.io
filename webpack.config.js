@@ -1,6 +1,5 @@
 const webpack = require("webpack");
 const path = require("path");
-const MonacoWebpackPlugin = require("monaco-editor-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const PnpWebpackPlugin = require("pnp-webpack-plugin");
 
@@ -46,7 +45,6 @@ module.exports = {
             contentFile: "landing.html",
         }),
 
-        new MonacoWebpackPlugin({ languages: ["javascript", "typescript", "lua"] }),
         new HtmlWebpackPlugin({
             title: "TypeScriptToLua - Online Compiler",
             chunks: ["play_bundle"],
@@ -58,11 +56,19 @@ module.exports = {
         // Ignore pnpapi reference in patched typescript source
         new webpack.IgnorePlugin(/pnpapi/),
 
-        // Exclude `typescript` from `play_bundle` referenced from `typescript-to-lua/dist/LuaAST`
         new webpack.NormalModuleReplacementPlugin(/typescript/, resource => {
+            // Exclude `typescript` from `play_bundle` referenced from `typescript-to-lua/dist/LuaAST`
             const { issuer, compiler } = (resource.resourceResolveData && resource.resourceResolveData.context) || {};
             if (issuer === require.resolve("typescript-to-lua/dist/LuaAST") && compiler !== "worker") {
                 resource.resource = emptyModulePath;
+            }
+
+            // Replace vendored monaco-typescript's services build with full TypeScript API.
+            if (
+                resource.resource ===
+                require.resolve("monaco-editor/esm/vs/language/typescript/lib/typescriptServices.js")
+            ) {
+                resource.request = require.resolve("typescript");
             }
         }),
     ],
