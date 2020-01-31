@@ -1,59 +1,71 @@
-import { lauxlib, lua, lualib, to_jsstring, to_luastring, interop } from "fengari-web";
+import { interop, lauxlib, lua, lualib, to_luastring } from "fengari-web";
+import { inspect } from "util";
 
-declare var self: any;
+// TODO: Use different message types
+export type LuaMessage = { type: "print"; text: string };
 
-function executeLua(luaStr: string): any {
-    // clear print buffer and patch lua print
-    self.printStream = "";
-    const printToGlobal = `
-local js = require "js"
-local oldPrint = print
-_G.print = function(...)
-    local elements = table.pack(...)
-    for i = 1, elements.n do
-      js.global.printStream = js.global.printStream .. tostring(elements[i]) .. "\\t"
+const workerContext = globalThis as typeof globalThis & { printStream: string[] };
+
+const redirectPrintStream = `
+    local js = require("js")
+    _G.print = function(...)
+        local elements = {}
+        for i = 1, select("#", ...) do
+            table.insert(elements, tostring(select(i, ...)))
+        end
+        js.global.printStream:push(table.concat(elements, "\\t"))
     end
-    js.global.printStream = js.global.printStream .. "\\n"
-end
 `;
 
-    luaStr = printToGlobal + luaStr;
+function transformLuaValue(rootValue: any) {
+    const seenLuaValues = new Set<any>();
+    function transform(luaValue: any) {
+        if (typeof luaValue !== "function") return luaValue;
+
+        if (luaValue.toString().startsWith("function:")) {
+            return { inspect: () => "[Function]" };
+        }
+
+        // TODO: Is there some way to get stable reference?
+        if (seenLuaValues.has(luaValue.toString())) {
+            return { inspect: () => "[Circular]" };
+        }
+
+        seenLuaValues.add(luaValue.toString());
+
+        // TODO: Object.fromEntries
+        const result: Record<string, any> = {};
+        for (const [key, value] of luaValue) {
+            result[key] = transform(value);
+        }
+        return result;
+    }
+
+    return transform(rootValue);
+}
+
+function executeLua(code: string): LuaMessage[] {
+    workerContext.printStream = [];
 
     const L = lauxlib.luaL_newstate();
     lualib.luaL_openlibs(L);
     lauxlib.luaL_requiref(L, to_luastring("js"), interop.luaopen_js, 1);
     lua.lua_pop(L, 1);
-    const status = lauxlib.luaL_dostring(L, to_luastring(luaStr));
+    lauxlib.luaL_dostring(L, to_luastring(redirectPrintStream));
 
-    if (status === lua.LUA_OK) {
-        // Read the return value from stack depending on its type.
-        if (lua.lua_isboolean(L, -1)) {
-            return lua.lua_toboolean(L, -1);
-        } else if (lua.lua_isnil(L, -1)) {
-            return null;
-        } else if (lua.lua_isnumber(L, -1)) {
-            return lua.lua_tonumber(L, -1);
-        } else if (lua.lua_isstring(L, -1)) {
-            return lua.lua_tojsstring(L, -1);
-        } else {
-            throw new Error("Unsupported lua return type: " + to_jsstring(lua.lua_typename(L, lua.lua_type(L, -1))));
-        }
-    } else {
-        // If the lua VM did not terminate with status code LUA_OK an error occurred.
-        // Throw a JS error with the message, retrieved by reading a string from the stack.
+    const status = lauxlib.luaL_dostring(L, to_luastring(code));
+    const messageType = status === lua.LUA_OK ? "Module" : "Error";
+    const value = transformLuaValue(interop.tojs(L, -1));
 
-        // Filter control characters out of string which are in there because ????
-        throw new Error("LUA ERROR: " + to_jsstring(lua.lua_tostring(L, -1).filter((c: number) => c >= 20)));
+    const messages: LuaMessage[] = workerContext.printStream.map(text => ({ type: "print", text }));
+    if (value !== undefined || messageType === "Error") {
+        const formattedValue = inspect(value);
+        messages.push({ type: "print", text: `${messageType}: ${formattedValue}` });
     }
+
+    return messages;
 }
 
 onmessage = (event: MessageEvent) => {
-    if (event.data.luaStr) {
-        try {
-            executeLua(event.data.luaStr);
-            postMessage({ luaPrint: self.printStream });
-        } catch (e) {
-            postMessage({ luaPrint: e.toString() });
-        }
-    }
+    postMessage({ messages: executeLua(event.data.code) });
 };

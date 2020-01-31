@@ -126,5 +126,6 @@ $output-height: 120px;
     #editor-output-terminal-content {
         width: 100%;
         font-size: 13px;
+        white-space: pre;
     }
 }

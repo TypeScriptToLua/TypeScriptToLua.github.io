@@ -14,6 +14,7 @@ import { getInitialCode, updateCodeHistory } from "./code";
 // TODO: Use TypeScript 3.8 type imports
 type CustomTypeScriptWorker = import("./ts.worker").CustomTypeScriptWorker;
 type LuaBlock = import("typescript-to-lua/dist/LuaAST").Block;
+type LuaMessage = import("./fengari.worker").LuaMessage;
 
 (globalThis as any).MonacoEnvironment = {
     getWorker(_workerId: any, label: string) {
@@ -70,12 +71,13 @@ async function onCodeChanged() {
     const { code, ast } = await client.getTranspileOutput();
     luaEditor.setValue(code);
     setLuaAST(ast);
-    fengariWorker.postMessage({ luaStr: code });
+    fengariWorker.postMessage({ code });
 }
 
 const fengariWorker = new FengariWorker();
 fengariWorker.onmessage = event => {
-    outputTerminalContent.innerText = event.data.luaPrint;
+    const messages: LuaMessage[] = event.data.messages;
+    outputTerminalContent.innerText = messages.map(m => m.text).join("\n");
 };
 
 const tsEditor = monaco.editor.create(tsEditorContainer, {
