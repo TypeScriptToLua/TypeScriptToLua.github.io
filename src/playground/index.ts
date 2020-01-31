@@ -10,6 +10,7 @@ import EditorWorker from "worker-loader?name=editor.worker.js!monaco-editor/esm/
 import FengariWorker from "worker-loader?name=fengari.worker.js!./fengari.worker";
 import TsWorker from "worker-loader?name=ts.worker.js!./ts.worker";
 import "../../assets/styles/play.scss";
+import { getInitialCode, updateCodeHistory } from "./code";
 
 // TODO: Use TypeScript 3.8 type imports
 type CustomTypeScriptWorker = import("./ts.worker").CustomTypeScriptWorker;
@@ -24,134 +25,87 @@ type CustomTypeScriptWorker = import("./ts.worker").CustomTypeScriptWorker;
     },
 };
 
-const container = document.getElementById("editor-ts");
-const outputTerminalHeader = document.getElementById("editor-output-terminal-header");
-const outputTerminalContent = document.getElementById("editor-output-terminal-content");
-const exampleLua = document.getElementById("editor-lua");
-const astLua = document.getElementById("editor-lua-ast");
+renderjson.set_show_to_level(1);
+renderjson.set_replacer((key: string, value: any) => {
+    if (key === "kind") {
+        return lua.SyntaxKind[value];
+    }
+
+    return value;
+});
+
+const tsEditorContainer = document.getElementById("editor-ts")!;
+const luaEditorContainer = document.getElementById("editor-lua")!;
+const luaAstContainer = document.getElementById("editor-lua-ast")!;
+const outputTerminalContent = document.getElementById("editor-output-terminal-content")!;
 
 // Set tstl version
-outputTerminalHeader!.textContent = `TypescriptToLua version ${tstlVersion}`;
+const outputTerminalHeader = document.getElementById("editor-output-terminal-header")!;
+outputTerminalHeader.textContent = `TypeScriptToLua version ${tstlVersion}`;
 
 // Layout stuff
-const luaTabText = document.getElementById("lua-tab-text") as HTMLDivElement | null;
-const luaTabAst = document.getElementById("lua-tab-ast") as HTMLDivElement | null;
-if (luaTabText && luaTabAst && exampleLua && astLua) {
-    const tabOnclick = () => {
-        luaTabText.classList.toggle("lua-tab-active");
-        luaTabAst.classList.toggle("lua-tab-active");
-        exampleLua.classList.toggle("editor-lua-active");
-        astLua.classList.toggle("editor-lua-active");
-    };
-    luaTabText.onclick = tabOnclick;
-    luaTabAst.onclick = tabOnclick;
+const luaTabText = document.querySelector<HTMLDivElement>("#lua-tab-text")!;
+const luaTabAst = document.querySelector<HTMLDivElement>("#lua-tab-ast")!;
+const onTabClick = () => {
+    luaTabText.classList.toggle("lua-tab-active");
+    luaTabAst.classList.toggle("lua-tab-active");
+    luaEditorContainer.classList.toggle("editor-lua-active");
+    luaAstContainer.classList.toggle("editor-lua-active");
+};
+
+luaTabText.onclick = onTabClick;
+luaTabAst.onclick = onTabClick;
+
+function setLuaAST(ast: lua.Block) {
+    luaAstContainer.innerText = "";
+    luaAstContainer.appendChild(renderjson(ast));
 }
 
-// Actual editor and transpilation
-let example = `/** @noSelfInFile */
+async function onCodeChanged() {
+    const model = tsEditor.getModel()!;
+    const getWorker = await monaco.languages.typescript.getTypeScriptWorker();
+    const client: CustomTypeScriptWorker = await getWorker(model.uri);
 
-// Declare exposed API
-type Vector = [number, number, number];
-
-declare interface OnSpellStartEvent {
-    caster: Unit;
-    targetLocation: Vector;
+    const { code, ast } = await client.getTranspileOutput();
+    luaEditor.setValue(code);
+    setLuaAST(ast);
+    fengariWorker.postMessage({ luaStr: code });
 }
 
-declare class Unit {
-    getLevel(): number;
-    isEnemy(other: Unit): boolean;
-    kill(): void;
-}
+const fengariWorker = new FengariWorker();
+fengariWorker.onmessage = event => {
+    outputTerminalContent.innerText = event.data.luaPrint;
+};
 
-declare function print(...messages: any[]): void;
-declare function FindUnitsInRadius(location: Vector, radius: number): Unit[];
+const tsEditor = monaco.editor.create(tsEditorContainer, {
+    value: getInitialCode(),
+    language: "typescript",
+    minimap: { enabled: false },
+    theme: "vs-dark",
+});
 
-// Use declared API in code
-function onSpellStart(event: OnSpellStartEvent): void {
-    const units = FindUnitsInRadius(event.targetLocation, 500);
-    const enemies = units.filter(unit => event.caster.isEnemy(unit));
+const luaEditor = monaco.editor.create(luaEditorContainer, {
+    value: "",
+    language: "lua",
+    minimap: { enabled: false },
+    theme: "vs-dark",
+    readOnly: true,
+});
 
-    for (const unit of enemies) {
-        print(unit, unit.getLevel());
-        unit.kill();
-    }
-}`;
+// More performant than `automaticLayout: true`, because container sizes can change only with window
+window.onresize = () => {
+    tsEditor.layout();
+    luaEditor.layout();
+};
 
-var queryStringSrcStart = window.location.hash.indexOf("#src=");
-if (queryStringSrcStart == 0) {
-    var encoded = window.location.hash.substring("#src=".length);
-    example = decodeURIComponent(encoded);
-}
+let contentChangeTimeout: any;
+tsEditor.onDidChangeModelContent(e => {
+    clearTimeout(contentChangeTimeout);
+    // Update transpile result no more often than every 250ms
+    contentChangeTimeout = setTimeout(() => {
+        onCodeChanged();
+        updateCodeHistory(tsEditor.getValue());
+    }, 250);
+});
 
-if (container && exampleLua && astLua) {
-    renderjson.set_show_to_level(1);
-    renderjson.set_replacer((key: string, value: any) => {
-        if (key === "kind") {
-            return lua.SyntaxKind[value];
-        }
-
-        return value;
-    });
-
-    async function compileLua() {
-        const model = tsEditor.getModel()!;
-        const getWorker = await monaco.languages.typescript.getTypeScriptWorker();
-        const client = (await getWorker(model.uri)) as CustomTypeScriptWorker;
-        const { code, ast } = await client.getTranspileOutput();
-
-        luaEditor.setValue(code);
-        astLua!.innerText = "";
-        astLua!.appendChild(renderjson(ast));
-        fengariWorker.postMessage({ luaStr: code });
-    }
-
-    let tsEditor = monaco.editor.create(container, {
-        value: example,
-        language: "typescript",
-        minimap: { enabled: false },
-        theme: "vs-dark",
-    });
-
-    let luaEditor = monaco.editor.create(exampleLua, {
-        value: "",
-        language: "lua",
-        minimap: { enabled: false },
-        theme: "vs-dark",
-        readOnly: true,
-    });
-
-    window.onresize = () => {
-        tsEditor.layout();
-        luaEditor.layout();
-    };
-
-    compileLua();
-
-    let timerVar: any;
-    let ignoreHashChange = false;
-
-    tsEditor.onDidChangeModelContent(e => {
-        clearInterval(timerVar);
-        // Update transpile result only once per 250s
-        timerVar = setTimeout(() => {
-            compileLua();
-            window.location.replace("#src=" + encodeURIComponent(tsEditor.getValue()));
-            ignoreHashChange = true;
-        }, 250);
-    });
-
-    window.onhashchange = () => {
-        if (ignoreHashChange) {
-            ignoreHashChange = false;
-            return;
-        }
-    };
-
-    const fengariWorker = new FengariWorker();
-    fengariWorker.onmessage = (event: MessageEvent) => {
-        if (outputTerminalContent) {
-            outputTerminalContent.innerText = event.data.luaPrint;
-        }
-    };
-}
+onCodeChanged();

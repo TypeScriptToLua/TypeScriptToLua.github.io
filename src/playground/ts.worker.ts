@@ -7,7 +7,7 @@ import * as tstl from "typescript-to-lua";
 const emitHost: tstl.EmitHost = {
     getCurrentDirectory: () => ".",
     readFile: (fileName: string) => {
-        let featureName = fileName.replace("/dist/lualib/", "").replace(".lua", "");
+        const featureName = fileName.replace("/dist/lualib/", "").replace(".lua", "");
         return require(`raw-loader!typescript-to-lua/dist/lualib/${featureName}.lua`).default;
     },
 };
