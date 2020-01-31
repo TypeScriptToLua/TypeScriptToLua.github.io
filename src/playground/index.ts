@@ -4,7 +4,6 @@ import "monaco-editor/esm/vs/basic-languages/typescript/typescript.contribution"
 import "monaco-editor/esm/vs/editor/edcore.main";
 import "monaco-editor/esm/vs/language/typescript/monaco.contribution";
 import renderjson from "renderjson";
-import * as lua from "typescript-to-lua/dist/LuaAST";
 import { version as tstlVersion } from "typescript-to-lua/package.json";
 import EditorWorker from "worker-loader?name=editor.worker.js!monaco-editor/esm/vs/editor/editor.worker.js";
 import FengariWorker from "worker-loader?name=fengari.worker.js!./fengari.worker";
@@ -14,6 +13,7 @@ import { getInitialCode, updateCodeHistory } from "./code";
 
 // TODO: Use TypeScript 3.8 type imports
 type CustomTypeScriptWorker = import("./ts.worker").CustomTypeScriptWorker;
+type LuaBlock = import("typescript-to-lua/dist/LuaAST").Block;
 
 (globalThis as any).MonacoEnvironment = {
     getWorker(_workerId: any, label: string) {
@@ -25,10 +25,11 @@ type CustomTypeScriptWorker = import("./ts.worker").CustomTypeScriptWorker;
     },
 };
 
+const LuaSyntaxKind = __LUA_SYNTAX_KIND__;
 renderjson.set_show_to_level(1);
 renderjson.set_replacer((key: string, value: any) => {
     if (key === "kind") {
-        return lua.SyntaxKind[value];
+        return LuaSyntaxKind[value];
     }
 
     return value;
@@ -56,7 +57,7 @@ const onTabClick = () => {
 luaTabText.onclick = onTabClick;
 luaTabAst.onclick = onTabClick;
 
-function setLuaAST(ast: lua.Block) {
+function setLuaAST(ast: LuaBlock) {
     luaAstContainer.innerText = "";
     luaAstContainer.appendChild(renderjson(ast));
 }

@@ -2,9 +2,10 @@ const webpack = require("webpack");
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const PnpWebpackPlugin = require("pnp-webpack-plugin");
+// Not used directly in playground, because it imports typescript
+const { SyntaxKind: LuaSyntaxKind } = require("typescript-to-lua/dist/LuaAST");
 
 const resolve = query => path.resolve(__dirname, query);
-const emptyModulePath = require.resolve("node-libs-browser/mock/empty.js");
 
 /** @type {import("webpack").Configuration} */
 module.exports = {
@@ -18,6 +19,12 @@ module.exports = {
     resolve: {
         extensions: [".tsx", ".ts", ".js"],
         plugins: [PnpWebpackPlugin],
+        alias: {
+            // Replace vendored `monaco-typescript` services build with `typescript`, already used by `typescript-to-lua`
+            [require.resolve("monaco-editor/esm/vs/language/typescript/lib/typescriptServices.js")]: require.resolve(
+                "typescript",
+            ),
+        },
     },
     resolveLoader: {
         plugins: [PnpWebpackPlugin.moduleLoader(module)],
@@ -53,23 +60,9 @@ module.exports = {
             contentFile: "play.html",
         }),
 
-        // Ignore pnpapi reference in patched typescript source
+        new webpack.DefinePlugin({ __LUA_SYNTAX_KIND__: JSON.stringify(LuaSyntaxKind) }),
+
+        // Ignore `pnpapi` reference in patched `typescript` source
         new webpack.IgnorePlugin(/pnpapi/),
-
-        new webpack.NormalModuleReplacementPlugin(/typescript/, resource => {
-            // Exclude `typescript` from `play_bundle` referenced from `typescript-to-lua/dist/LuaAST`
-            const { issuer, compiler } = (resource.resourceResolveData && resource.resourceResolveData.context) || {};
-            if (issuer === require.resolve("typescript-to-lua/dist/LuaAST") && compiler !== "worker") {
-                resource.resource = emptyModulePath;
-            }
-
-            // Replace vendored monaco-typescript's services build with full TypeScript API.
-            if (
-                resource.resource ===
-                require.resolve("monaco-editor/esm/vs/language/typescript/lib/typescriptServices.js")
-            ) {
-                resource.request = require.resolve("typescript");
-            }
-        }),
     ],
 };

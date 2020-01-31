@@ -8,3 +8,5 @@ declare module "worker-loader*" {
 
     export = WebpackWorker;
 }
+
+declare const __LUA_SYNTAX_KIND__: typeof import("typescript-to-lua").SyntaxKind;
