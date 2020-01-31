@@ -1,7 +1,7 @@
 $header-height: 50px;
 $output-height: 120px;
 
-@import 'base';
+@import "base";
 
 #header {
     width: 100%;
@@ -65,7 +65,7 @@ $output-height: 120px;
 
     .editor {
         height: calc(100% - #{$output-height});
-        background-color:$body-background;
+        background-color: $body-background;
         color: white;
         display: inline-block;
         overflow: hidden;
@@ -88,11 +88,12 @@ $output-height: 120px;
     }
 
     @media screen and (max-width: 600px) {
-        #editor-ts, #editor-lua {
+        #editor-ts,
+        #editor-lua {
             flex: 100%;
         }
     }
-    
+
     #editor-output {
         height: $output-height;
         flex: 100%;

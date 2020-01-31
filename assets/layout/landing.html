@@ -22,6 +22,7 @@
 <main>
     <div id="example">
         <div id="ts">
+            <!-- prettier-ignore -->
             <div class="example-item" id="ts-declarations"><b>// TS Declarations</b>
 
 type Vector = [number, number, number];
@@ -32,6 +33,7 @@ declare class Unit {
     kill(): void;
     FindUnitsInRadius(radius: number): Unit[];
 }</div>
+            <!-- prettier-ignore -->
             <div class="example-item" id="ts-source"><b>// TS Source</b>
 
 function onSpellStart(caster: Unit, targetLocation: Vector): void {
@@ -43,6 +45,7 @@ function onSpellStart(caster: Unit, targetLocation: Vector): void {
     }
 }</div>
         </div>
+        <!-- prettier-ignore -->
         <div class="example-item" id="lua"><b>-- Lua Output</b>
 
 function onSpellStart(caster, targetLocation)
@@ -58,18 +61,20 @@ end</div>
     <div id="features">
         <div class="feature-item">
             <div class="feature-header">Extend existing APIs</div>
-            This project is useful in any environment where Lua code is accepted,
-            with the powerful option of simply declaring any existing API using TypeScript declaration files.
+            This project is useful in any environment where Lua code is accepted, with the powerful option of simply
+            declaring any existing API using TypeScript declaration files.
         </div>
         <div class="feature-item">
             <div class="feature-header">Type Safety</div>
-            Static types can ease the mental burden of writing programs, by automatically tracking information the programmer would otherwise have to track mentally in some fashion.
-            Types serve as documentation for yourself and other programmers and provide a ‘gradient’ that tells you what terms make sense to write.
+            Static types can ease the mental burden of writing programs, by automatically tracking information the
+            programmer would otherwise have to track mentally in some fashion. Types serve as documentation for yourself
+            and other programmers and provide a ‘gradient’ that tells you what terms make sense to write.
         </div>
         <div class="feature-item">
             <div class="feature-header">IDE Support</div>
-            Types enable JavaScript developers to use highly-productive development tools and practices like static checking and code refactoring when developing JavaScript applications.
-            TypeScript extensions are available for many text editors. 
+            Types enable JavaScript developers to use highly-productive development tools and practices like static
+            checking and code refactoring when developing JavaScript applications. TypeScript extensions are available
+            for many text editors.
         </div>
     </div>
 </main>

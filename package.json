@@ -7,7 +7,7 @@
         "dev": "webpack-dev-server --mode development",
         "deploy": "npm run build && npx gh-pages -d dist -b master",
         "lint": "npm run lint:prettier",
-        "lint:prettier": "prettier --check \"**/*.{js,ts,yml,json,md}\""
+        "lint:prettier": "prettier --check \"**/*.{js,ts,yml,json,md,html,scss,webmanifest}\""
     },
     "keywords": [],
     "author": "",

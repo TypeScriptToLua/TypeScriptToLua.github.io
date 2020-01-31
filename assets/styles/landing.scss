@@ -1,6 +1,7 @@
-@import 'base';
+@import "base";
 
-main, header {
+main,
+header {
     width: 900px;
     overflow: hidden;
     margin-left: auto;
@@ -50,7 +51,7 @@ nav {
     margin-top: 30px;
     margin-bottom: 20px;
     display: flex;
-    flex-wrap: wrap;    
+    flex-wrap: wrap;
 }
 
 .feature-item {
@@ -82,7 +83,8 @@ nav {
     width: 100%;
 }
 
-#ts-declarations, #ts-source {
+#ts-declarations,
+#ts-source {
     display: inline-block;
     overflow: hidden;
 }
@@ -97,7 +99,8 @@ nav {
 }
 
 @media screen and (max-width: 900px) {
-    main, header {
+    main,
+    header {
         width: 100%;
     }
 
