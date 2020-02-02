@@ -1,30 +1,20 @@
-const example = `/** @noSelfInFile */
-
-// Declare exposed API
+const example = `// Declare exposed API
 type Vector = [number, number, number];
 
-declare interface OnSpellStartEvent {
-    caster: Unit;
-    targetLocation: Vector;
-}
-
-declare class Unit {
-    getLevel(): number;
+declare function findUnits(this: void, center: Vector, radius: number): Unit[];
+declare interface Unit {
     isEnemy(other: Unit): boolean;
     kill(): void;
 }
 
-declare function print(...messages: any[]): void;
-declare function FindUnitsInRadius(location: Vector, radius: number): Unit[];
 
 // Use declared API in code
-function onSpellStart(event: OnSpellStartEvent): void {
-    const units = FindUnitsInRadius(event.targetLocation, 500);
-    const enemies = units.filter(unit => event.caster.isEnemy(unit));
+function onAbilityCast(this: void, caster: Unit, targetLocation: Vector) {
+    const units = findUnits(targetLocation, 500);
+    const enemies = units.filter(unit => caster.isEnemy(unit));
 
-    for (const unit of enemies) {
-        print(unit, unit.getLevel());
-        unit.kill();
+    for (const enemy of enemies) {
+        enemy.kill();
     }
 }
 `;
