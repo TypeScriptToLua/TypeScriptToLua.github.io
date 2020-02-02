@@ -43,6 +43,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/webpack-env@npm:^1.15.1":
+  version: 1.15.1
+  resolution: "@types/webpack-env@npm:1.15.1"
+  checksum: 481065aa7573f836e4e62dad60f81f6b51d0dfbe050ca9dcf624dd9dc4b95f10fe23ea61dc9c730fba9e4a3fdffc5231f5670f8d874f063b6bd326b5f9766612
+  languageName: node
+  linkType: hard
+
 "@webassemblyjs/ast@npm:1.8.5":
   version: 1.8.5
   resolution: "@webassemblyjs/ast@npm:1.8.5"
@@ -6332,6 +6339,7 @@ resolve@^1.13.1:
   dependencies:
     "@types/highlight.js": ^9.12.3
     "@types/node": ^13.5.0
+    "@types/webpack-env": ^1.15.1
     css-loader: ^3.4.2
     fengari-web: ^0.1.4
     file-loader: ^5.0.2

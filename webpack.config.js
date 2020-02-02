@@ -20,10 +20,13 @@ module.exports = {
         extensions: [".tsx", ".ts", ".js"],
         plugins: [PnpWebpackPlugin],
         alias: {
-            // Replace vendored `monaco-typescript` services build with `typescript`, already used by `typescript-to-lua`
+            // Replace vendored monaco-typescript services build with typescript, already used by typescript-to-lua
             [require.resolve("monaco-editor/esm/vs/language/typescript/lib/typescriptServices.js")]: require.resolve(
                 "typescript",
             ),
+
+            // Exclude builtin monaco-typescript libs
+            [require.resolve("monaco-editor/esm/vs/language/typescript/lib/lib.js")]: resolve("src/empty.ts"),
         },
     },
     resolveLoader: {
@@ -62,7 +65,7 @@ module.exports = {
 
         new webpack.DefinePlugin({ __LUA_SYNTAX_KIND__: JSON.stringify(LuaSyntaxKind) }),
 
-        // Ignore `pnpapi` reference in patched `typescript` source
+        // Ignore "pnpapi" reference in patched typescript source
         new webpack.IgnorePlugin(/pnpapi/),
     ],
 };

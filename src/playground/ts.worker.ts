@@ -4,11 +4,16 @@ import { TypeScriptWorker } from "monaco-editor/esm/vs/language/typescript/tsWor
 import * as ts from "typescript";
 import * as tstl from "typescript-to-lua";
 
+const libContext = require.context(`raw-loader!typescript-to-lua/dist/lualib`, true, /(.+)(?<!lualib_bundle)\.lua$/);
 const emitHost: tstl.EmitHost = {
-    getCurrentDirectory: () => ".",
+    getCurrentDirectory: () => "",
     readFile: (fileName: string) => {
-        const featureName = fileName.replace("/dist/lualib/", "").replace(".lua", "");
-        return require(`raw-loader!typescript-to-lua/dist/lualib/${featureName}.lua`).default;
+        const [, featureName] = fileName.match(/\/dist\/lualib\/(.+)\.lua$/) ?? [];
+        if (featureName === undefined) {
+            throw new Error(`Unexpected file to read: ${fileName}`);
+        }
+
+        return libContext(`./${featureName}.lua`).default;
     },
 };
 
@@ -16,28 +21,27 @@ const emitHost: tstl.EmitHost = {
 const clearDiagnostics = (TypeScriptWorker as any).clearFiles;
 
 export class CustomTypeScriptWorker extends TypeScriptWorker {
-    public async getTranspileOutput() {
-        const { transpiledFiles } = this.transpileLua();
+    public async getTranspileOutput(fileName: string) {
+        const { transpiledFiles } = this.transpileLua(fileName);
         const [transpiledFile] = transpiledFiles;
         return { code: transpiledFile.lua!, ast: transpiledFile.luaAst! };
     }
 
     public async getSemanticDiagnostics(fileName: string) {
         const diagnostics = await super.getSemanticDiagnostics(fileName);
-        const { diagnostics: transpileDiagnostics } = this.transpileLua();
+        const { diagnostics: transpileDiagnostics } = this.transpileLua(fileName);
         clearDiagnostics(transpileDiagnostics);
         return [...diagnostics, ...transpileDiagnostics];
     }
 
-    private transpileLua() {
+    private transpileLua(fileName: string) {
         const program = ((this as any)._languageService as ts.LanguageService).getProgram()!;
 
         const compilerOptions = program.getCompilerOptions();
         compilerOptions.luaLibImport = tstl.LuaLibImportKind.Inline;
         compilerOptions.luaTarget = tstl.LuaTarget.Lua53;
 
-        const sourceFiles = program.getRootFileNames().map(n => program.getSourceFile(n)!);
-        return tstl.transpile({ program, emitHost, sourceFiles });
+        return tstl.transpile({ program, emitHost, sourceFiles: [program.getSourceFile(fileName)!] });
     }
 }
 

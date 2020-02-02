@@ -41,6 +41,7 @@
         "worker-loader": "^2.0.0"
     },
     "dependencies": {
+        "@types/webpack-env": "^1.15.1",
         "fengari-web": "^0.1.4",
         "highlight.js": "^9.18.0",
         "monaco-editor": "^0.19.3",

@@ -68,7 +68,7 @@ async function onCodeChanged() {
     const getWorker = await monaco.languages.typescript.getTypeScriptWorker();
     const client: CustomTypeScriptWorker = await getWorker(model.uri);
 
-    const { code, ast } = await client.getTranspileOutput();
+    const { code, ast } = await client.getTranspileOutput(model.uri.toString());
     luaEditor.setValue(code);
     setLuaAST(ast);
     fengariWorker.postMessage({ code });
@@ -79,6 +79,14 @@ fengariWorker.onmessage = event => {
     const messages: LuaMessage[] = event.data.messages;
     outputTerminalContent.innerText = messages.map(m => m.text).join("\n");
 };
+
+function addLibsFromContext(context: __WebpackModuleApi.RequireContext) {
+    for (const request of context.keys()) {
+        monaco.languages.typescript.typescriptDefaults.addExtraLib(context(request).default);
+    }
+}
+
+addLibsFromContext(require.context("!!raw-loader!typescript/lib/", false, /lib(\.es(.+))?\.d\.ts$/));
 
 const tsEditor = monaco.editor.create(tsEditorContainer, {
     value: getInitialCode(),
