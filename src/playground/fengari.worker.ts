@@ -19,7 +19,7 @@ const redirectPrintStream = `
 
 function transformLuaValue(rootValue: any) {
     const seenLuaValues = new Set<any>();
-    function transform(luaValue: any) {
+    function transform(luaValue: any): any {
         if (typeof luaValue !== "function") return luaValue;
 
         if (luaValue.toString().startsWith("function:")) {
@@ -33,12 +33,7 @@ function transformLuaValue(rootValue: any) {
 
         seenLuaValues.add(luaValue.toString());
 
-        // TODO: Object.fromEntries
-        const result: Record<string, any> = {};
-        for (const [key, value] of luaValue) {
-            result[key] = transform(value);
-        }
-        return result;
+        return Object.fromEntries([...luaValue].map(([key, value]) => [key, transform(value)]));
     }
 
     return transform(rootValue);
