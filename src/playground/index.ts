@@ -87,6 +87,16 @@ function addLibsFromContext(context: __WebpackModuleApi.RequireContext) {
 }
 
 addLibsFromContext(require.context("!!raw-loader!typescript/lib/", false, /lib(\.es(.+))?\.d\.ts$/));
+addLibsFromContext(require.context("!!raw-loader!lua-types/core", true, /\.d\.ts$/));
+// TODO: Generate it from lua-types/special/5.3.d.ts
+for (const module of [
+    require("!!raw-loader!lua-types/special/5.2-plus.d.ts"),
+    require("!!raw-loader!lua-types/special/5.2-plus-or-jit.d.ts"),
+    require("!!raw-loader!lua-types/special/5.3-plus.d.ts"),
+    require("!!raw-loader!lua-types/special/5.4-pre.d.ts"),
+]) {
+    monaco.languages.typescript.typescriptDefaults.addExtraLib(module.default);
+}
 
 const tsEditor = monaco.editor.create(tsEditorContainer, {
     value: getInitialCode(),
