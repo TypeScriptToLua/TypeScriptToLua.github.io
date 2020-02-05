@@ -1,3 +1,5 @@
+import lzstring from "lz-string";
+
 const example = `// Declare exposed API
 type Vector = [number, number, number];
 
@@ -25,18 +27,15 @@ export function getInitialCode() {
         return decodeURIComponent(code);
     }
 
+    if (window.location.hash.startsWith("#code/")) {
+        const code = window.location.hash.replace("#code/", "").trim();
+        return lzstring.decompressFromEncodedURIComponent(code);
+    }
+
     return example;
 }
 
-let ignoreHashChange = false;
-window.onhashchange = () => {
-    if (ignoreHashChange) {
-        ignoreHashChange = false;
-        return;
-    }
-};
-
 export function updateCodeHistory(code: string) {
-    window.location.replace("#src=" + encodeURIComponent(code));
-    ignoreHashChange = true;
+    const hash = `code/${lzstring.compressToEncodedURIComponent(code)}`;
+    window.history.replaceState({}, "", `#${hash}`);
 }
