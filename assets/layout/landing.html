@@ -35,8 +35,8 @@ declare class Unit {
             <div class="example-item" id="ts-source"><b>// TS Source</b>
 
 function onSpellStart(caster: Unit, targetLocation: Vector): void {
-    const units = caster.FindUnitsInRadius(event.targetLocation, 500);
-    const enemies = units.filter(unit => event.caster.isEnemy(unit));
+    const units = FindUnitsInRadius(targetLocation, 500);
+    const enemies = units.filter(unit => caster.isEnemy(unit));
 
     for (const enemy of enemies) {
         enemy.kill();
