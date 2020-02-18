@@ -1,7 +1,6 @@
 const webpack = require("webpack");
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-const PnpWebpackPlugin = require("pnp-webpack-plugin");
 // Not used directly in playground, because it imports typescript
 const { SyntaxKind: LuaSyntaxKind } = require("typescript-to-lua/dist/LuaAST");
 
@@ -15,10 +14,9 @@ module.exports = {
         play_bundle: resolve("src/playground/index.ts"),
     },
     output: { path: resolve("dist") },
-    node: { fs: "empty", module: "empty" },
+    node: { fs: "empty" },
     resolve: {
         extensions: [".tsx", ".ts", ".js"],
-        plugins: [PnpWebpackPlugin],
         alias: {
             // Replace vendored monaco-typescript services build with typescript, already used by typescript-to-lua
             [require.resolve("monaco-editor/esm/vs/language/typescript/lib/typescriptServices.js")]: require.resolve(
@@ -28,9 +26,6 @@ module.exports = {
             // Exclude builtin monaco-typescript libs
             [require.resolve("monaco-editor/esm/vs/language/typescript/lib/lib.js")]: resolve("src/empty.ts"),
         },
-    },
-    resolveLoader: {
-        plugins: [PnpWebpackPlugin.moduleLoader(module)],
     },
     module: {
         rules: [
@@ -64,8 +59,5 @@ module.exports = {
         }),
 
         new webpack.DefinePlugin({ __LUA_SYNTAX_KIND__: JSON.stringify(LuaSyntaxKind) }),
-
-        // Ignore "pnpapi" reference in patched typescript source
-        new webpack.IgnorePlugin(/pnpapi/),
     ],
 };
