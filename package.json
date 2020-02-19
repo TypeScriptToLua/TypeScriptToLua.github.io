@@ -1,27 +1,31 @@
 {
-    "name": "typescripttolua.github.io",
-    "version": "1.0.0",
-    "description": "",
+    "private": true,
     "scripts": {
         "build": "rimraf dist && webpack --mode production",
         "dev": "webpack-dev-server --mode development",
-        "deploy": "npm run build && npx gh-pages -d dist -b master",
         "lint": "npm run lint:prettier",
         "lint:prettier": "prettier --check \"**/*.{js,ts,yml,json,md,html,scss,webmanifest}\""
     },
-    "keywords": [],
-    "author": "",
-    "license": "",
     "prettier": {
         "printWidth": 120,
         "trailingComma": "all"
     },
-    "devDependencies": {
+    "dependencies": {
         "@types/highlight.js": "^9.12.3",
+        "@types/lz-string": "^1.3.33",
+        "@types/webpack-env": "^1.15.1",
+        "fengari-web": "^0.1.4",
+        "highlight.js": "^9.18.0",
+        "lua-types": "^2.7.0",
+        "lz-string": "^1.4.4",
+        "monaco-editor": "^0.19.3",
+        "renderjson": "^1.4.0",
+        "typescript-to-lua": "^0.31.0"
+    },
+    "devDependencies": {
         "@types/node": "^13.5.0",
         "css-loader": "^3.4.2",
         "file-loader": "^5.0.2",
-        "gh-pages": "^2.2.0",
         "html-loader": "^0.5.5",
         "html-webpack-plugin": "^3.2.0",
         "prettier": "^1.19.1",
@@ -38,16 +42,5 @@
         "webpack-cli": "^3.3.10",
         "webpack-dev-server": "^3.10.1",
         "worker-loader": "^2.0.0"
-    },
-    "dependencies": {
-        "@types/lz-string": "^1.3.33",
-        "@types/webpack-env": "^1.15.1",
-        "fengari-web": "^0.1.4",
-        "highlight.js": "^9.18.0",
-        "lua-types": "^2.7.0",
-        "lz-string": "^1.4.4",
-        "monaco-editor": "^0.19.3",
-        "renderjson": "^1.4.0",
-        "typescript-to-lua": "^0.31.0"
     }
 }
