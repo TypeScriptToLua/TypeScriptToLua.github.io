@@ -1,7 +1,7 @@
-@import 'base';
+@import "base";
 
-main, header {
-    width: 900px;
+main,
+header {
     overflow: hidden;
     margin-left: auto;
     margin-right: auto;
@@ -46,11 +46,18 @@ nav {
     }
 }
 
+main {
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+}
+
 #features {
+    max-width: 900px;
     margin-top: 30px;
     margin-bottom: 20px;
     display: flex;
-    flex-wrap: wrap;    
+    flex-wrap: wrap;
 }
 
 .feature-item {
@@ -65,6 +72,18 @@ nav {
     margin-bottom: 10px;
 }
 
+#example {
+    max-width: 100%;
+    margin-top: 70px;
+}
+
+#example #ts {
+    display: flex;
+    @media screen and (max-width: 1200px) {
+        flex-direction: column;
+    }
+}
+
 .example-item {
     padding: (15px !important);
     white-space: pre;
@@ -72,35 +91,23 @@ nav {
     font-family: $console-fonts;
 }
 
-#example #ts {
-    display: flex;
-    border-bottom: solid 2px #5690fc;
+@media screen and (max-width: 1200px) {
+    .example-item:not(#lua) {
+        border-bottom: solid 2px #5690fc;
+    }
 }
 
-#example {
-    margin-top: 70px;
-    width: 100%;
-}
+@media screen and (min-width: 1201px) {
+    #example #ts {
+        border-bottom: solid 2px #5690fc;
+    }
 
-#ts-declarations, #ts-source {
-    display: inline-block;
-    overflow: hidden;
-}
-
-#ts-declarations {
-    flex: 40%;
-}
-
-#ts-source {
-    flex: 60%;
-    border-left: solid 2px #5690fc;
+    #ts-source {
+        border-left: solid 2px #5690fc;
+    }
 }
 
 @media screen and (max-width: 900px) {
-    main, header {
-        width: 100%;
-    }
-
     nav {
         font-size: 24px;
     }
@@ -108,10 +115,6 @@ nav {
     #title {
         font-size: 42px;
         margin-top: 15px;
-    }
-
-    .example-item {
-        font-size: 9px;
     }
 
     #example {

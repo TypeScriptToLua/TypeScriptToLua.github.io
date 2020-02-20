@@ -22,20 +22,22 @@
 <main>
     <div id="example">
         <div id="ts">
+            <!-- prettier-ignore -->
             <div class="example-item" id="ts-declarations"><b>// TS Declarations</b>
 
+/** <a href="https://github.com/TypeScriptToLua/TypeScriptToLua/wiki/Functions-and-the-%60self%60-Parameter#noselfinfile" target="_blank">@noSelfInFile</a> */
 type Vector = [number, number, number];
 
-declare class Unit {
-    getLevel(): number;
+declare function findUnitsInRadius(center: Vector, radius: number): Unit[];
+declare interface Unit {
     isEnemy(other: Unit): boolean;
     kill(): void;
-    FindUnitsInRadius(radius: number): Unit[];
 }</div>
+            <!-- prettier-ignore -->
             <div class="example-item" id="ts-source"><b>// TS Source</b>
 
-function onSpellStart(caster: Unit, targetLocation: Vector): void {
-    const units = FindUnitsInRadius(targetLocation, 500);
+function onAbilityCast(this: void, caster: Unit, targetLocation: Vector) {
+    const units = findUnitsInRadius(targetLocation, 500);
     const enemies = units.filter(unit => caster.isEnemy(unit));
 
     for (const enemy of enemies) {
@@ -43,33 +45,34 @@ function onSpellStart(caster: Unit, targetLocation: Vector): void {
     }
 }</div>
         </div>
+        <!-- prettier-ignore -->
         <div class="example-item" id="lua"><b>-- Lua Output</b>
 
-function onSpellStart(caster, targetLocation)
-    local units = FindUnitsInRadius(targetLocation, 500);
-    local enemies = __TS__ArrayFilter(units, function(unit) return caster:isEnemy(unit) end);
-    for _, enemy in ipairs(enemies) do
-        do
-            enemy:kill();
-        end
+function onAbilityCast(caster, targetLocation)
+    local units = findUnitsInRadius(targetLocation, 500)
+    local enemies = __TS__ArrayFilter(units, function(____, unit) return caster:isEnemy(unit) end)
+    for ____, enemy in ipairs(enemies) do
+        enemy:kill()
     end
 end</div>
     </div>
     <div id="features">
         <div class="feature-item">
             <div class="feature-header">Extend existing APIs</div>
-            This project is useful in any environment where Lua code is accepted,
-            with the powerful option of simply declaring any existing API using TypeScript declaration files.
+            This project is useful in any environment where Lua code is accepted, with the powerful option of simply
+            declaring any existing API using TypeScript declaration files.
         </div>
         <div class="feature-item">
             <div class="feature-header">Type Safety</div>
-            Static types can ease the mental burden of writing programs, by automatically tracking information the programmer would otherwise have to track mentally in some fashion.
-            Types serve as documentation for yourself and other programmers and provide a ‘gradient’ that tells you what terms make sense to write.
+            Static types can ease the mental burden of writing programs, by automatically tracking information the
+            programmer would otherwise have to track mentally in some fashion. Types serve as documentation for yourself
+            and other programmers and provide a ‘gradient’ that tells you what terms make sense to write.
         </div>
         <div class="feature-item">
             <div class="feature-header">IDE Support</div>
-            Types enable JavaScript developers to use highly-productive development tools and practices like static checking and code refactoring when developing JavaScript applications.
-            TypeScript extensions are available for many text editors. 
+            Types enable JavaScript developers to use highly-productive development tools and practices like static
+            checking and code refactoring when developing JavaScript applications. TypeScript extensions are available
+            for many text editors.
         </div>
     </div>
 </main>
