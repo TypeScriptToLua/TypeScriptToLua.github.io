@@ -1,7 +1,5 @@
-// @ts-ignore
 import * as worker from "monaco-editor/esm/vs/editor/editor.worker";
 import { TypeScriptWorker } from "monaco-editor/esm/vs/language/typescript/tsWorker";
-import * as ts from "typescript";
 import * as tstl from "typescript-to-lua";
 
 const libContext = require.context(`raw-loader!typescript-to-lua/dist/lualib`, true, /(.+)(?<!lualib_bundle)\.lua$/);
@@ -17,27 +15,23 @@ const emitHost: tstl.EmitHost = {
     },
 };
 
-// TODO: In latest monaco-typescript it returns `ts.Diagnostic[]`
-const clearDiagnostics = (TypeScriptWorker as any).clearFiles;
-
 export class CustomTypeScriptWorker extends TypeScriptWorker {
     public async getTranspileOutput(fileName: string) {
         const { transpiledFiles } = this.transpileLua(fileName);
-        const [transpiledFile] = transpiledFiles;
-        return { code: transpiledFile.lua!, ast: transpiledFile.luaAst! };
+        const [file] = transpiledFiles;
+        return { code: file.lua!, ast: file.luaAst! };
     }
 
     public async getSemanticDiagnostics(fileName: string) {
         const diagnostics = await super.getSemanticDiagnostics(fileName);
         const { diagnostics: transpileDiagnostics } = this.transpileLua(fileName);
-        clearDiagnostics(transpileDiagnostics);
-        return [...diagnostics, ...transpileDiagnostics];
+        return [...diagnostics, ...TypeScriptWorker.clearFiles(transpileDiagnostics)];
     }
 
     private transpileLua(fileName: string) {
-        const program = ((this as any)._languageService as ts.LanguageService).getProgram()!;
+        const program = this._languageService.getProgram()!;
 
-        const compilerOptions = program.getCompilerOptions();
+        const compilerOptions: tstl.CompilerOptions = program.getCompilerOptions();
         compilerOptions.luaLibImport = tstl.LuaLibImportKind.Inline;
         compilerOptions.luaTarget = tstl.LuaTarget.Lua53;
 
@@ -46,5 +40,5 @@ export class CustomTypeScriptWorker extends TypeScriptWorker {
 }
 
 globalThis.onmessage = () => {
-    worker.initialize((context: any, createData: any) => new CustomTypeScriptWorker(context, createData));
+    worker.initialize((context, createData) => new CustomTypeScriptWorker(context, createData));
 };
