@@ -10,9 +10,11 @@
 }
 
 :root {
-    --vs-background: #fffffe;
+    --monaco-background: #fffffe;
+    --monaco-accent: #c4c4c4;
 }
 
 :root[data-theme="dark"] {
-    --vs-background: #1e1e1e;
+    --monaco-background: #1e1e1e;
+    --monaco-accent: #333333;
 }
