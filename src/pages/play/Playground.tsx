@@ -165,7 +165,7 @@ function OutputPane() {
                     )}
                     onClick={toggleAstView}
                 >
-                    {isAstView ? "AST" : "TEXT"}
+                    {isAstView ? "Lua AST" : "TEXT"}
                 </button>
             </div>
 
