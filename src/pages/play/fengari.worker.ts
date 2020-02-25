@@ -8,7 +8,7 @@ const workerContext = globalThis as typeof globalThis & { printStream: string[] 
 
 const redirectPrintStream = `
     local js = require("js")
-    _G.print = function(...)
+    print = function(...)
         local elements = {}
         for i = 1, select("#", ...) do
             table.insert(elements, tostring(select(i, ...)))
