@@ -1,3 +1,5 @@
+import Link from "@docusaurus/Link";
+import useBaseUrl from "@docusaurus/useBaseUrl";
 import CodeBlock from "@theme/CodeBlock";
 import Layout from "@theme/Layout";
 import React from "react";
@@ -85,6 +87,11 @@ export default function Home() {
                     To<b>Lua</b>
                 </h1>
                 <p className="hero__subtitle">Write Lua with TypeScript</p>
+                <div className={styles.buttons}>
+                    <Link className="button button--outline button--success button--lg" to={useBaseUrl("play")}>
+                        Try Online
+                    </Link>
+                </div>
             </header>
             <main>
                 <section className="padding-vert--md container">
