@@ -1,0 +1,21 @@
+{
+    "docs": [
+        "getting-started",
+        "differences-between-lua-and-javascript",
+        "writing-declarations",
+        "compiler-annotations",
+        "functions-and-the-self-parameter",
+        "supported-lua-versions",
+        "limitations",
+        {
+            "type": "category",
+            "label": "API",
+            "items": ["api/overview", "api/transformer", "api/printer"]
+        },
+        {
+            "type": "category",
+            "label": "Contributors",
+            "items": ["contributors/design-goals"]
+        }
+    ]
+}

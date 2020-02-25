@@ -88,6 +88,12 @@ export default function Home() {
                 </h1>
                 <p className="hero__subtitle">Write Lua with TypeScript</p>
                 <div className={styles.buttons}>
+                    <Link
+                        className="button button--outline button--primary button--lg"
+                        to={useBaseUrl("docs/getting-started")}
+                    >
+                        Get Started
+                    </Link>
                     <Link className="button button--outline button--success button--lg" to={useBaseUrl("play")}>
                         Try Online
                     </Link>
