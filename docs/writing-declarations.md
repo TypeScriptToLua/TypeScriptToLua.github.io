@@ -212,7 +212,7 @@ With TypeScript, by default, there are declarations that exist that describe som
 
 Using the _lib_ option can narrow down these declarations.
 
-```json
+```json title=tsconfig.json
 {
   "compilerOptions": {
     "lib": ["esnext"]
@@ -522,7 +522,7 @@ npm install <declarations> --save-dev
 
 And link it to a _tsconfig.json_ file.
 
-```json
+```json title=tsconfig.json
 {
   "compilerOptions": {
     "types": ["declarations"]
@@ -542,7 +542,7 @@ This only works with TypeScript (_tsc_). TypeScriptToLua (_tstl_) may have suppo
 
 Every TypeScript project points to a list of declarations. TypeScript is very generous with what files that includes.
 
-```json
+```json title=tsconfig.json
 {
   "compilerOptions": {
     "rootDir": "src"
@@ -558,7 +558,7 @@ Every TypeScript project points to a list of declarations. TypeScript is very ge
   tsconfig.json
 ```
 
-```json
+```json title=tsconfig.json
 {
   "compilerOptions": {
     "rootDir": "src",

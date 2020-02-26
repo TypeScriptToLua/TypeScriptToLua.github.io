@@ -20,7 +20,7 @@ This file is called `tsconfig.json` and should be located in your projects root.
 
 Example:
 
-```json
+```json title=tsconfig.json
 {
   "compilerOptions": {
     "target": "esnext",
