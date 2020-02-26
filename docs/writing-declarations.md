@@ -168,7 +168,7 @@ If you're using an editor that seeks out information about functions, variables,
 declare function print(...args: any[]);
 ```
 
-[Try out what this looks like in an editor](<https://typescripttolua.github.io/play.html#src=%2F%2F%20All%20in%20one%20definition%20and%20implementation%20for%20examples%20sake%0A%0A%2F**%0A%20*%20When%20hovering%20over%20print%2C%20this%20description%20will%20be%20shown%0A%20*%20%40param%20%7Bany%5B%5D%7D%20args%20Stuff%20to%20print%0A%20*%2F%0Adeclare%20function%20print(...args%3A%20any%5B%5D)%3B%0A%0A%2F%2F%20Try%20hovering%20your%20cursor%20over%20%60print%60%0Aprint(%22Hello%22)%3B%0A>)
+<p><a href="/play/#code/PTAEEEBtNBLA7UB7eBTUATVAzBsAusKoAhvBnALYAOkqlq8+Jhx2SATqKgB4k10AzqEEkA1qgBQk4ACpZk0LNAB1ABaNQapADdUHBAHNkertQNMANKHxrYwrIIDGB6q0QB3WNFAAjdILaHvCKygAC1CQc-KAA3mQAngDaALoAvqQchsIAyvgArtjYNkig5gj4ocCSWE6QUejY+fBO7mUW+AAUAHS9UdkAXKTwySkAlADc0iCgACocCVq6+kagCUj5XE6bgpwm+qAABuVMh5InXQBEABKo0EiXk5JAA" target="_blank">Try out what this looks like in an editor</a></p>
 
 TypeScript uses TSDoc for its comments. TSDoc allows you to also use markdown in your comments! This means pictures, links, tables, code syntax highlighting and more markdown features are available. These may display differently depending on the editor in use.
 
@@ -204,7 +204,7 @@ let [c, d] = array();
 // local c, d = unpack(array())
 ```
 
-See [Compiler Directives wiki page](https://github.com/TypeScriptToLua/TypeScriptToLua/wiki/Compiler-Directives) for more directive info.
+See [Compiler Annotations](compiler-annotations.md) page for more directive info.
 
 ## Environmental Declarations
 

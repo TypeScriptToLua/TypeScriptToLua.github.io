@@ -113,7 +113,7 @@ takesCallback(function(arg) print(arg) end)
 
 ## `@noSelf`
 
-If you wish to specify that all functions in a class, interface or namespace should not have a context parameter, you can use the [`@noSelf`](https://github.com/TypeScriptToLua/TypeScriptToLua/wiki/Compiler-Directives#noself) directive.
+If you wish to specify that all functions in a class, interface or namespace should not have a context parameter, you can use the [`@noSelf`](compiler-annotations.md#noself) directive.
 
 **Example**
 
@@ -147,9 +147,9 @@ MyNamespace:myFunction("foo")
 
 ## `@noSelfInFile`
 
-If you want to specify that all functions in a file should have no context, you can use [`@noSelfInFile`](https://github.com/TypeScriptToLua/TypeScriptToLua/wiki/Compiler-Directives#noselfinfile) at the top of the file.
+If you want to specify that all functions in a file should have no context, you can use [`@noSelfInFile`](compiler-annotations.md#noselfinfile) at the top of the file.
 
-For more information on [`@noSelf`](https://github.com/TypeScriptToLua/TypeScriptToLua/wiki/Compiler-Directives#noself) and [`@noSelfInFile`](https://github.com/TypeScriptToLua/TypeScriptToLua/wiki/Compiler-Directives#noselfinfile), please refer to [Compiler Directives](https://github.com/TypeScriptToLua/TypeScriptToLua/wiki/Compiler-Directives).
+For more information on [`@noSelf`](compiler-annotations.md#noself) and [`@noSelfInFile`](compiler-annotations.md#noselfinfile), please refer to [Compiler Annotations](compiler-annotations).
 
 # Assignment Errors
 

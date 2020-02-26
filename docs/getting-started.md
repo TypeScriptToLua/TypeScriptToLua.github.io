@@ -33,7 +33,7 @@ Example:
 }
 ```
 
-Because we use the same configuration system `tsc` uses, you can use most of the [options](https://www.typescriptlang.org/docs/handbook/compiler-options.html) available for vanilla TS (including source maps!) with some [limitations](https://github.com/Perryvw/TypescriptToLua/wiki/Limitations#config--compileroptions).
+Because we use the same configuration system `tsc` uses, you can use most of the [options](https://www.typescriptlang.org/docs/handbook/compiler-options.html) available for vanilla TS (including source maps!) with some [limitations](limitations.md#config--compileroptions).
 
 In addition we add some Lua related options:
 
@@ -74,14 +74,3 @@ tstl --luaTarget 5.1 --strict true script.ts
 ```bash
 tstl --luaTarget 5.1 --strict true script1.ts someDir/script2.ts
 ```
-
-## Further Reading
-
-It's recommended to read the following articles, for more information on advanced usage and limitations of tstl.
-
-- [Differences between Lua and JS](https://github.com/TypeScriptToLua/TypeScriptToLua/wiki/Differences-between-Lua-and-Javascript)
-- [Writing Declarations](https://github.com/TypeScriptToLua/TypeScriptToLua/wiki/Writing-Declarations)
-- [Compiler Directives](https://github.com/TypeScriptToLua/TypeScriptToLua/wiki/Compiler-Directives)
-- [Functions and the self Parameter](https://github.com/TypeScriptToLua/TypeScriptToLua/wiki/Functions-and-the-self-Parameter)
-- [Supported Lua Versions](https://github.com/TypeScriptToLua/TypeScriptToLua/wiki/Supported-Lua-Versions)
-- [Limitations](https://github.com/TypeScriptToLua/TypeScriptToLua/wiki/Limitations)

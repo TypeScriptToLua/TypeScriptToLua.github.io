@@ -6,7 +6,7 @@ The [LuaPrinter](https://github.com/TypeScriptToLua/TypeScriptToLua/blob/master/
 
 ## Visitor Pattern
 
-Like the LuaTransformer, the LuaPrinter class also implements a visitor pattern. For more explanation see the [visitor pattern explanation on the LuaTransformer page](https://github.com/TypeScriptToLua/TypeScriptToLua/wiki/Custom-LuaTransformer-API#visitor-pattern)
+Like the LuaTransformer, the LuaPrinter class also implements a visitor pattern. For more explanation see the [visitor pattern explanation on the LuaTransformer page](transformer.md#visitor-pattern)
 
 ## API Reference
 

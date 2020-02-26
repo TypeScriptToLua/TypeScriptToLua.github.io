@@ -100,8 +100,8 @@ The low-level API consists of only one function: `transpile`. It takes a TypeScr
 
 More information on extending the transformer and printer can be found here:
 
-- [Custom LuaTransformer API](https://github.com/TypeScriptToLua/TypeScriptToLua/wiki/Custom-LuaTransformer-API)
-- [Custom LuaPrinter API](https://github.com/TypeScriptToLua/TypeScriptToLua/wiki/Custom-LuaPrinter-API)
+- [Custom LuaTransformer API](transformer.md)
+- [Custom LuaPrinter API](printer.md)
 
 **Arguments:**
 

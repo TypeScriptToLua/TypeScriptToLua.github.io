@@ -261,7 +261,7 @@ NormalNS.normalFunc("foo");                         Translates to  NormalNS:norm
 NoSelfNS.noSelfFunc("bar");                         ============>  NoSelfNS.noSelfFunc("bar")
 ```
 
-For more information about how the `self` parameter is handled, see [Functions and the `self` Parameter](https://github.com/TypeScriptToLua/TypeScriptToLua/wiki/Functions-and-the-%60self%60-Parameter)
+For more information about how the `self` parameter is handled, see [Functions and the `self` Parameter](functions-and-the-self-parameter.md)
 
 ## @noSelfInFile
 
