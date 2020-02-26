@@ -4,23 +4,6 @@ title: Compiler Annotations
 
 To improve translation and compatibility to different Lua interfaces, the TypscriptToLua transpiler supports several custom annotations that slightly change translation results. This page documents the supported annotations. The syntax of the compiler annotations use the JSDoc syntax.
 
-#### Table of Contents
-
-- [@compileMembersOnly](#compilemembersonly)
-- [@customConstructor](#customconstructor)
-- [@extension](#extension)
-- [@forRange](#forRange)
-- [@luaIterator](#luaIterator)
-- [@luaTable](#luaTable)
-- [@metaExtension](#metaextension)
-- [@noResolution](#noResolution)
-- [@noSelf](#noself)
-- [@noSelfInFile](#noselfinfile)
-- [@phantom](#phantom)
-- [@pureAbstract](#pureabstract)
-- [@tupleReturn](#tuplereturn)
-- [@vararg](#vararg)
-
 ## @compileMembersOnly
 
 **Target elements:** `(declare) enum`

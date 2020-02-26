@@ -9,7 +9,9 @@ For a TypeScript quick start please read: https://www.typescriptlang.org/docs/ha
 
 NPM users can run:
 
-`npm install -g typescript-to-lua`
+```bash
+npm install -g typescript-to-lua
+```
 
 ## Project Setup
 
@@ -18,16 +20,16 @@ This file is called `tsconfig.json` and should be located in your projects root.
 
 Example:
 
-```
+```json
 {
-    "compilerOptions": {
-        "target": "esnext",
-        "lib": ["esnext"],
-        "strict": true
-    },
-    "tstl": {
-        "luaTarget": "JIT"
-    }
+  "compilerOptions": {
+    "target": "esnext",
+    "lib": ["esnext"],
+    "strict": true
+  },
+  "tstl": {
+    "luaTarget": "JIT"
+  }
 }
 ```
 
@@ -37,15 +39,15 @@ In addition we add some Lua related options:
 
 ### TSTL specific options
 
-| Option             | Values                                                                                           | Description                                                                                                                                                                  |
-| ------------------ | ------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| luaTarget          | "JIT", "5.3", "5.2", "5.1" (default: "JIT")                                                      | Specifies the Lua version you wan to generate code for.                                                                                                                      |
-| noImplicitSelf     | true, false (default: false)                                                                     | If true, treats all project files as if they were prefixed with `/** @noSelfInFile **/`.                                                                                     |
-| noHeader           | true, false (default: false)                                                                     | Set this to true if you don't want to include our header in the output.                                                                                                      |
-| luaLibImport       | "inline" lualib functions <br /> "require" lualib functions, "none" don't import lualib features | We polypill certain javascript features with Lua functions, this option specifies how these functions are imported into the Lua output.                                      |
-| sourceMapTraceback | true, false (default: false)                                                                     | Overrides Lua's `debug.traceback` to apply sourcemaps to Lua stacktraces. This will make error messages point to your original TypeScript code instead of the generated Lua. |
-| luaBundle          | Name/path of the output lua bundle file                                                          | Will bundle all output lua files into a single bundle file. Requires **luaBundleEntry** to be set!                                                                           |
-| luaBundleEntry     | Name/path of the entry module (\*.ts) of your program                                            | This should be the name/path of the TS file in your project that will serve as entry point to the bundled code.                                                              |
+| Option               | Values                                                               | Description                                                                                                                                                                  |
+| -------------------- | -------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `luaTarget`          | `"JIT"`, `"5.3"`, `"5.2"`, `"5.1"` (default: `"JIT"`)                | Specifies the Lua version you wan to generate code for.                                                                                                                      |
+| `noImplicitSelf`     | `true`, `false` (default: `false`)                                   | If true, treats all project files as if they were prefixed with<br />`/** @noSelfInFile **/`.                                                                                |
+| `noHeader`           | `true`, `false` (default: `false`)                                   | Set this to true if you don't want to include our header in the output.                                                                                                      |
+| `luaLibImport`       | `"inline"`, `"require"`, `"always"`, `"none"` (default: `"require"`) | We polyfill certain JavaScript features with Lua functions, this option specifies how these functions are imported into the Lua output.                                      |
+| `sourceMapTraceback` | `true`, `false` (default: `false`)                                   | Overrides Lua's `debug.traceback` to apply sourcemaps to Lua stacktraces. This will make error messages point to your original TypeScript code instead of the generated Lua. |
+| `luaBundle`          | File path (relative to the `tsconfig.json`)                          | Will bundle all output lua files into a single bundle file. Requires **luaBundleEntry** to be set!                                                                           |
+| `luaBundleEntry`     | File path (relative to the `tsconfig.json`)                          | This should be the name/path of the TS file in your project that will serve as entry point to the bundled code.                                                              |
 
 **IMPORTANT** These options need to be set in the `tstl` object of your `tsconfig.json`, do not set them inside `compilerOptions` (see example above).
 
@@ -55,7 +57,9 @@ Our command line interface is called `tstl` and it works almost exactly as TypeS
 
 Example:
 
-`tstl -p pathToYour/tsconfig.json --luaTarget JIT --strict false`
+```bash
+tstl -p pathToYour/tsconfig.json --luaTarget JIT --strict false
+```
 
 This command will build your project, overriding some options set in `tsconfig.json` (first example).
 
@@ -63,9 +67,13 @@ This command will build your project, overriding some options set in `tsconfig.j
 
 Example:
 
-`tstl --luaTarget 5.1 --strict true script.ts`
+```bash
+tstl --luaTarget 5.1 --strict true script.ts
+```
 
-`tstl --luaTarget 5.1 --strict true script1.ts someDir/script2.ts`
+```bash
+tstl --luaTarget 5.1 --strict true script1.ts someDir/script2.ts
+```
 
 ## Further Reading
 

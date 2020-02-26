@@ -7,25 +7,25 @@ This project aims for both compilation results to have the same behavior as much
 
 Below are some of the cases where resulting Lua intentionally behaves different from compiled JS.
 
-# True/False values
+# [Boolean coercion](https://developer.mozilla.org/en-US/docs/Glossary/Falsy)
 
 JavaScript and Lua differ in what they evaluate to true/false. TypeScriptToLua adheres to the Lua evaluations. Therefore there is also no difference between `==` and `===` when compiling to Lua, all comparisons are strict (`===`).
 
 | TypeScript        | _JavaScript behavior_ | _Lua behavior_ |
 | ----------------- | --------------------- | -------------- |
 | `false`           | `false`               | `false`        |
-| `undefined`       | `false`               | `nil`→ `false` |
-| `null`            | `false`               | `nil`→ `false` |
-| `NaN`             | `false`               | `nil`→ `false` |
-| `""`              | ⚠️`false`             | ⚠️`true`       |
-| `0`               | ⚠️`false`             | ⚠️`true`       |
-| (Everything else) | `false`               | `false`        |
+| `undefined`       | `false`               | `false`        |
+| `null`            | `false`               | `false`        |
+| `NaN`             | `false`               | ⚠️`true`       |
+| `""`              | `false`               | ⚠️`true`       |
+| `0`               | `false`               | ⚠️`true`       |
+| (Everything else) | `true`                | `true`         |
 
 # List Length
 
 List length is translated to Lua's `#` operator. Due to the way lists are implemented in Lua there can be differences between Javascript's `list.length` and Lua's `#list`. The transpiler does not do anything to remedy these differences, so when working with lists, the transpiled Lua will use the standard Lua conventions. Generally speaking, the situation where these differences occur happen when adding/removing items to a list in a hacky way, or when setting list items to `undefined`/`null`.
 
-##Exmples:
+## Examples:
 
 **Safe (no difference):**
 

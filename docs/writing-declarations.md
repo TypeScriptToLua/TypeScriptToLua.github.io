@@ -4,34 +4,7 @@ title: Writing Declarations
 
 The real power of the transpiler is unlocked when combining it with declarations for your target environment. Declarations tell TypeScript which Lua API is available in your target context.
 
-If you need tips or help writing declarations, feel free to join our Discord:
-
-[https://discord.gg/BWAq58Y](https://discord.gg/BWAq58Y)
-
-#### Table of Contents
-
-- [About Declaration Files](#about-declaration-files)
-- [Declare Keyword](#declare-keyword)
-- [Export Keyword](#export-keyword)
-- [Self Parameter](#self-parameter)
-- [Comments and Directives](#comments-and-directives)
-- [Environmental Declarations](#environmental-declarations)
-- [Advanced Types](#advanced-types)
-- [Declaration Merging](#declaration-merging)
-  - [Function + Table](#function-+-table)
-- [Declaration Examples](#declaration-examples)
-  - [Interface](#interfaces)
-  - [Namespaces](#namespaces)
-  - [Classes](#classes)
-  - [Ambient Modules](#ambient-modules)
-  - [Unions](#unions)
-  - [Keyof](#keyof)
-  - [String Enums](#string-enums)
-  - [Keyword Workarounds](#keyword-workarounds)
-  - [Operator Overloads](#operator-overloads)
-  - [Import and Export](#import-and-export)
-- [NPM Publishing](#npm-publishing)
-- [Debugging Declarations](#debugging-declarations)
+If you need tips or help writing declarations, feel free to [join our Discord](https://discord.gg/BWAq58Y).
 
 ## About Declaration Files
 
@@ -46,8 +19,6 @@ This means functions, modules, variables and other members of the target Lua env
 They don't contain code that you would execute. Similar to how you'd write an interface in some other languages. TypeScriptToLua doesn't output any information from these files either.
 
 > Note: You can write ambient declarations inside `.ts` files as well.
-
-[Back to top](#table-of-contents)
 
 ## Declare Keyword
 
@@ -82,8 +53,6 @@ print(_VERSION); // Editor and transpiler know what print and _VERSION are
 ```
 
 > Note: You can use _declare_ to write ambient declarations inside `.ts` files.
-
-[Back to top](#table-of-contents)
 
 ## Export Keyword
 
@@ -139,8 +108,6 @@ utf8.codepoint();
 
 The `export` keyword can be used in a `.ts` or `.d.ts` file. It tells the transpiler and your editor (potentially) that something **contains/provides** something that you can either import (by using `import` in TS or `require()` in Lua) or access.
 
-[Back to top](#table-of-contents)
-
 ## Self Parameter
 
 TypeScript has a hidden _this_ parameter attached to every function.
@@ -186,8 +153,6 @@ declare namespace table {
 ```
 
 > By doing this, the transpiler also figures out if it needs to use _:_ or _._ when invoking a function / method.
-
-[Back to top](#table-of-contents)
 
 ## Comments and Directives
 
@@ -241,8 +206,6 @@ let [c, d] = array();
 
 See [Compiler Directives wiki page](https://github.com/TypeScriptToLua/TypeScriptToLua/wiki/Compiler-Directives) for more directive info.
 
-[Back to top](#table-of-contents)
-
 ## Environmental Declarations
 
 With TypeScript, by default, there are declarations that exist that describe something that doesn't exist in Lua (like `console.log`).
@@ -290,8 +253,6 @@ assert.isEqual();
 assert();
 ```
 
-[Back to top](#table-of-contents)
-
 ## Declaration Examples
 
 ### Interfaces
@@ -316,8 +277,6 @@ declare let image: Image;
 let [w, h] = image.getDimensions(); // local w, h = image:getDimensions()
 let o = image.getFlags();
 ```
-
-[Back to top](#table-of-contents)
 
 ### Namespaces
 
@@ -350,8 +309,6 @@ let [a, b, c, d] = love.getVersion();
 let p = love.graphics.newImage("file.png");
 ```
 
-[Back to top](#table-of-contents)
-
 ### Classes
 
 You'd only declare these if there were TypeScriptToLua compatible classes within the existing Lua code. It is definitely not recommended to define classes in ambient contexts for TypeScriptToLua, use interfaces instead.
@@ -368,8 +325,6 @@ declare class X {
 let p = new X();
 p.tuple();
 ```
-
-[Back to top](#table-of-contents)
 
 ### Ambient Modules
 
@@ -445,8 +400,6 @@ switch (response.type) {
 }
 ```
 
-[Back to top](#table-of-contents)
-
 ### keyof
 
 ```ts
@@ -461,8 +414,6 @@ getFile("player.png"); // Valid
 getFile("unknown.png"); // Invalid
 ```
 
-[Back to top](#table-of-contents)
-
 ### String Enums
 
 TypeScript can check a string is valid.
@@ -474,8 +425,6 @@ draw("rounded", 0, 0, 16, 16); // Invalid
 ```
 
 > This can apply to numbers as well
-
-[Back to top](#table-of-contents)
 
 ### Keyword Workarounds
 
@@ -510,8 +459,6 @@ declare module "creator" {
 }
 ```
 
-[Back to top](#table-of-contents)
-
 ### Operator Overloads
 
 Lua supports overloading of mathematical operators such as `+`, `-` or `*`. Since TypeScript does not support operator overloading in its type system this is hard to replicate. Unfortunately this is not something that can be fixed properly right now without forking off our custom TypeScript version.
@@ -534,8 +481,6 @@ const v3 = (v1 * 4) as Vector;
 const d = v3.dot(v2);
 ```
 
-[Back to top](#table-of-contents)
-
 ### Import and export
 
 Using `import` can be important for making sure an _index.d.ts_ file contains all the declarations needed.
@@ -556,8 +501,6 @@ declare module "mymodule" {
   export function getType(): types.Type;
 }
 ```
-
-[Back to top](#table-of-contents)
 
 ## NPM Publishing
 
@@ -581,21 +524,17 @@ And link it to a _tsconfig.json_ file.
 
 ```json
 {
-    "compilerOptions": {
-        "types": {
-            "declarations"
-        }
-    }
+  "compilerOptions": {
+    "types": ["declarations"]
+  }
 }
 ```
-
-[Back to top](#table-of-contents)
 
 ## Debugging Declarations
 
 If you have TypeScript installed, you can use the command below to list all files a _tsconfig.json_ file targets.
 
-```
+```bash
 tsc -p tsconfig.json --noEmit --listFiles
 ```
 
@@ -635,5 +574,3 @@ Every TypeScript project points to a list of declarations. TypeScript is very ge
 + global.ts
   tsconfig.json
 ```
-
-[Back to top](#table-of-contents)
