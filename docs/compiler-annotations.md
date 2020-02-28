@@ -17,16 +17,16 @@ This decorator removes an enumeration's name after compilation and only leaves i
 <SideBySide>
 
 ```typescript
-declare enum myEnum {
-  myEnum_memberA,
-  myEnum_memberB,
+declare enum MyEnum {
+  MY_ENUM_MEMBER_A,
+  MY_ENUM_MEMBER_B,
 }
 
-const myvar = myEnum.myEnum_memberA;
+print(MyEnum.MY_ENUM_MEMBER_A);
 ```
 
 ```lua
-local myvar = myEnum.myEnum_memberA
+print(MyEnum.MY_ENUM_MEMBER_A)
 ```
 
 </SideBySide>
@@ -35,15 +35,16 @@ local myvar = myEnum.myEnum_memberA
 
 ```typescript
 /** @compileMembersOnly */
-declare enum myEnum {
-  myEnum_memberA,
-  myEnum_memberB,
+declare enum MyEnum {
+  MY_ENUM_MEMBER_A,
+  MY_ENUM_MEMBER_B,
 }
-const myvar = myEnum.myEnum_memberA;
+
+print(MyEnum.MY_ENUM_MEMBER_A);
 ```
 
 ```lua
-local myvar = myEnum_memberA
+print(MY_ENUM_MEMBER_A)
 ```
 
 </SideBySide>
@@ -53,21 +54,22 @@ local myvar = myEnum_memberA
 <SideBySide>
 
 ```typescript
-enum myEnum {
-  myEnum_memberA,
-  myEnum_memberB,
-  myEnum_memberC = "c",
+enum MyEnum {
+  MY_ENUM_MEMBER_A,
+  MY_ENUM_MEMBER_B,
+  MY_ENUM_MEMBER_C = "c",
 }
-const myvar = myEnum.myEnum_memberA;
+
+print(MyEnum.MY_ENUM_MEMBER_A);
 ```
 
 ```lua
-myEnum = {}
-myEnum.myEnum_memberA = 0
-myEnum.myEnum_memberB = 1
-myEnum.myEnum_memberC = "c"
+MyEnum = {}
+MyEnum.MY_ENUM_MEMBER_A = 0
+MyEnum.MY_ENUM_MEMBER_B = 1
+MyEnum.MY_ENUM_MEMBER_C = "c"
 
-local myvar = myEnum.myEnum_memberA
+print(MyEnum.MY_ENUM_MEMBER_A)
 ```
 
 </SideBySide>
@@ -76,20 +78,21 @@ local myvar = myEnum.myEnum_memberA
 
 ```typescript
 /** @compileMembersOnly */
-enum myEnum {
-  myEnum_memberA,
-  myEnum_memberB,
-  myEnum_memberC = "c",
+enum MyEnum {
+  MY_ENUM_MEMBER_A,
+  MY_ENUM_MEMBER_B,
+  MY_ENUM_MEMBER_C = "c",
 }
-const myvar = myEnum.myEnum_memberA;
+
+print(MyEnum.MY_ENUM_MEMBER_A);
 ```
 
 ```lua
-myEnum_memberA = 0
-myEnum_memberB = 1
-myEnum_memberC = "c"
+MY_ENUM_MEMBER_A = 0
+MY_ENUM_MEMBER_B = 1
+MY_ENUM_MEMBER_C = "c"
 
-local myvar = myEnum_memberA
+print(MY_ENUM_MEMBER_A)
 ```
 
 </SideBySide>
@@ -112,7 +115,7 @@ const inst = new MyClass(3);
 ```
 
 ```lua
-local inst = MyClass.new(true, 3);
+local inst = __TS__New(MyClass, 3)
 ```
 
 </SideBySide>
@@ -128,7 +131,7 @@ const inst = new MyClass(3);
 ```
 
 ```lua
-local inst = MyConstructor(3);
+local inst = MyConstructor(3)
 ```
 
 </SideBySide>
@@ -144,16 +147,15 @@ The Extension decorator marks a class as an extension of an already existing cla
 <SideBySide>
 
 ```typescript
-class myBaseClass {
+class MyBaseClass {
   myFunction(): void {}
 }
 ```
 
 ```lua
-myBaseClass = myBaseClass or {}
-myBaseClass.__index = myBaseClass
+MyBaseClass = __TS__Class()
 ...
-function myBaseClass.myFunction(self) end
+function MyBaseClass.prototype.myFunction(self) end
 ```
 
 </SideBySide>
@@ -162,13 +164,13 @@ function myBaseClass.myFunction(self) end
 
 ```typescript
 /** @extension */
-class myBaseClass {
+class MyBaseClass {
   myFunction(): void {}
 }
 ```
 
 ```lua
-function myBaseClass.myFunction(self) end
+function MyBaseClass.myFunction(self) end
 ```
 
 </SideBySide>
@@ -214,10 +216,10 @@ Denotes a type is a Lua iterator. When an object of a type with this annotation 
 <!-- prettier-ignore -->
 ```typescript
 /** @luaIterator */
-interface MyIterable extends Iterable<string> {}
-declare function myIterator(): MyIterable;
+type LuaIterable<T> = Iterable<T>;
 
-for (let s of myIterator()) {}
+declare function myIterator(): LuaIterator<string>;
+for (const s of myIterator()) {}
 ```
 
 ```lua
@@ -234,12 +236,11 @@ This can also be combined with [@tupleReturn](#tuplereturn), if the iterator ret
 
 <!-- prettier-ignore -->
 ```typescript
-// Lua's built-in string.gmatch() iterator
-declare namespace string {
-  /** @luaIterator @tupleReturn */
-  interface GmatchIterable extends Array<string[]> {}
+/** @luaIterator @tupleReturn */
+type LuaTupleIterable<T extends any[]> = Iterable<T>;
 
-  function gmatch(s: string, pattern: string): GmatchIterable;
+declare namespace string {
+  function gmatch(s: string, pattern: string): LuaTupleIterable<string[]>;
 }
 
 for (const [a, b] of string.gmatch("foo", "(.)(.)")) {}
@@ -286,16 +287,15 @@ The Extension decorator marks a class as an extension of an already existing met
 <SideBySide>
 
 ```typescript
-class myBaseClass {
+class MyBaseClass {
   myFunction(): void {}
 }
 ```
 
 ```lua
-myBaseClass = myBaseClass or {}
-myBaseClass.__index = myBaseClass
+MyBaseClass = __TS__Class()
 ...
-function myBaseClass.myFunction(self) end
+function MyBaseClass.prototype.myFunction(self) end
 ```
 
 </SideBySide>
@@ -304,14 +304,14 @@ function myBaseClass.myFunction(self) end
 
 ```typescript
 /** @metaExtension */
-class myMetaExtension extends myMetaClass {
+class MyMetaExtension extends MyMetaClass {
   myFunction(): void {}
 }
 ```
 
 ```lua
-local __meta__myMetaClass = debug.getregistry()["myMetaClass"]
-__meta__myMetaClass.myFunction = function(self)
+local __meta__MyMetaClass = debug.getregistry().MyMetaClass
+__meta__MyMetaClass.myFunction = function(self)
 end;
 ```
 
@@ -328,7 +328,7 @@ Prevents tstl from trying to resolve the module path. When importing this module
 <SideBySide>
 
 ```typescript
-module MyModule {}
+declare module "mymodule" {}
 import module from "mymodule";
 ```
 
@@ -343,7 +343,7 @@ local module = require("src.mymodule");
 
 ```typescript
 /** @noResolution */
-module MyModule {}
+declare module "mymodule" {}
 import module from "mymodule";
 ```
 
@@ -397,12 +397,12 @@ When applied to a namespace, all functions declared within the namespace will tr
 
 ```typescript
 declare namespace NormalNS {
-  export function normalFunc(s: string): string;
+  function normalFunc(s: string): string;
 }
 
 /** @noSelf **/
 declare namespace NoSelfNS {
-  export function noSelfFunc(s: string): string;
+  function noSelfFunc(s: string): string;
 }
 
 NormalNS.normalFunc("foo");
@@ -454,7 +454,7 @@ function myNameSpace.myFunction() end
 <SideBySide>
 
 ```typescript
-/** !phantom */
+/** @phantom */
 namespace myNameSpace {
   function myFunction(): void {}
 }
@@ -477,15 +477,16 @@ This decorator marks a class declaration as purely abstract. The result is that 
 <SideBySide>
 
 ```typescript
-declare class myAbstractClass {}
-class myClass extends myAbstractClass {}
+declare class MyAbstractClass {}
+class MyClass extends MyAbstractClass {}
 ```
 
 ```lua
-myClass = myClass or myAbstractClass.new()
-myClass.__index = myClass
-myClass.__base = myAbstractClass
-function myClass.new(...
+MyClass = __TS__Class()
+MyClass.__base = MyAbstractClass
+MyClass.____super = MyAbstractClass
+setmetatable(MyClass, MyClass.____super)
+setmetatable(MyClass.prototype, MyClass.____super.prototype)
 ```
 
 </SideBySide>
@@ -494,14 +495,12 @@ function myClass.new(...
 
 ```typescript
 /** @pureAbstract */
-declare class myAbstractClass {}
-class myClass extends myAbstractClass {}
+declare class MyAbstractClass {}
+class MyClass extends MyAbstractClass {}
 ```
 
 ```lua
-myClass = myClass or {}
-myClass.__index = myClass
-function myClass.new(...
+MyClass = __TS__Class()
 ```
 
 </SideBySide>
@@ -520,7 +519,7 @@ This decorator indicates a function returns a lua tuple instead of a table. It i
 function myFunction(): [number, string] {
   return [3, "4"];
 }
-let [a, b] = myFunction();
+const [a, b] = myFunction();
 ```
 
 ```lua
@@ -539,7 +538,7 @@ local a,b = unpack(myFunction())
 function myFunction(): [number, string] {
   return [3, "4"];
 }
-let [a, b] = myFunction();
+const [a, b] = myFunction();
 ```
 
 ```lua
@@ -581,8 +580,10 @@ function varargWrapUnpack(...args: string[]) {
 ```
 
 ```lua
-local args = ({...})
-print(unpack(args))
+function varargWrapUnpack(self, ...)
+    local args = ({...})
+    print(unpack(args))
+end
 ```
 
 </SideBySide>
@@ -599,7 +600,9 @@ function varargForward(...args: Vararg<string>) {
 ```
 
 ```lua
-print(...)
+function varargForward(self, ...)
+    print(...))
+end
 ```
 
 </SideBySide>
@@ -629,22 +632,36 @@ To also support tuple-typed rest parameters, you can define the type like this:
 
 ```typescript
 /** @vararg */
-type Vararg<A extends unknown[]> = A & { __luaVararg?: never };
+type Vararg<T extends unknown[]> = T & { __luaVararg?: never };
 
 function varargForward(...args: Vararg<[string, number]>) {}
 ```
 
 **_Warning_**
 
-TypeScriptToLua does not check that the vararg expression is valid in the context it is used. If the array is used in a spread operation in an invalid context (such as a nested function), a Lua compiler error will occur.
+TypeScriptToLua does not check that the vararg expression is valid in the context it is used. If the array is used in a spread operation in an invalid context (such as a nested function), a deoptimization will occur.
 
 **Example**
+
+<SideBySide>
 
 ```typescript
 function outerFunction(...args: Vararg<string>) {
   function innerFunction() {
-    console.log(...args); // cannot use '...' outside a vararg function
+    console.log(...args);
   }
   innerFunction();
 }
 ```
+
+```lua
+function outerFunction(self, ...)
+    local args = {...}
+    local function innerFunction(self)
+        print(unpack(args))
+    end
+    innerFunction(_G)
+end
+```
+
+</SideBySide>

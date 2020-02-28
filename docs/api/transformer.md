@@ -45,6 +45,7 @@ class CustomTransformer extends tstl.LuaTransformer {
 
 This is a list of all public overridable methods in the default TypeScriptToLua tranformer:
 
+<!-- prettier-ignore -->
 ```ts
 class LuaTransformer {
   public transformSourceFile(sourceFile: ts.SourceFile): [tstl.Block, Set<LuaLibFeature>];
@@ -57,32 +58,15 @@ class LuaTransformer {
 
   public transformImportDeclaration(declaration: ts.ImportDeclaration): StatementVisitResult;
 
-  public transformClassDeclaration(
-    declaration: ts.ClassLikeDeclaration,
-    nameOverride?: tstl.Identifier,
-  ): StatementVisitResult;
+  public transformClassDeclaration(declaration: ts.ClassLikeDeclaration, nameOverride?: tstl.Identifier): StatementVisitResult;
 
-  public transformGetAccessorDeclaration(
-    declaration: ts.GetAccessorDeclaration,
-    className: tstl.Identifier,
-  ): StatementVisitResult;
+  public transformGetAccessorDeclaration(declaration: ts.GetAccessorDeclaration, className: tstl.Identifier): StatementVisitResult;
 
-  public transformSetAccessorDeclaration(
-    declaration: ts.GetAccessorDeclaration,
-    className: tstl.Identifier,
-  ): StatementVisitResult;
+  public transformSetAccessorDeclaration(declaration: ts.GetAccessorDeclaration, className: tstl.Identifier): StatementVisitResult;
 
-  public transformMethodDeclaration(
-    declaration: ts.MethodDeclaration,
-    className: tstl.Identifier,
-    noPrototype: boolean,
-  ): StatementVisitResult;
+  public transformMethodDeclaration(declaration: ts.MethodDeclaration, className: tstl.Identifier, noPrototype: boolean): StatementVisitResult;
 
-  public transformBindingPattern(
-    pattern: ts.BindingPattern,
-    table: tstl.Identifier,
-    propertyStack: ts.PropertyName,
-  ): StatementVisitResult;
+  public transformBindingPattern(pattern: ts.BindingPattern, table: tstl.Identifier,propertyStack: ts.PropertyName): StatementVisitResult;
 
   public transformModuleDeclaration(declaration: ts.ModuleDeclaration): StatementVisitResult;
 

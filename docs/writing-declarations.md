@@ -26,8 +26,7 @@ The _declare_ keyword is used to say that the following declaration defines some
 
 This is useful for defining Lua's environment.
 
-```ts
-// _G.d.ts
+```ts title=_G.d.ts
 // Uses some declarations from
 // https://www.lua.org/manual/5.1/manual.html
 
@@ -47,8 +46,7 @@ declare const _VERSION: number;
 declare function print(...args: any[]): void;
 ```
 
-```ts
-// main.ts
+```ts title=main.ts
 print(_VERSION); // Editor and transpiler know what print and _VERSION are
 ```
 
@@ -62,20 +60,17 @@ This also includes ambient interfaces, types, modules and other items that don't
 
 If a file named _lib.lua_ exists and returns a table with an _x_ field, you can write _lib.d.t.s_ as follows to tell TypeScript that _lib_ exists and what it provides.
 
-```ts
-// lib.d.ts
+```ts title=lib.d.ts
 export let x: number;
 ```
 
-```ts
-// main.ts
+```ts title=main.ts
 import { x } from "./lib";
 ```
 
 If a namespace contains certain functions, `export` tells TypeScript that those functions can be accessed within the namespace.
 
-```ts
-// .d.ts
+```ts title=.d.ts
 declare namespace table {
   /**
    * @noSelf
@@ -84,15 +79,13 @@ declare namespace table {
 }
 ```
 
-```ts
-// .ts
+```ts title=main.ts
 table.insert({}, 1);
 ```
 
 If a globally available module exists within the Lua environment. You can define what the module provides.
 
-```ts
-// .d.ts
+```ts title=.d.ts
 declare module "utf8" {
   /**
    * @noSelf
@@ -158,12 +151,10 @@ declare namespace table {
 
 If you're using an editor that seeks out information about functions, variables, etc. It will likely find the file where what it is analyzing is defined and check out the comment above it.
 
-```ts
-// print.d.ts
-
+```ts title=print.d.ts
 /**
  * When hovering over print, this description will be shown
- * @param {any[]} args Stuff to print
+ * @param args Stuff to print
  */
 declare function print(...args: any[]);
 ```
@@ -240,15 +231,14 @@ Some examples of declaration merging have been shown in the above examples.
 
 Some tables can use `__call` to make themselves callable. Busted (the Lua testing suite) does this to `assert`.
 
-```ts
-// .d.ts
+```ts title=.d.ts
 declare namespace assert {
   export function isEqual(): void;
 }
 declare function assert(value: any, errorDescription?: string): void;
 ```
 
-```ts
+```ts title=main.ts
 assert.isEqual();
 assert();
 ```
@@ -257,8 +247,7 @@ assert();
 
 ### Interfaces
 
-```ts
-// .d.ts
+```ts title=.d.ts
 interface Image {
   /** @tupleReturn */
   getDimensions(): [number, number];
@@ -271,8 +260,7 @@ interface Image {
 }
 ```
 
-```ts
-// usage.ts
+```ts title=main.ts
 declare let image: Image;
 let [w, h] = image.getDimensions(); // local w, h = image:getDimensions()
 let o = image.getFlags();
@@ -280,8 +268,7 @@ let o = image.getFlags();
 
 ### Namespaces
 
-```ts
-// .d.ts
+```ts title=.d.ts
 declare namespace love {
   export let update: (delta: number) => void;
   /** @tupleReturn */
@@ -303,8 +290,7 @@ declare namespace string {
 }
 ```
 
-```ts
-// usage.ts
+```ts title=main.ts
 let [a, b, c, d] = love.getVersion();
 let p = love.graphics.newImage("file.png");
 ```
@@ -313,15 +299,13 @@ let p = love.graphics.newImage("file.png");
 
 You'd only declare these if there were TypeScriptToLua compatible classes within the existing Lua code. It is definitely not recommended to define classes in ambient contexts for TypeScriptToLua, use interfaces instead.
 
-```ts
-// .d.ts
+```ts title=.d.ts
 declare class X {
   tuple();
 }
 ```
 
-```ts
-// usage.ts
+```ts title=main.ts
 let p = new X();
 p.tuple();
 ```
@@ -332,8 +316,7 @@ You may have to use the `@noResolution` directive to tell TypeScriptToLua to not
 
 Module declarations need to be kept in _.d.ts_ files.
 
-```ts
-// .d.ts
+```ts title=.d.ts
 /** @noSelf */
 declare module "image-size" {
   export function getimagewidth(filename: string): number;
@@ -356,8 +339,7 @@ declare module "number-of-the-day" {
 declare module "custommodule";
 ```
 
-```ts
-// .ts
+```ts title=main.ts
 import { getimagewidth, getimageheight } from "image-size";
 import * as x from "contains_a_number";
 import * as custommodule from "custommodule";
@@ -367,8 +349,7 @@ import * as custommodule from "custommodule";
 
 Unions can be used to tell TypeScript that a given type could be one of many other types. TypeScript can then pick up hints in the code to figure out what that type is at a given statement.
 
-```ts
-// .ts
+```ts title=main.ts
 declare interface PingResponse {
   type: "ping";
   timeTaken: number;

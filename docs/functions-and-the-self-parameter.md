@@ -13,7 +13,7 @@ In JavaScript and TypeScript, almost all functions have access to an implicit `t
 <SideBySide>
 
 ```typescript
-function myFunction(arg: unknown) {}
+function myFunction(arg: string) {}
 myFunction("foo");
 ```
 
@@ -31,13 +31,15 @@ The reason for this is that a method can be assigned to a stand-alone function a
 
 ```typescript
 class MyClass {
-  myMethod(arg: unknown) {
+  myMethod(arg: string) {
     console.log("myMethod", arg);
   }
 }
-var myFunction = function(arg: unknown) {
+
+let myFunction = function(arg: string) {
   console.log("myFunction", arg);
 };
+
 const c = new MyClass();
 
 c.myMethod = myFunction;
@@ -56,7 +58,7 @@ Note that even declared functions are assumed to have this extra parameter as we
 <SideBySide>
 
 ```typescript
-declare function myLibFunction(arg: unknown): void;
+declare function myLibFunction(arg: string): void;
 myLibFunction("foo");
 ```
 
@@ -79,7 +81,7 @@ You can declare any function with `this: void` to prevent generation of this ini
 <SideBySide>
 
 ```typescript
-declare function myLibFunction(this: void, arg: unknown): void;
+declare function myLibFunction(this: void, arg: string): void;
 myLibFunction("foo");
 ```
 
@@ -97,18 +99,18 @@ This works on methods as well, which can be useful if you have class methods whi
 
 ```typescript
 declare class MyClass {
-  myMethodWithContext(arg: unknown): void;
-  myMethodWithoutContext(this: void, arg: unknown): void;
+  withContext(arg: string): void;
+  withoutContext(this: void, arg: string): void;
 }
 const c = new MyClass();
-c.myMethodWithContext("foo");
-c.myMethodWithoutContext("foo");
+c.withContext("foo");
+c.withoutContext("foo");
 ```
 
 ```lua
-local c = MyClass.new()
-c:myMethodWithContext("foo") -- uses colon :
-c.myMethodWithoutContext("foo") -- uses dot .
+local c = __TS__New(MyClass)
+c:withContext("foo") -- uses colon :
+c.withoutContext("foo") -- uses dot .
 ```
 
 </SideBySide>
@@ -119,9 +121,13 @@ Another common scenario is a library function which takes a lua callback functio
 
 <SideBySide>
 
+<!-- prettier-ignore -->
 ```typescript
-type Callback = (this: void, arg: unknown) => void;
-declare function takesCallback(this: void, callback: Callback): void;
+declare function takesCallback(
+  this: void,
+  callback: (this: void, arg: string) => void,
+): void;
+
 takesCallback(arg => {
   console.log(arg);
 });
@@ -144,7 +150,7 @@ If you wish to specify that all functions in a class, interface or namespace sho
 ```typescript
 /** @noSelf **/
 declare namespace MyNamespace {
-  export function myFunction(arg: unknown): void;
+  function myFunction(arg: string): void;
 }
 MyNamespace.myFunction("foo");
 ```
@@ -164,7 +170,7 @@ You can override `@noSelf` on a per-function basis by specifying a `this` parame
 ```typescript
 /** @noSelf **/
 declare namespace MyNamespace {
-  export function myFunction(this: any, arg: unknown): void {}
+  function myFunction(this: any, arg: string): void;
 }
 MyNamespace.myFunction("foo");
 ```
@@ -194,7 +200,7 @@ function myCallback(arg: string) {}
 takesCallback(myCallback); // Error: Unable to convert function with a 'this' parameter to function with no 'this'. To fix, wrap in an arrow function, or declare with 'this: void'.
 ```
 
-This throws an error because if takesCallback called myCallback, it would do so without passing an initial context parameter. This can be easily fixed simply by wrapping the call in an arrow function.
+This throws an error because if `takesCallback` called `myCallback`, it would do so without passing an initial context parameter. This can be easily fixed simply by wrapping the call in an arrow function.
 
 **Example**
 
