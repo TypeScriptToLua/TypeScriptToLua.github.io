@@ -2,11 +2,15 @@
 title: Functions and the `self` Parameter
 ---
 
+import { SideBySide } from "@site/src/components/SideBySide";
+
 # Every Function Has a Context Parameter
 
 In JavaScript and TypeScript, almost all functions have access to an implicit `this` parameter. In order to maintain compatibility with this, all Lua functions are generated with an extra initial context parameter.
 
 **Example**
+
+<SideBySide>
 
 ```typescript
 function myFunction(arg: unknown) {}
@@ -18,6 +22,8 @@ function myFunction(self, arg)
 end
 myFunction(nil, "foo")
 ```
+
+</SideBySide>
 
 The reason for this is that a method can be assigned to a stand-alone function and vice-versa.
 
@@ -47,6 +53,8 @@ Note that even declared functions are assumed to have this extra parameter as we
 
 **Example**
 
+<SideBySide>
+
 ```typescript
 declare function myLibFunction(arg: unknown): void;
 myLibFunction("foo");
@@ -55,6 +63,8 @@ myLibFunction("foo");
 ```lua
 myLibFunction(nil, "foo")
 ```
+
+</SideBySide>
 
 # Removing the Context Parameter
 
@@ -66,6 +76,8 @@ You can declare any function with `this: void` to prevent generation of this ini
 
 **Example**
 
+<SideBySide>
+
 ```typescript
 declare function myLibFunction(this: void, arg: unknown): void;
 myLibFunction("foo");
@@ -75,9 +87,13 @@ myLibFunction("foo");
 myLibFunction("foo")
 ```
 
+</SideBySide>
+
 This works on methods as well, which can be useful if you have class methods which should be called with a dot `.` instead of a colon `:`.
 
 **Example**
+
+<SideBySide>
 
 ```typescript
 declare class MyClass {
@@ -95,9 +111,13 @@ c:myMethodWithContext("foo") -- uses colon :
 c.myMethodWithoutContext("foo") -- uses dot .
 ```
 
+</SideBySide>
+
 Another common scenario is a library function which takes a lua callback function, which should not have a context parameter.
 
 **Example**
+
+<SideBySide>
 
 ```typescript
 type Callback = (this: void, arg: unknown) => void;
@@ -111,11 +131,15 @@ takesCallback(arg => {
 takesCallback(function(arg) print(arg) end)
 ```
 
+</SideBySide>
+
 ## `@noSelf`
 
 If you wish to specify that all functions in a class, interface or namespace should not have a context parameter, you can use the [`@noSelf`](compiler-annotations.md#noself) directive.
 
 **Example**
+
+<SideBySide>
 
 ```typescript
 /** @noSelf **/
@@ -129,9 +153,13 @@ MyNamespace.myFunction("foo");
 MyNamespace.myFunction("foo")
 ```
 
+</SideBySide>
+
 You can override `@noSelf` on a per-function basis by specifying a `this` parameter.
 
 **Example**
+
+<SideBySide>
 
 ```typescript
 /** @noSelf **/
@@ -144,6 +172,8 @@ MyNamespace.myFunction("foo");
 ```lua
 MyNamespace:myFunction("foo")
 ```
+
+</SideBySide>
 
 ## `@noSelfInFile`
 
@@ -168,6 +198,8 @@ This throws an error because if takesCallback called myCallback, it would do so 
 
 **Example**
 
+<SideBySide>
+
 ```typescript
 takesCallback(arg => myCallback(arg));
 ```
@@ -175,6 +207,8 @@ takesCallback(arg => myCallback(arg));
 ```lua
 takesCallback(function(arg) return myCallback(nil, arg) end)
 ```
+
+</SideBySide>
 
 The reason this works is because TypeScriptToLua infers whether the arrow function should take a context parameter or not based on the type it's being assigned to.
 
