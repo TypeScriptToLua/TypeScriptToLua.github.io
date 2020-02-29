@@ -4,27 +4,6 @@ title: Limitations
 
 There are certain features of Typescript, that are either not allowed or only partially supported. The following is a list of limitations.
 
-## Config / CompilerOptions
-
-Important Supported options are:
-
-- rootDir
-- outDir
-- project
-- (baseUrl)
-- skipLibCheck
-- strict
-- noImplicitAny
-- noImplicitThis
-
-For options not listed here, as a rule of thumb: **all options that configure type checking will work.**
-
-All other options are most likely not supported and will have no effect.
-
-**baseUrl**
-
-Does only work if your base url points to a directory inside your rootDir. Avoid using baseUrl if possible.
-
 ## String functions
 
 Not all string functions are supported. The supported functions are:
