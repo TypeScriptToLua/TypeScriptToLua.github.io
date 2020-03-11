@@ -8,6 +8,7 @@
         "functions-and-the-self-parameter",
         "supported-lua-versions",
         "limitations",
+        "editor-support",
         {
             "type": "category",
             "label": "API",
