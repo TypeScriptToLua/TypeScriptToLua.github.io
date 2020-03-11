@@ -2,12 +2,10 @@
     "docs": [
         "getting-started",
         "configuration",
-        "differences-between-lua-and-javascript",
         "writing-declarations",
         "compiler-annotations",
         "functions-and-the-self-parameter",
-        "supported-lua-versions",
-        "limitations",
+        "caveats",
         "editor-support",
         {
             "type": "category",
