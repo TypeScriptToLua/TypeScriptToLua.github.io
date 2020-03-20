@@ -2,11 +2,9 @@
 title: Overview
 ---
 
-TypeScriptToLua provides a high-level and a low-level API. The high-level API can be used to invoke basic transpiler operations. The low-level API can be used to extend and override default transpiler behavior, to customize it to your specific environment.
-
 ## High-level API
 
-The high level API allows you to simply invoke several common transpiler operations from code.
+The high level API allows you to simply invoke several common transpiler operations using well-known language primitives, handling usage of TypeScript API for you.
 
 ### TranspileString
 
@@ -92,65 +90,35 @@ console.log(result.transpiledFiles);
 
 ## Low-level API
 
-The low-level TypeScriptToLua API allows for extending or modifying of the default tstl transpilation process. For this to make sense it is important to know the process can broadly be split into **two phases: transforming and printing**. The first step of each transpilation is to **transform** the TypeScript AST of each file to a Lua AST. The next step is to **print** the resulting Lua AST to a string. TypeScriptToLua therefore implements a **LuaTransformer** and **LuaPrinter**. These two classes can be modified using the low-level API.
+On the contrast with high-level API, low-level API requires you to to manage TypeScript project yourself. See [Using the Compiler API](https://github.com/microsoft/TypeScript/wiki/Using-the-Compiler-API) page for the introduction to TypeScript API.
 
 ### Transpile
-
-The low-level API consists of only one function: `transpile`. It takes a TypeScript program, optional source files, and optional custom transformer and printer arguments, allowing you to override their default behavior first.
-
-More information on extending the transformer and printer can be found here:
-
-- [Custom LuaTransformer API](transformer.md)
-- [Custom LuaPrinter API](printer.md)
 
 **Arguments:**
 
 - program: ts.Program - The TypeScript program to transpile (note: unlike the high-level API, compilerOptions is part of the program and cannot be supplied separately).
-- _[Optional]_ sourceFiles: ts.SourceFile[] - A collection of sourcefiles to transpile, `program.getSourceFiles()` by default.
-- _[Optional]_ customTransformers: ts.CustomTransformers - Custom TypeScript transformers to apply before transpiling.
-- _[Optional]_ transformer: tstl.LuaTransformer - If provided, this transformer is used instead of the default tstl transformer.
-- _[Optional]_ printer: tstl.LuaPrinter - If provided, this printer is used instead of the default tstl printer.
+- _[Optional]_ sourceFiles: ts.SourceFile[] - A collection of `SourceFile`s to transpile, `program.getSourceFiles()` by default.
+- _[Optional]_ customTransformers: ts.CustomTransformers - List of extra [TypeScript transformers](../configuration.md#transformers).
+- _[Optional]_ plugins: tstl.Plugin[] - List of [TypeScriptToLua plugins](plugins.md).
 - _[Optional]_ emitHost: tstl.EmitHost - Provides the methods for reading/writing files, useful in cases where you need something other than regular reading from disk. Defaults to `ts.sys`.
 
 **Example:**
 
-This example shows using the low-level API to override how array literals are transpiled. By default, array literals are transformed as follows: `(TS)[1, 2, 3] -> (Lua){1, 2, 3}`. This example extends and overrides the default transformer to instead transform like this: `(TS)[1, 2, 3] -> (Lua){1, 2, 3, n=3}`.
-
 ```ts
-const options: tstl.CompilerOptions = { luaTarget: tstl.LuaTarget.Lua53 };
-const program = ts.createProgram({ rootNames: ["file1.ts", "file2.ts"], options });
-
-class CustomTransformer extends tstl.LuaTransformer {
-  public transformArrayLiteral(expression: ts.ArrayLiteralExpression): tstl.ExpressionVisitResult {
-    // Call the original transformArrayLiteral first, to get the default result.
-    // You could also skip this and create your own table expression with tstl.createTableExpression()
-    const result = super.transformArrayLiteral(expression) as tstl.TableExpression;
-
-    // Create the 'n = <elements.length>' node
-    const nIdentifier = tstl.createIdentifier("n");
-    const nValue = tstl.createNumericLiteral(expression.elements.length);
-    const tableField = tstl.createTableFieldExpression(nValue, nIdentifier);
-
-    // Add the extra table field we created to the default transformation result
-    if (result.fields === undefined) {
-      result.fields = [];
-    }
-    result.fields.push(tableField);
-
-    return result;
-  }
+const reportDiagnostic = tstl.createDiagnosticReporter(true);
+const configFileName = path.resolve(__dirname, "tsconfig.json");
+const parsedCommandLine = tstl.parseConfigFileWithSystem(configFileName);
+if (parsedCommandLine.errors.length > 0) {
+  parsedCommandLine.errors.forEach(reportDiagnostic);
+  return;
 }
 
-const transformer = new CustomTransformer(program);
-const printer = new tstl.LuaPrinter(options);
+const program = ts.createProgram(parsedCommandLine.fileNames, parsedCommandLine.options);
+const { transpiledFiles, diagnostics: transpileDiagnostics } = tstl.transpile({ program });
 
-const result = tstl.transpile({
-  program,
-  transformer,
-  printer,
-});
-console.log(result.diagnostics);
-console.log(result.transpiledFiles);
-// Emit result
-console.log(tstl.emitTranspiledFiles(options, result5.transpiledFiles));
+const emitResult = tstl.emitTranspiledFiles(options, transpiledFiles);
+emitResult.forEach(({ name, text }) => ts.sys.writeFile(name, text));
+
+const diagnostics = ts.sortAndDeduplicateDiagnostics([...ts.getPreEmitDiagnostics(program), ...transpileDiagnostics]);
+diagnostics.forEach(reportDiagnostic);
 ```

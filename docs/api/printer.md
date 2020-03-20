@@ -1,81 +1,61 @@
 ---
-title: LuaPrinter
+title: Printer
 ---
 
-The [LuaPrinter](https://github.com/TypeScriptToLua/TypeScriptToLua/blob/master/src/LuaPrinter.ts) class takes Lua AST and prints it to a string (with source map). Like the LuaTransformer, the printer implements the visitor pattern. All methods visit nodes in the AST to print them to a `SourceNode`, this will automatically produce correct mappings in the resulting source map.
-
-## Visitor Pattern
-
-Like the LuaTransformer, the LuaPrinter class also implements a visitor pattern. For more explanation see the [visitor pattern explanation on the LuaTransformer page](transformer.md#visitor-pattern)
+The [LuaPrinter](https://github.com/TypeScriptToLua/TypeScriptToLua/blob/master/src/LuaPrinter.ts) class takes Lua AST and prints it to a string (with source map). The printer implements the [visitor pattern](https://en.wikipedia.org/wiki/Visitor_pattern). All methods visit nodes in the AST to print them to a [`SourceNode`](https://github.com/mozilla/source-map#sourcenode), this will automatically produce correct mappings in the resulting source map.
 
 ## API Reference
 
-This is a list of all public overridable methods in the default TypeScriptToLua printer:
-
 ```ts
+interface PrintResult {
+  code: string;
+  sourceMap: string;
+  sourceMapNode: SourceNode;
+}
+
 class LuaPrinter {
-  public printStatement(statement: tstl.Statement): SourceNode;
-
-  public printDoStatement(statement: tstl.DoStatement): SourceNode;
-
-  public printVariableDeclarationStatement(statement: tstl.VariableDeclarationStatement): SourceNode;
-
-  public printVariableAssignmentStatement(statement: tstl.AssignmentStatement): SourceNode;
-
-  public printIfStatement(statement: tstl.IfStatement): SourceNode;
-
-  public printWhileStatement(statement: tstl.WhileStatement): SourceNode;
-
-  public printRepeatStatement(statement: tstl.RepeatStatement): SourceNode;
-
-  public printForStatement(statement: tstl.ForStatement): SourceNode;
-
-  public printForInStatement(statement: tstl.ForInStatement): SourceNode;
-
-  public printGotoStatement(statement: tstl.GotoStatement): SourceNode;
-
-  public printLabelStatement(statement: tstl.LabelStatement): SourceNode;
-
-  public printReturnStatement(statement: tstl.ReturnStatement): SourceNode;
-
-  public printBreakStatement(statement: tstl.BreakStatement): SourceNode;
-
-  public printExpressionStatement(statement: tstl.ExpressionStatement): SourceNode;
-
-  public printExpression(expression: tstl.Expression): SourceNode;
-
-  public printStringLiteral(expression: tstl.StringLiteral): SourceNode;
-
-  public printNumericLiteral(expression: tstl.NumericLiteral): SourceNode;
-
-  public printNilLiteral(expression: tstl.NilLiteral): SourceNode;
-
-  public printDotsLiteral(expression: tstl.DotsLiteral): SourceNode;
-
-  public printBooleanLiteral(expression: tstl.BooleanLiteral): SourceNode;
-
-  public printFunctionExpression(expression: tstl.FunctionExpression): SourceNode;
-
-  public printFunctionDefinition(statement: tstl.FunctionDefinition): SourceNode;
-
-  public printTableFieldExpression(expression: tstl.TableFieldExpression): SourceNode;
-
-  public printTableExpression(expression: tstl.TableExpression): SourceNode;
-
-  public printUnaryExpression(expression: tstl.UnaryExpression): SourceNode;
-
-  public printBinaryExpression(expression: tstl.BinaryExpression): SourceNode;
-
-  public printParenthesizedExpression(expression: tstl.ParenthesizedExpression): SourceNode;
-
-  public printCallExpression(expression: tstl.CallExpression): SourceNode;
-
-  public printMethodCallExpression(expression: tstl.MethodCallExpression): SourceNode;
-
-  public printIdentifier(expression: tstl.Identifier): SourceNode;
-
-  public printTableIndexExpression(expression: tstl.TableIndexExpression): SourceNode;
-
-  public printOperator(kind: tstl.Operator): SourceNode;
+  constructor(options: CompilerOptions, emitHost: EmitHost, fileName: string);
+  public print(block: lua.Block, luaLibFeatures: Set<LuaLibFeature>): PrintResult;
+  public printStatement(statement: lua.Statement): SourceNode;
+  public printDoStatement(statement: lua.DoStatement): SourceNode;
+  public printVariableDeclarationStatement(statement: lua.VariableDeclarationStatement): SourceNode;
+  public printVariableAssignmentStatement(statement: lua.AssignmentStatement): SourceNode;
+  public printIfStatement(statement: lua.IfStatement, isElseIf?: boolean): SourceNode;
+  public printWhileStatement(statement: lua.WhileStatement): SourceNode;
+  public printRepeatStatement(statement: lua.RepeatStatement): SourceNode;
+  public printForStatement(statement: lua.ForStatement): SourceNode;
+  public printForInStatement(statement: lua.ForInStatement): SourceNode;
+  public printGotoStatement(statement: lua.GotoStatement): SourceNode;
+  public printLabelStatement(statement: lua.LabelStatement): SourceNode;
+  public printReturnStatement(statement: lua.ReturnStatement): SourceNode;
+  public printBreakStatement(statement: lua.BreakStatement): SourceNode;
+  public printExpressionStatement(statement: lua.ExpressionStatement): SourceNode;
+  public printExpression(expression: lua.Expression): SourceNode;
+  public printStringLiteral(expression: lua.StringLiteral): SourceNode;
+  public printNumericLiteral(expression: lua.NumericLiteral): SourceNode;
+  public printNilLiteral(expression: lua.NilLiteral): SourceNode;
+  public printDotsLiteral(expression: lua.DotsLiteral): SourceNode;
+  public printBooleanLiteral(expression: lua.BooleanLiteral): SourceNode;
+  public printFunctionExpression(expression: lua.FunctionExpression): SourceNode;
+  public printFunctionDefinition(statement: lua.FunctionDefinition): SourceNode;
+  public printTableFieldExpression(expression: lua.TableFieldExpression): SourceNode;
+  public printTableExpression(expression: lua.TableExpression): SourceNode;
+  public printUnaryExpression(expression: lua.UnaryExpression): SourceNode;
+  public printBinaryExpression(expression: lua.BinaryExpression): SourceNode;
+  public printCallExpression(expression: lua.CallExpression): SourceNode;
+  public printMethodCallExpression(expression: lua.MethodCallExpression): SourceNode;
+  public printIdentifier(expression: lua.Identifier): SourceNode;
+  public printTableIndexExpression(expression: lua.TableIndexExpression): SourceNode;
+  public printOperator(kind: lua.Operator): SourceNode;
+  protected pushIndent(): void;
+  protected popIndent(): void;
+  protected indent(input?: SourceChunk): SourceChunk;
+  protected createSourceNode(node: lua.Node, chunks: SourceChunk | SourceChunk[], name?: string): SourceNode;
+  protected concatNodes(...chunks: SourceChunk[]): SourceNode;
+  protected printBlock(block: lua.Block): SourceNode;
+  protected printStatementArray(statements: lua.Statement[]): SourceChunk[];
+  protected isStatementEmpty(statement: lua.Statement): boolean;
+  protected joinChunks(separator: string, chunks: SourceChunk[]): SourceChunk[];
+  protected printExpressionList(expressions: lua.Expression[]): SourceChunk[];
 }
 ```

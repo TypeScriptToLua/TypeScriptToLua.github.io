@@ -2,7 +2,7 @@
 title: Plugins
 ---
 
-TypeScriptToLua allows to customize transpilation behavior using plugins.
+TypeScriptToLua supports plugins - an interface that allows to customize transpilation behavior.
 
 To add a plugin you have to add it under `tstl.luaPlugins` option in the [configuration file](../configuration.md).
 
@@ -26,6 +26,8 @@ Example:
 ## API
 
 ### `visitors`
+
+Internally, to process [Abstract Syntax Tree](https://basarat.gitbook.io/typescript/overview/ast) of a TypeScript program, TypeScriptToLua implements the [visitor pattern](https://en.wikipedia.org/wiki/Visitor_pattern). Visitor is a function, called with a processed node and transformation context, and returning a Lua AST node. Plugins can inject their own visitors using `visitors` property, overriding standard transformation behavior.
 
 Example:
 
@@ -73,20 +75,18 @@ export default plugin;
 
 ### `printer`
 
+Printer is a function that overrides standard implementation of Lua AST printer. It receives some information about the file and transformed Lua AST. See [Printer](printer.md) page for more information.
+
 Example:
 
 ```ts
 import * as tstl from "typescript-to-lua";
 
+class CustomLuaPrinter extends tstl.LuaPrinter {}
+
 const plugin: tstl.Plugin = {
-  // Printer is a function that can be used to override standard Lua AST printer
-  // It receives some information about the file and the transformed Lua AST
-  printer: (program, emitHost, fileName, ...args) => {
-    // You can get original printer result by constructing `LuaPrinter` and calling `print` method
-    const result = new tstl.LuaPrinter(program.getCompilerOptions(), emitHost, fileName).print(...args);
-    result.code = `-- Plugin\n${result.code}`;
-    return result;
-  },
+  printer: (program, emitHost, fileName, block, luaLibFeatures) =>
+    new CustomLuaPrinter(program.getCompilerOptions(), emitHost, fileName).print(block, luaLibFeatures),
 };
 
 export default plugin;
