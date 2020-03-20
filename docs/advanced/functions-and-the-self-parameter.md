@@ -4,7 +4,7 @@ title: Functions and the `self` Parameter
 
 import { SideBySide } from "@site/src/components/SideBySide";
 
-# Every Function Has a Context Parameter
+## Every Function Has a Context Parameter
 
 In JavaScript and TypeScript, almost all functions have access to an implicit `this` parameter. In order to maintain compatibility with this, all Lua functions are generated with an extra initial context parameter.
 
@@ -68,11 +68,11 @@ myLibFunction(nil, "foo")
 
 </SideBySide>
 
-# Removing the Context Parameter
+## Removing the Context Parameter
 
 When dealing with external library functions that don't expect this initial parameter, you will need to inform TypeScriptToLua. This can be done a few different ways.
 
-## `this: void`
+### `this: void`
 
 You can declare any function with `this: void` to prevent generation of this initial argument.
 
@@ -139,7 +139,7 @@ takesCallback(function(arg) print(arg) end)
 
 </SideBySide>
 
-## `@noSelf`
+### `@noSelf`
 
 If you wish to specify that all functions in a class, interface or namespace should not have a context parameter, you can use the [`@noSelf`](compiler-annotations.md#noself) directive.
 
@@ -181,13 +181,13 @@ MyNamespace:myFunction("foo")
 
 </SideBySide>
 
-## `@noSelfInFile`
+### `@noSelfInFile`
 
 If you want to specify that all functions in a file should have no context, you can use [`@noSelfInFile`](compiler-annotations.md#noselfinfile) at the top of the file.
 
 For more information on [`@noSelf`](compiler-annotations.md#noself) and [`@noSelfInFile`](compiler-annotations.md#noselfinfile), please refer to [Compiler Annotations](compiler-annotations).
 
-# Assignment Errors
+## Assignment Errors
 
 Functions that have a context parameter cannot be assigned to functions that do not, and vice-versa. A common case where this may occur is passing a callback to an api that expects a function that does not take an initial argument.
 
@@ -218,7 +218,7 @@ takesCallback(function(arg) return myCallback(nil, arg) end)
 
 The reason this works is because TypeScriptToLua infers whether the arrow function should take a context parameter or not based on the type it's being assigned to.
 
-## Overloads
+### Overloads
 
 If a function is overloaded and the signatures differ in context type, you can not assign them:
 
