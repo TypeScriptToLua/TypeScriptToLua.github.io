@@ -2,11 +2,17 @@
     "docs": [
         "getting-started",
         "configuration",
-        "writing-declarations",
-        "compiler-annotations",
-        "functions-and-the-self-parameter",
         "caveats",
         "editor-support",
+        {
+            "type": "category",
+            "label": "Advanced",
+            "items": [
+                "advanced/writing-declarations",
+                "advanced/compiler-annotations",
+                "advanced/functions-and-the-self-parameter"
+            ]
+        },
         {
             "type": "category",
             "label": "API",
