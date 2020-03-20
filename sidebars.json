@@ -11,11 +11,6 @@
             "type": "category",
             "label": "API",
             "items": ["api/overview", "api/transformer", "api/printer", "api/plugins"]
-        },
-        {
-            "type": "category",
-            "label": "Contributors",
-            "items": ["contributors/design-goals"]
         }
     ]
 }
