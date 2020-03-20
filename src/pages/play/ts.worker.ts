@@ -25,7 +25,10 @@ export class CustomTypeScriptWorker extends TypeScriptWorker {
     public async getSemanticDiagnostics(fileName: string) {
         const diagnostics = await super.getSemanticDiagnostics(fileName);
         const { diagnostics: transpileDiagnostics } = this.transpileLua(fileName);
-        return [...diagnostics, ...TypeScriptWorker.clearFiles(transpileDiagnostics)];
+        return [
+            ...diagnostics,
+            ...TypeScriptWorker.clearFiles(transpileDiagnostics.map(diag => ({ ...diag, code: diag.source as any }))),
+        ];
     }
 
     private transpileLua(fileName: string) {

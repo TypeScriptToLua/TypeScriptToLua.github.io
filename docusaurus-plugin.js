@@ -8,14 +8,7 @@ const resolve = query => path.resolve(__dirname, query);
 
 /** @returns {import('@docusaurus/types').Plugin<any>} */
 module.exports = () => ({
-    // TODO: https://github.com/facebook/docusaurus/pull/2250
-    getClientModules: () => [resolve("src/prism")],
     configureWebpack: (config, isServer) => {
-        config.module.rules
-            .flatMap(r => r.use)
-            .filter(r => r.loader && r.loader.includes("babel-loader"))
-            .forEach(r => r.options.presets.push("@babel/preset-typescript"));
-
         return {
             node: { fs: "empty" },
             resolveLoader: {
