@@ -2,29 +2,28 @@
 title: Getting Started
 ---
 
-This is a quick introduction into project setup and our CLI.
-For a TypeScript quick start please read: https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html
+This is a quick introduction into project setup and our CLI. For a TypeScript quick start please read: https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html
 
 ## Installation
 
-NPM users can run:
+TypeScriptToLua is built using [Node.js](https://nodejs.org/) and distributed via [npm](https://www.npmjs.com/). To install it, you need to create a `package.json` file in the root of your project, containing at least `{}`. Then you can use this command to add the latest version of TypeScriptToLua to your project:
 
 ```bash
-npm install -g typescript-to-lua
+npm install -D typescript-to-lua
 ```
 
-## Project Setup
+## Project setup
 
-We use the same configuration file that the vanilla TypeScript compiler `tsc` uses.
-This file is called `tsconfig.json` and should be located in your projects root.
+TypeScriptToLua shares the configuration format with vanilla TypeScript. This file is called `tsconfig.json` and should be located in your project's root.
 
-Example:
+Basic recommended configuration:
 
 ```json title=tsconfig.json
 {
   "compilerOptions": {
     "target": "esnext",
     "lib": ["esnext"],
+    "types": [],
     "strict": true
   },
   "tstl": {
@@ -37,24 +36,29 @@ Check out [Configuration](configuration.md) page for more information.
 
 ## Building your project
 
-Our command line interface is called `tstl` and it works almost exactly as TypeScript's `tsc`, you can pass `tsc` options to `tstl`.
+Our command line interface is called `tstl` and it works almost exactly as TypeScript's `tsc`.
 
-Example:
+> Note: Even though it's possible to install `tstl` globally, it is considered a bad practice. For for testing purposes you can run it with `npx typescript-to-lua`.
 
-```bash
-tstl -p pathToYour/tsconfig.json --luaTarget JIT --strict false
+Since `tstl` is installed locally to your project, you cannot run it as a bare command in your terminal, so it's recommended to use it with [npm scripts](https://docs.npmjs.com/misc/scripts).
+
+```json title=package.json
+{
+  "private": true,
+  "scripts": {
+    "build": "tstl",
+    "dev": "tstl --watch"
+  },
+  "devDependencies": {
+    "typescript-to-lua": "..."
+  }
+}
 ```
 
-This command will build your project, overriding some options set in `tsconfig.json` (first example).
-
-## Compiling files directly
-
-Example:
-
 ```bash
-tstl --luaTarget 5.1 --strict true script.ts
-```
+# Build
+npm run build
 
-```bash
-tstl --luaTarget 5.1 --strict true script1.ts someDir/script2.ts
+# Build and watch for changes
+npm run dev
 ```

@@ -4,7 +4,7 @@ title: Compiler Annotations
 
 import { SideBySide } from "@site/src/components/SideBySide";
 
-To improve translation and compatibility to different Lua interfaces, the TypscriptToLua transpiler supports several custom annotations that slightly change translation results. This page documents the supported annotations. The syntax of the compiler annotations use the JSDoc syntax.
+To improve translation and compatibility to different Lua interfaces, the TypeScriptToLua transpiler supports several custom annotations that slightly change translation results. This page documents the supported annotations. The syntax of the compiler annotations use the JSDoc syntax.
 
 ## @compileMembersOnly
 
@@ -179,7 +179,7 @@ function MyBaseClass.myFunction(self) end
 
 **Target elements:** `declare function`
 
-Denotes a function declaration is a Lua numerical iterator. When used in a Typescript `for...of` loop, the resulting Lua will use a numerical for loop.
+Denotes a function declaration is a Lua numerical iterator. When used in a TypeScript `for...of` loop, the resulting Lua will use a numerical for loop.
 
 The function should not be a real function and an error will be thrown if it is used in any other way.
 
@@ -207,7 +207,7 @@ for i = 10, 1, -1 do end
 
 **Target elements:** `(declare) interface`
 
-Denotes a type is a Lua iterator. When an object of a type with this annotation is used in a for...of statement, it will transpile directly as a lua iterator in a for...in statement, instead of being treated as a Typescript iterable. Typically, this is used on an interface that extends `Iterable` or `Array` so that Typescript will allow it to be used in a for...of statement.
+Denotes a type is a Lua iterator. When an object of a type with this annotation is used in a for...of statement, it will transpile directly as a lua iterator in a for...in statement, instead of being treated as a TypeScript iterable. Typically, this is used on an interface that extends `Iterable` or `Array` so that TypeScript will allow it to be used in a for...of statement.
 
 **Example**
 
