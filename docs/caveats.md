@@ -22,6 +22,10 @@ This project aims for both compilation results to have the same behavior as much
 
 Below are some of the cases where resulting Lua intentionally behaves different from compiled JS.
 
+## Type-directed emit
+
+One of TypeScript's [design goals](https://github.com/microsoft/TypeScript/wiki/TypeScript-Design-Goals) is **not** using type information to affect program runtime behavior. Though this has many advantages (such as gradual typing), TypeScriptToLua uses type information extensively. This allows us to emit a much more optimized, portable, and correct Lua code.
+
 ## [Boolean coercion](https://developer.mozilla.org/en-US/docs/Glossary/Falsy)
 
 JavaScript and Lua differ in what they evaluate to true/false. TypeScriptToLua adheres to the Lua evaluations.
