@@ -19,7 +19,7 @@ export class CustomTypeScriptWorker extends TypeScriptWorker {
     public async getTranspileOutput(fileName: string) {
         const { transpiledFiles } = this.transpileLua(fileName);
         const [file] = transpiledFiles;
-        return { code: file.lua!, ast: file.luaAst! };
+        return { lua: file.lua!, ast: file.luaAst!, sourceMap: file.sourceMap! };
     }
 
     public async getSemanticDiagnostics(fileName: string) {

@@ -1,6 +1,6 @@
 import useThemeContext from "@theme/hooks/useThemeContext";
 import clsx from "clsx";
-import React, { useCallback, useContext, useEffect, useRef, useState } from "react";
+import React, { useCallback, useContext, useEffect, useRef, useState, useMemo } from "react";
 import JSONTree from "react-json-tree";
 import MonacoEditor from "react-monaco-editor";
 import { version as tstlVersion } from "typescript-to-lua/package.json";
@@ -27,29 +27,33 @@ async function executeLua(code: string) {
     });
 }
 
-const EditorContext = React.createContext<EditorContext>(null!);
-interface EditorContext {
-    updateModel(model: monaco.editor.ITextModel): void;
-    code: string;
+interface EditorState {
+    source: string;
+    lua: string;
+    sourceMap: string;
     ast: object;
     results: LuaMessage[];
 }
 
+const EditorContext = React.createContext<EditorContext>(null!);
+interface EditorContext extends EditorState {
+    updateModel(model: monaco.editor.ITextModel): void;
+}
+
 function EditorContextProvider({ children }: { children: React.ReactNode }) {
-    const [code, setCode] = useState("");
-    const [ast, setAst] = useState<object>({});
-    const [results, setResults] = useState<LuaMessage[]>([]);
+    const [state, setState] = useState<EditorState>({ source: "", lua: "", ast: {}, sourceMap: "", results: [] });
     const updateModel = useCallback<EditorContext["updateModel"]>(async model => {
         const getWorker = await monaco.languages.typescript.getTypeScriptWorker();
         const client = (await getWorker(model.uri)) as CustomTypeScriptWorker;
+        const { lua, ast, sourceMap } = await client.getTranspileOutput(model.uri.toString());
 
-        const { code, ast } = await client.getTranspileOutput(model.uri.toString());
-        setCode(code);
-        setAst(ast);
-        setResults(await executeLua(code));
+        const source = model.getValue();
+        const results = await executeLua(lua);
+
+        setState({ source, lua, ast, sourceMap, results });
     }, []);
 
-    return <EditorContext.Provider value={{ code, ast, results, updateModel }}>{children}</EditorContext.Provider>;
+    return <EditorContext.Provider value={{ updateModel, ...state }}>{children}</EditorContext.Provider>;
 }
 
 const commonMonacoOptions: monaco.editor.IEditorConstructionOptions = {
@@ -67,7 +71,6 @@ function InputPane() {
         updateModel(ref.current!.editor!.getModel()!);
     }, []);
 
-    // TODO: Debounce
     const onChange = useCallback(
         debounce((newValue: string) => {
             updateCodeHistory(newValue);
@@ -133,9 +136,16 @@ function LuaAST({ ast }: { ast: object }) {
 
 function OutputPane() {
     const theme = useMonacoTheme();
-    const { code, ast, results } = useContext(EditorContext);
+    const { source, lua, sourceMap, ast, results } = useContext(EditorContext);
     const [isAstView, setAstView] = useState(false);
     const toggleAstView = useCallback(() => setAstView(x => !x), []);
+    const sourceMapUrl = useMemo(() => {
+        const inputs = [lua, sourceMap, source]
+            // Replace non-ASCII characters, because btoa not supports them
+            .map(s => btoa(s.replace(/[^\x00-\x7F]/g, "?")))
+            .join(",");
+        return `https://sokra.github.io/source-map-visualization#base64,${inputs}`;
+    }, [lua, sourceMap, source]);
 
     return (
         <div className={styles.contentPane}>
@@ -144,7 +154,7 @@ function OutputPane() {
                     <MonacoEditor
                         theme={theme}
                         language="lua"
-                        value={code}
+                        value={lua}
                         options={{
                             ...commonMonacoOptions,
                             scrollBeyondLastLine: false,
@@ -157,16 +167,17 @@ function OutputPane() {
                     <LuaAST ast={ast} />
                 </div>
 
-                <button
-                    className={clsx(
-                        "button button--outline button--primary",
-                        styles.outputToggleButton,
-                        !isAstView && "button--active",
-                    )}
-                    onClick={toggleAstView}
-                >
-                    {isAstView ? "Lua AST" : "TEXT"}
-                </button>
+                <div className={styles.outputControls}>
+                    <button
+                        className={clsx("button button--outline button--primary", !isAstView && "button--active")}
+                        onClick={toggleAstView}
+                    >
+                        {isAstView ? "Lua AST" : "TEXT"}
+                    </button>
+                    <a className="button button--success" href={sourceMapUrl} target="_blank">
+                        Source Map
+                    </a>
+                </div>
             </div>
 
             <div className={styles.editorOutput}>
