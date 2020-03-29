@@ -69,10 +69,16 @@ $output-height: 120px;
     height: calc(100% - #{$output-height});
 }
 
-.outputToggleButton {
+.outputControls {
     position: absolute;
     top: 1em;
     right: 2em;
+    display: flex;
+    flex-flow: column;
+
+    > *:not(:last-child) {
+        margin-bottom: 5px;
+    }
 }
 
 .editorOutput {
