@@ -38,7 +38,9 @@ Check out [Configuration](configuration.md) page for more information.
 
 Our command line interface is called `tstl` and it works almost exactly as TypeScript's `tsc`.
 
-> Note: Even though it's possible to install `tstl` globally, it is considered a bad practice. For for testing purposes you can run it with `npx typescript-to-lua`.
+:::note
+Even though it's possible to install `tstl` globally, it is considered a bad practice. For for testing purposes you can run it with `npx typescript-to-lua`.
+:::
 
 Since `tstl` is installed locally to your project, you cannot run it as a bare command in your terminal, so it's recommended to use it with [npm scripts](https://docs.npmjs.com/misc/scripts).
 

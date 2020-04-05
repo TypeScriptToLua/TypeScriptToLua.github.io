@@ -10,15 +10,15 @@ If you need tips or help writing declarations, feel free to [join our Discord](h
 
 Declaration files end with the extension `.d.ts`. These contain pure ambient code.
 
-> Ambient : <small>relating to the immediate surroundings of something.</small>
-
 For TypeScriptToLua, these files should contain information that describes the target Lua environment.
 
 This means functions, modules, variables and other members of the target Lua environment are primarily described in these files.
 
 They don't contain code that you would execute. Similar to how you'd write an interface in some other languages. TypeScriptToLua doesn't output any information from these files either.
 
-> Note: You can write ambient declarations inside `.ts` files as well.
+:::note
+You can write ambient declarations inside `.ts` files as well.
+:::
 
 ## Declare Keyword
 
@@ -50,7 +50,9 @@ declare function print(...args: any[]): void;
 print(_VERSION); // Editor and transpiler know what print and _VERSION are
 ```
 
-> Note: You can use _declare_ to write ambient declarations inside `.ts` files.
+:::note
+You can use _declare_ to write ambient declarations inside `.ts` files.
+:::
 
 ## Export Keyword
 
@@ -145,7 +147,7 @@ declare namespace table {
 }
 ```
 
-> By doing this, the transpiler also figures out if it needs to use _:_ or _._ when invoking a function / method.
+By doing this, the transpiler also figures out if it needs to use _:_ or _._ when invoking a function / method.
 
 ## Comments and Annotations
 
@@ -407,7 +409,9 @@ draw("solid", 0, 0, 16, 16); // Valid
 draw("rounded", 0, 0, 16, 16); // Invalid
 ```
 
-> This can apply to numbers as well
+:::info
+This can apply to numbers as well.
+:::
 
 ### Keyword Workarounds
 
