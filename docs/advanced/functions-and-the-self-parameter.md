@@ -141,7 +141,7 @@ takesCallback(function(arg) print(arg) end)
 
 ### `@noSelf`
 
-If you wish to specify that all functions in a class, interface or namespace should not have a context parameter, you can use the [`@noSelf`](compiler-annotations.md#noself) directive.
+If you wish to specify that all functions in a class, interface or namespace should not have a context parameter, you can use the [`@noSelf`](compiler-annotations.md#noself) annotation.
 
 **Example**
 

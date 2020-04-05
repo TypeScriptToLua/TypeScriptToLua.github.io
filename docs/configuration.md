@@ -35,13 +35,12 @@ Most of the standard [TypeScript options](https://www.typescriptlang.org/docs/ha
 - `incremental`
 - `emitDecoratorMetadata`
 - `esModuleInterop`
-- `jsx`
 
 Some options do not apply to TypeScriptToLua and are ignored:
 
 - `outFile` - use `luaBundle` instead.
 - `importHelpers`, `noEmitHelpers` - use `luaLibImport` instead.
-- `target`, `module` - it's only effect is limiting some features, so prefer to set it to `esnext`. If TypeScript requires you to specify different `module` type because you want to bundle your declarations with `outFile` and `declarations`, consider using [API Extractor](https://api-extractor.com/) instead.
+- `target`, `module` - it's only effect is limiting some features, so prefer to set it to `esnext`. If TypeScript requires you to specify different `module` type because you want to bundle your declarations with `outFile`, consider using [API Extractor](https://api-extractor.com/) instead.
 
 ## Transformers
 

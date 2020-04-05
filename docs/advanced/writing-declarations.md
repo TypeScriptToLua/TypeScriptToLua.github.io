@@ -141,13 +141,13 @@ declare namespace table {
 /** @noSelfInFile */
 
 declare namespace table {
-  export function remove(this: void, table: object, index: number): any;
+  export function remove(table: object, index: number): any;
 }
 ```
 
 > By doing this, the transpiler also figures out if it needs to use _:_ or _._ when invoking a function / method.
 
-## Comments and Directives
+## Comments and Annotations
 
 If you're using an editor that seeks out information about functions, variables, etc. It will likely find the file where what it is analyzing is defined and check out the comment above it.
 
@@ -161,16 +161,16 @@ declare function print(...args: any[]);
 
 <p><a href="/play/#code/PTAEEEBtNBLA7UB7eBTUATVAzBsAusKoAhvBnALYAOkqlq8+Jhx2SATqKgB4k10AzqEEkA1qgBQk4ACpZk0LNAB1ABaNQapADdUHBAHNkertQNMANKHxrYwrIIDGB6q0QB3WNFAAjdILaHvCKygAC1CQc-KAA3mQAngDaALoAvqQchsIAyvgArtjYNkig5gj4ocCSWE6QUejY+fBO7mUW+AAUAHS9UdkAXKTwySkAlADc0iCgACocCVq6+kagCUj5XE6bgpwm+qAABuVMh5InXQBEABKo0EiXk5JAA" target="_blank">Try out what this looks like in an editor</a></p>
 
-TypeScript uses TSDoc for its comments. TSDoc allows you to also use markdown in your comments! This means pictures, links, tables, code syntax highlighting and more markdown features are available. These may display differently depending on the editor in use.
+TypeScript uses [TSDoc](https://github.com/microsoft/tsdoc) for its comments. TSDoc allows you to also use markdown in your comments! This means pictures, links, tables, code syntax highlighting and more markdown features are available. These may display differently depending on the editor in use.
 
 Here are some commonly used TSDoc tags used in comments:
 
-| Tag                                    | Description                                          |
-| -------------------------------------- | ---------------------------------------------------- |
-| `@param <parametername> <description>` | Defines a parameter. e.g. A parameter for a function |
-| `@return <description>`                | Describes the return value of a function / method    |
+| Tag                           | Description                                          |
+| ----------------------------- | ---------------------------------------------------- |
+| `@param <name> <description>` | Defines a parameter. e.g. A parameter for a function |
+| `@return <description>`       | Describes the return value of a function / method    |
 
-TypeScriptToLua takes this further. Some "tags" change how the transpiler translates certain pieces of code. These are referred to as _Directives_.
+TypeScriptToLua takes this further. Some "tags" change how the transpiler translates certain pieces of code. These are referred to as [annotations](compiler-annotations.md).
 
 As an example, `@tupleReturn` marks a function as something which returns multiple values instead of its array.
 
@@ -195,7 +195,7 @@ let [c, d] = array();
 // local c, d = unpack(array())
 ```
 
-See [Compiler Annotations](compiler-annotations.md) page for more directive info.
+See [Compiler Annotations](compiler-annotations.md) page for more information.
 
 ## Environmental Declarations
 
@@ -312,7 +312,7 @@ p.tuple();
 
 ### Ambient Modules
 
-You may have to use the `@noResolution` directive to tell TypeScriptToLua to not try any path resolution methods when the specified module is imported.
+You may have to use the `@noResolution` annotation to tell TypeScriptToLua to not try any path resolution methods when the specified module is imported.
 
 Module declarations need to be kept in _.d.ts_ files.
 
@@ -336,19 +336,20 @@ declare module "number-of-the-day" {
  * Not very useful for TypeScript. It has no idea what is in here.
  * @noResolution
  */
-declare module "custommodule";
+declare module "custom-module";
 ```
 
 ```ts title=main.ts
 import { getimagewidth, getimageheight } from "image-size";
-import * as x from "contains_a_number";
-import * as custommodule from "custommodule";
+import * as x from "number-of-the-day";
+import * as customModule from "custom-module";
 ```
 
 ### Unions
 
 Unions can be used to tell TypeScript that a given type could be one of many other types. TypeScript can then pick up hints in the code to figure out what that type is at a given statement.
 
+<!-- prettier-ignore -->
 ```ts title=main.ts
 declare interface PingResponse {
   type: "ping";
@@ -369,15 +370,16 @@ response.timeTaken;
 
 switch (response.type) {
   case "ping":
+    // If the program arrives here, response: PingResponse
     return response.timeTaken;
-  // If the program arrives here, response: PingResponse
   case "message":
+    // If the program arrives here, response: MessageResponse
     return response.text;
-  // If the program arrives here, response: MessageResponse
-  case "disconnect": // Impossible
+  case "disconnect":
+    // Impossible
   default:
-  // Because of what Response is described as, TypeScript knows getting
-  // here is impossible.
+    // Because of what Response is described as, TypeScript knows getting
+    // here is impossible.
 }
 ```
 
@@ -416,27 +418,27 @@ The parent to these kinds of functions will need to be represented as a JSON obj
 ```ts
 // ❌
 declare namespace table {
-    export function new: () => any;
+  export function new: () => any;
 }
 
 // ✔
 declare let table: {
-    new: () => any;
-}
+  new: () => any;
+};
 ```
 
 ```ts
 // ❌
 declare module "creator" {
-    export function new: () => any;
+  export function new: () => any;
 }
 
 // ✔
 declare module "creator" {
-    let exports: {
-        new: () => any;
-    }
-    export = exports;
+  let exports: {
+    new: () => any;
+  };
+  export = exports;
 }
 ```
 

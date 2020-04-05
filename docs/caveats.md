@@ -4,17 +4,31 @@ title: Caveats
 
 ## Feature support
 
-| Feature             | Lua 5.1 | Lua 5.2 | Lua 5.3 | LuaJIT |
-| ------------------- | :-----: | :-----: | :-----: | :----: |
-| (Everything else)   |   ✔️    |   ✔️    |   ✔️    |   ✔️   |
-| Bitwise operators   |   ❌    |   ✔️    |   ✔️    |   ✔️   |
-| Switch statement    |   ❌    |   ✔️    |   ✔️    |   ✔️   |
-| `continue`          |   ❌    |   ✔️    |   ✔️    |   ✔️   |
-| `Promise`           |   ❌    |   ❌    |   ❌    |   ❌   |
-| `async` / `await`   |   ❌    |   ❌    |   ❌    |   ❌   |
-| Regular Expressions |   ❌    |   ❌    |   ❌    |   ❌   |
-| Optional Chaining   |   ❌    |   ❌    |   ❌    |   ❌   |
-| Nullish Coalescing  |   ❌    |   ❌    |   ❌    |   ❌   |
+| Feature               | Lua 5.1 | Lua 5.2 | Lua 5.3 | LuaJIT |
+| --------------------- | :-----: | :-----: | :-----: | :----: |
+| (Everything else)     |   ✔️    |   ✔️    |   ✔️    |   ✔️   |
+| [Bitwise operators]   |   ❌    |   ✔️    |   ✔️    |   ✔️   |
+| [Switch statement]    |   ❌    |   ✔️    |   ✔️    |   ✔️   |
+| [`continue`]          |   ❌    |   ✔️    |   ✔️    |   ✔️   |
+| [`Promise`]           |   ❌    |   ❌    |   ❌    |   ❌   |
+| [`async`] / [`await`] |   ❌    |   ❌    |   ❌    |   ❌   |
+| [Regular Expressions] |   ❌    |   ❌    |   ❌    |   ❌   |
+| [Optional Chaining]   |   ❌    |   ❌    |   ❌    |   ❌   |
+| [Nullish Coalescing]  |   ❌    |   ❌    |   ❌    |   ❌   |
+| [Private Fields]      |   ❌    |   ❌    |   ❌    |   ❌   |
+| [JSX]                 |   ❌    |   ❌    |   ❌    |   ❌   |
+
+[bitwise operators]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Bitwise_Operators
+[switch statement]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/switch
+[`continue`]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/continue
+[`promise`]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise
+[`async`]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function
+[`await`]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/await
+[regular expressions]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions
+[optional chaining]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Optional_chaining
+[nullish coalescing]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Nullish_coalescing_operator
+[private fields]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/Class_fields#Private_fields
+[jsx]: https://www.typescriptlang.org/docs/handbook/jsx.html
 
 ## Differences from JavaScript
 
