@@ -72,7 +72,7 @@ import { x } from "./lib";
 
 If a namespace contains certain functions, `export` tells TypeScript that those functions can be accessed within the namespace.
 
-```ts title=.d.ts
+```ts title=table.d.ts
 declare namespace table {
   /**
    * @noSelf
@@ -87,7 +87,7 @@ table.insert({}, 1);
 
 If a globally available module exists within the Lua environment. You can define what the module provides.
 
-```ts title=.d.ts
+```ts title=utf8.d.ts
 declare module "utf8" {
   /**
    * @noSelf
@@ -96,7 +96,7 @@ declare module "utf8" {
 }
 ```
 
-```ts
+```ts title=main.ts
 import * as utf8 from "utf8"; // equiv to `local utf8 = require("utf8");
 utf8.codepoint();
 ```
@@ -153,7 +153,7 @@ By doing this, the transpiler also figures out if it needs to use _:_ or _._ whe
 
 If you're using an editor that seeks out information about functions, variables, etc. It will likely find the file where what it is analyzing is defined and check out the comment above it.
 
-```ts title=print.d.ts
+```ts
 /**
  * When hovering over print, this description will be shown
  * @param args Stuff to print
@@ -233,11 +233,11 @@ Some examples of declaration merging have been shown in the above examples.
 
 Some tables can use `__call` to make themselves callable. Busted (the Lua testing suite) does this to `assert`.
 
-```ts title=.d.ts
+```ts title=assert.d.ts
+declare function assert(value: any, errorDescription?: string): void;
 declare namespace assert {
   export function isEqual(): void;
 }
-declare function assert(value: any, errorDescription?: string): void;
 ```
 
 ```ts title=main.ts
@@ -249,7 +249,7 @@ assert();
 
 ### Interfaces
 
-```ts title=.d.ts
+```ts title=image.d.ts
 interface Image {
   /** @tupleReturn */
   getDimensions(): [number, number];
@@ -270,7 +270,7 @@ let o = image.getFlags();
 
 ### Namespaces
 
-```ts title=.d.ts
+```ts title=love.d.ts
 declare namespace love {
   export let update: (delta: number) => void;
   /** @tupleReturn */
@@ -301,7 +301,7 @@ let p = love.graphics.newImage("file.png");
 
 You'd only declare these if there were TypeScriptToLua compatible classes within the existing Lua code. It is definitely not recommended to define classes in ambient contexts for TypeScriptToLua, use interfaces instead.
 
-```ts title=.d.ts
+```ts title=x.d.ts
 declare class X {
   tuple();
 }
@@ -318,7 +318,7 @@ You may have to use the `@noResolution` annotation to tell TypeScriptToLua to no
 
 Module declarations need to be kept in _.d.ts_ files.
 
-```ts title=.d.ts
+```ts title=types.d.ts
 /** @noSelf */
 declare module "image-size" {
   export function getimagewidth(filename: string): number;
@@ -352,7 +352,7 @@ import * as customModule from "custom-module";
 Unions can be used to tell TypeScript that a given type could be one of many other types. TypeScript can then pick up hints in the code to figure out what that type is at a given statement.
 
 <!-- prettier-ignore -->
-```ts title=main.ts
+```ts
 declare interface PingResponse {
   type: "ping";
   timeTaken: number;
