@@ -8,7 +8,7 @@ If you need tips or help writing declarations, feel free to [join our Discord](h
 
 ## About Declaration Files
 
-Declaration files end with the extension `.d.ts`. These contain pure ambient code.
+Declaration files end with the extension _.d.ts_. These contain pure ambient code.
 
 For TypeScriptToLua, these files should contain information that describes the target Lua environment.
 
@@ -17,12 +17,12 @@ This means functions, modules, variables and other members of the target Lua env
 They don't contain code that you would execute. Similar to how you'd write an interface in some other languages. TypeScriptToLua doesn't output any information from these files either.
 
 :::note
-You can write ambient declarations inside `.ts` files as well.
+You can write ambient declarations inside _.ts_ files as well.
 :::
 
 ## Declare Keyword
 
-The _declare_ keyword is used to say that the following declaration defines something that exists within global scope. Like something within the _\_G_ table in Lua.
+The `declare` keyword is used to say that the following declaration defines something that exists within global scope. Like something within the `_G` table in Lua.
 
 This is useful for defining Lua's environment.
 
@@ -51,7 +51,7 @@ print(_VERSION); // Editor and transpiler know what print and _VERSION are
 ```
 
 :::note
-You can use _declare_ to write ambient declarations inside `.ts` files.
+You can use `declare` to write ambient declarations inside _.ts_ files.
 :::
 
 ## Export Keyword
@@ -60,7 +60,7 @@ The export keyword indicates something is exported and can be used by external c
 
 This also includes ambient interfaces, types, modules and other items that don't result in any transpiled code.
 
-If a file named _lib.lua_ exists and returns a table with an _x_ field, you can write _lib.d.t.s_ as follows to tell TypeScript that _lib_ exists and what it provides.
+If a file named _lib.lua_ exists and returns a table with an `x` field, you can write _lib.d.t.s_ as follows to tell TypeScript that _lib_ exists and what it provides.
 
 ```ts title=lib.d.ts
 export let x: number;
@@ -105,9 +105,9 @@ The `export` keyword can be used in a `.ts` or `.d.ts` file. It tells the transp
 
 ## Self Parameter
 
-TypeScript has a hidden _this_ parameter attached to every function.
+TypeScript has a hidden `this` parameter attached to every function.
 
-This causes TypeScriptToLua to treat every function as if _self_ exists as its first parameter.
+This causes TypeScriptToLua to treat every function as if `self` exists as its first parameter.
 
 ```ts
 declare function assert(value: any): void;
@@ -116,15 +116,15 @@ declare function assert(value: any): void;
 assert(true); // assert(_G, true)
 ```
 
-This allows users to modify _this_ inside a function and expect behaviour similar to what JavaScript does.
+This allows users to modify `this` inside a function and expect behaviour similar to what JavaScript does.
 
-But obviously Lua does not have a _self_ parameter for every function, so one of the three options must happen to tell TypeScriptToLua there is no "contextual parameter" (_self_):
+But obviously Lua does not have a `self` parameter for every function, so one of the three options must happen to tell TypeScriptToLua there is no "contextual parameter" (`self`):
 
-1. Use `this: void` as the first parameter of the function / method. This formally describes to TypeScript to not allow _this_ to be modified inside this function. (you could also use the _--noImplicitThis_ option to disallow _this_ to be modified if _this_ is of an _any_ type).
+1. Use `this: void` as the first parameter of the function / method. This formally describes to TypeScript to not allow `this` to be modified inside this function. (you could also use the [noImplicitThis](../configuration.md#custom-options) option to disallow `this` to be modified if `this` is of an `any` type).
 2. Use `@noSelf` in the comments of the declaration's owner (the namespace, module, object, etc).
 3. Use `@noSelfInFile` at the beginning of the file in a comment to make sure every function defined in this file does not use a "contextual parameter".
 
-Below is three ways to make _table.remove_ not use a "contextual parameter".
+Below is three ways to make `table.remove` not use a "contextual parameter".
 
 ```ts
 declare namespace table {
@@ -147,7 +147,7 @@ declare namespace table {
 }
 ```
 
-By doing this, the transpiler also figures out if it needs to use _:_ or _._ when invoking a function / method.
+By doing this, the transpiler also figures out if it needs to use `:` or `.` when invoking a function / method.
 
 ## Comments and Annotations
 
@@ -203,7 +203,7 @@ See [Compiler Annotations](compiler-annotations.md) page for more information.
 
 With TypeScript, by default, there are declarations that exist that describe something that doesn't exist in Lua (like `console.log`).
 
-Using the _lib_ option can narrow down these declarations.
+Using the `lib` option can narrow down these declarations.
 
 ```json title=tsconfig.json
 {
@@ -213,7 +213,7 @@ Using the _lib_ option can narrow down these declarations.
 }
 ```
 
-It is possible to also use _noLib_ to remove every declaration but TypeScript NEEDS certain declarations to exist so they will have to be manually defined. TypeScriptToLua also treats certain declarations differently specifically if they came from the standard libs. So _noLib_ is not recommended.
+It is possible to also use `noLib` to remove every declaration but TypeScript NEEDS certain declarations to exist so they will have to be manually defined. TypeScriptToLua also treats certain declarations differently specifically if they came from the standard libs. So `noLib` is not recommended.
 
 ## Advanced Types
 
@@ -415,7 +415,7 @@ This can apply to numbers as well.
 
 ### Keyword Workarounds
 
-Some functions in Lua can have names that are keywords in TypeScript (e.g., _try_, _catch_, _new_, etc).
+Some functions in Lua can have names that are keywords in TypeScript (e.g., `try`, `catch`, `new`, etc).
 
 The parent to these kinds of functions will need to be represented as a JSON object.
 
@@ -472,15 +472,15 @@ const d = v3.dot(v2);
 
 Using `import` can be important for making sure an _index.d.ts_ file contains all the declarations needed.
 
-```ts
+```ts title=index.d.ts
 import "./lib";
-// All declarations in lib will be included with this file
+// All global declarations in lib will be included with this file
 
 export { Player } from "./Entities";
 // The Player declaration is re-exported from this file
 ```
 
-It is also possible to place _import_ statements inside ambient modules and namespaces.
+It is also possible to place `import` statements inside ambient modules and namespaces.
 
 ```ts
 declare module "mymodule" {
@@ -491,7 +491,7 @@ declare module "mymodule" {
 
 ## NPM Publishing
 
-It is possible to publish a list of declarations for other users to easily download via _npm_.
+It is possible to publish a list of declarations for other users to easily download via [npm](https://www.npmjs.com/).
 
 ```bash
 npm init
