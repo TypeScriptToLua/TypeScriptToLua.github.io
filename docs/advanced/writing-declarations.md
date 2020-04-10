@@ -201,9 +201,7 @@ See [Compiler Annotations](compiler-annotations.md) page for more information.
 
 ## Environmental Declarations
 
-With TypeScript, by default, there are declarations that exist that describe something that doesn't exist in Lua (like `console.log`).
-
-Using the `lib` option can narrow down these declarations.
+By default, TypeScript includes global type declarations for both ECMAScript and web standards. TypeScriptToLua aims to support only standard ECMAScript feature set. To make TypeScript not suggest you to use unsupported browser builtins (including `window`, `document`, `console`, `setTimeout`) you can specify a `lib` option:
 
 ```json title=tsconfig.json
 {
@@ -213,7 +211,7 @@ Using the `lib` option can narrow down these declarations.
 }
 ```
 
-It is possible to also use `noLib` to remove every declaration but TypeScript NEEDS certain declarations to exist so they will have to be manually defined. TypeScriptToLua also treats certain declarations differently specifically if they came from the standard libs. So `noLib` is not recommended.
+It is also possible to use `noLib` to remove every standard declaration (to use TypeScriptToLua only for syntactic features with Lua standard library) but TypeScript **needs** certain declarations to exist so they will have to be manually defined, so using `noLib` is not recommended.
 
 ## Advanced Types
 
@@ -299,17 +297,79 @@ let p = love.graphics.newImage("file.png");
 
 ### Classes
 
-You'd only declare these if there were TypeScriptToLua compatible classes within the existing Lua code. It is definitely not recommended to define classes in ambient contexts for TypeScriptToLua, use interfaces instead.
+Because Lua doesn't have a strictly defined concept of a class, for TypeScriptToLua `class` declaration implies a very specific structure, built specifically for TypeScript compatibility. Because of that, usually you shouldn't use `declare class` for values coming from Lua.
 
-```ts title=x.d.ts
-declare class X {
-  tuple();
-}
+Most of Lua patterns used to simulate classes can be declared using interfaces instead.
+
+**Example 1**: a table with a static `new` method to construct new instances
+
+```lua
+Box = {}
+Box.__index = Box
+
+function Box.new(value)
+    local self = {}
+    setmetatable(self, Box)
+    self._value = value
+    return self
+end
+
+function Box:get()
+    return self._value
+end
 ```
 
-```ts title=main.ts
-let p = new X();
-p.tuple();
+```ts
+interface Box {
+  get(): string;
+}
+
+interface BoxConstructor {
+  new: (this: void, value: string) => Box;
+}
+
+declare var Box: BoxConstructor;
+
+// Usage
+const box = Box.new("foo");
+box.get();
+```
+
+**Example 2**: a callable table with extra static methods
+
+```lua
+Box = {}
+
+local instance
+function Box:getInstance()
+    if instance then return instance end
+    instance = Box("instance")
+    return instance
+end
+
+setmetatable(Box, {
+    __call = function(_, value)
+        return { get = function() return value end }
+    end
+})
+```
+
+```ts
+interface Box {
+  get(): string;
+}
+
+interface BoxConstructor {
+  (this: void, value: string): Box;
+  getInstance(): Box;
+}
+
+declare var Box: BoxConstructor;
+
+// Usage
+const box = Box("foo");
+box.get();
+Box.getInstance().get();
 ```
 
 ### Ambient Modules
@@ -399,19 +459,21 @@ getFile("player.png"); // Valid
 getFile("unknown.png"); // Invalid
 ```
 
-### String Enums
+### Literal Types
 
-TypeScript can check a string is valid.
+String and number values can be used as types too. In combination with union types it can be used to represent a known set of values.
 
 ```ts
-declare function draw(linetype: "solid" | "dashed", x1, y1, x2, y2): void;
-draw("solid", 0, 0, 16, 16); // Valid
-draw("rounded", 0, 0, 16, 16); // Invalid
+declare function drawLine(type: "solid" | "dashed"): void;
+drawLine("solid"); // Valid
+drawLine("rounded"); // Invalid
 ```
 
-:::info
-This can apply to numbers as well.
-:::
+```ts
+declare function getSupportedColors(): 1 | 8 | 256 | 16777216;
+getSupportedColors() === 8; // Valid
+getSupportedColors() === 16; // Invalid
+```
 
 ### Keyword Workarounds
 
