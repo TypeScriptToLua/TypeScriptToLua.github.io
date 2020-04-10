@@ -12,6 +12,10 @@ TypeScriptToLua is built using [Node.js](https://nodejs.org/) and distributed vi
 npm install -D typescript-to-lua
 ```
 
+:::note
+Installing `tstl` locally is recommended to keep your build reproducible and prevent version conflicts between projects. However, it is also possible to install it globally with `npm install --global typescript-to-lua` or run it without install using `npx typescript-to-lua`.
+:::
+
 ## Project setup
 
 TypeScriptToLua shares the configuration format with vanilla TypeScript. This file is called `tsconfig.json` and should be located in your project's root.
@@ -38,10 +42,6 @@ Check out [Configuration](configuration.md) page for more information.
 
 Our command line interface is called `tstl` and it works almost exactly as TypeScript's `tsc`.
 
-:::note
-Even though it's possible to install `tstl` globally, it is considered a bad practice. For for testing purposes you can run it with `npx typescript-to-lua`.
-:::
-
 Since `tstl` is installed locally to your project, you cannot run it as a bare command in your terminal, so it's recommended to use it with [npm scripts](https://docs.npmjs.com/misc/scripts).
 
 ```json title=package.json
@@ -64,6 +64,10 @@ npm run build
 # Build and watch for changes
 npm run dev
 ```
+
+:::note
+For testing purposes you also can run `tstl` directly from your terminal with `node_modules/.bin/tstl` or `npx --no-install tstl`.
+:::
 
 ## Declarations
 
