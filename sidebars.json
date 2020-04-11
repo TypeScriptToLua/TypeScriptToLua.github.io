@@ -1,0 +1,22 @@
+{
+    "docs": [
+        "getting-started",
+        "configuration",
+        "caveats",
+        "editor-support",
+        {
+            "type": "category",
+            "label": "Advanced",
+            "items": [
+                "advanced/writing-declarations",
+                "advanced/compiler-annotations",
+                "advanced/functions-and-the-self-parameter"
+            ]
+        },
+        {
+            "type": "category",
+            "label": "API",
+            "items": ["api/overview", "api/plugins", "api/printer"]
+        }
+    ]
+}

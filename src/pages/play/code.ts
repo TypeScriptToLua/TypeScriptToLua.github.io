@@ -39,3 +39,7 @@ export function updateCodeHistory(code: string) {
     const hash = `code/${lzstring.compressToEncodedURIComponent(code)}`;
     window.history.replaceState({}, "", `#${hash}`);
 }
+
+export function getPlaygroundUrlForCode(code: string) {
+    return `/play/#code/${lzstring.compressToEncodedURIComponent(code)}`;
+}

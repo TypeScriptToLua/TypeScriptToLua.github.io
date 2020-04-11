@@ -11,6 +11,7 @@ module.exports = {
             title: "TypeScriptToLua",
             logo: { src: "images/logo.png" },
             links: [
+                { to: "docs/getting-started", label: "Docs", position: "left" },
                 { to: "play", label: "Playground", position: "left" },
                 { href: "https://discord.gg/BWAq58Y", label: "Discord", position: "right" },
                 { href: "https://github.com/TypeScriptToLua/TypeScriptToLua", label: "GitHub", position: "right" },
@@ -26,6 +27,10 @@ module.exports = {
         [
             "@docusaurus/preset-classic",
             {
+                docs: {
+                    sidebarPath: require.resolve("./sidebars.json"),
+                    editUrl: "https://github.com/TypeScriptToLua/TypeScriptToLua.github.io/edit/source/",
+                },
                 theme: {
                     customCss: require.resolve("./src/custom.scss"),
                 },
