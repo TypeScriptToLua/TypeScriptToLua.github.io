@@ -1,6 +1,6 @@
 import useThemeContext from "@theme/hooks/useThemeContext";
 import clsx from "clsx";
-import React, { useCallback, useContext, useEffect, useRef, useState, useMemo } from "react";
+import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 import JSONTree from "react-json-tree";
 import MonacoEditor from "react-monaco-editor";
 import { version as tstlVersion } from "typescript-to-lua/package.json";
@@ -8,14 +8,10 @@ import { version as tsVersion } from "typescript/package.json";
 import FengariWorker from "worker-loader?name=fengari.worker.js!./fengari.worker";
 import { debounce } from "../../utils";
 import { getInitialCode, updateCodeHistory } from "./code";
+import type { LuaMessage } from "./fengari.worker";
 import { monaco, useMonacoTheme } from "./monaco";
 import styles from "./styles.module.scss";
-
-// TODO:
-// import type { LuaMessage } from './fengari.worker';
-// import type { CustomTypeScriptWorker } from './ts.worker';
-type LuaMessage = import("./fengari.worker").LuaMessage;
-type CustomTypeScriptWorker = import("./ts.worker").CustomTypeScriptWorker;
+import type { CustomTypeScriptWorker } from "./ts.worker";
 
 let fengariWorker = new FengariWorker();
 async function executeLua(code: string) {
