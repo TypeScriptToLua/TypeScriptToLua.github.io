@@ -17,11 +17,18 @@ import styles from "./styles.module.scss";
 type LuaMessage = import("./fengari.worker").LuaMessage;
 type CustomTypeScriptWorker = import("./ts.worker").CustomTypeScriptWorker;
 
-const fengariWorker = new FengariWorker();
+let fengariWorker = new FengariWorker();
 async function executeLua(code: string) {
     return new Promise<LuaMessage[]>(resolve => {
+        const timeout = setTimeout(() => {
+            resolve([{ type: "print", text: "Lua code execution timed out" }]);
+            fengariWorker.terminate();
+            fengariWorker = new FengariWorker();
+        }, 2500);
+
         fengariWorker.postMessage({ code });
         fengariWorker.addEventListener("message", event => {
+            clearTimeout(timeout);
             resolve(event.data.messages);
         });
     });
@@ -46,10 +53,10 @@ function EditorContextProvider({ children }: { children: React.ReactNode }) {
         const getWorker = await monaco.languages.typescript.getTypeScriptWorker();
         const client = (await getWorker(model.uri)) as CustomTypeScriptWorker;
         const { lua, ast, sourceMap } = await client.getTranspileOutput(model.uri.toString());
-
         const source = model.getValue();
-        const results = await executeLua(lua);
 
+        setState({ source, lua, ast, sourceMap, results: [] });
+        const results = await executeLua(lua);
         setState({ source, lua, ast, sourceMap, results });
     }, []);
 
