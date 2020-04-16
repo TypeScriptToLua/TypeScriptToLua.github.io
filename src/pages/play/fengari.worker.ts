@@ -55,7 +55,7 @@ function executeLua(code: string): LuaMessage[] {
     const messageType = status === lua.LUA_OK ? "Module" : "Error";
     const value = transformLuaValue(interop.tojs(L, -1));
 
-    const messages: LuaMessage[] = workerContext.printStream.map(text => ({ type: "print", text }));
+    const messages: LuaMessage[] = workerContext.printStream.map((text) => ({ type: "print", text }));
     if (value !== undefined || messageType === "Error") {
         const formattedValue = inspect(value);
         messages.push({ type: "print", text: `${messageType}: ${formattedValue}` });

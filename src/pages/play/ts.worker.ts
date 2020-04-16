@@ -32,7 +32,7 @@ export class CustomTypeScriptWorker extends TypeScriptWorker {
         const { diagnostics: transpileDiagnostics } = this.transpileLua(fileName);
         return [
             ...diagnostics,
-            ...TypeScriptWorker.clearFiles(transpileDiagnostics.map(diag => ({ ...diag, code: diag.source as any }))),
+            ...TypeScriptWorker.clearFiles(transpileDiagnostics.map((diag) => ({ ...diag, code: diag.source as any }))),
         ];
     }
 

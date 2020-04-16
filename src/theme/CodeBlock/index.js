@@ -75,7 +75,8 @@ export default ({ children, className: languageClassName, metastring = "" }) => 
     const [, title] = metastring.match(/title=(.+)( |$)/) ?? [];
 
     const [, highlightLinesRange] = metastring.match(/{([\d,-]+)}/) ?? [];
-    const highlightLines = highlightLinesRange != null ? rangeParser.parse(highlightLinesRange).filter(n => n > 0) : [];
+    const highlightLines =
+        highlightLinesRange != null ? rangeParser.parse(highlightLinesRange).filter((n) => n > 0) : [];
 
     let language = languageClassName && languageClassName.replace(/language-/, "");
     if (!language && prism.defaultLanguage) {

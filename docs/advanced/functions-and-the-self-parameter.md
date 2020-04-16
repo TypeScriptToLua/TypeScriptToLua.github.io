@@ -36,7 +36,7 @@ class MyClass {
   }
 }
 
-let myFunction = function(arg: string) {
+let myFunction = function (arg: string) {
   console.log("myFunction", arg);
 };
 
@@ -207,7 +207,7 @@ This throws an error because if `takesCallback` called `myCallback`, it would do
 <SideBySide>
 
 ```typescript
-takesCallback(arg => myCallback(arg));
+takesCallback((arg) => myCallback(arg));
 ```
 
 ```lua

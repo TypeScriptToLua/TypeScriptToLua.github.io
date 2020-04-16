@@ -19,7 +19,7 @@ type CustomTypeScriptWorker = import("./ts.worker").CustomTypeScriptWorker;
 
 let fengariWorker = new FengariWorker();
 async function executeLua(code: string) {
-    return new Promise<LuaMessage[]>(resolve => {
+    return new Promise<LuaMessage[]>((resolve) => {
         const timeout = setTimeout(() => {
             resolve([{ type: "print", text: "Lua code execution timed out" }]);
             fengariWorker.terminate();
@@ -27,7 +27,7 @@ async function executeLua(code: string) {
         }, 2500);
 
         fengariWorker.postMessage({ code });
-        fengariWorker.addEventListener("message", event => {
+        fengariWorker.addEventListener("message", (event) => {
             clearTimeout(timeout);
             resolve(event.data.messages);
         });
@@ -49,7 +49,7 @@ interface EditorContext extends EditorState {
 
 function EditorContextProvider({ children }: { children: React.ReactNode }) {
     const [state, setState] = useState<EditorState>({ source: "", lua: "", ast: {}, sourceMap: "", results: [] });
-    const updateModel = useCallback<EditorContext["updateModel"]>(async model => {
+    const updateModel = useCallback<EditorContext["updateModel"]>(async (model) => {
         const getWorker = await monaco.languages.typescript.getTypeScriptWorker();
         const client = (await getWorker(model.uri)) as CustomTypeScriptWorker;
         const { lua, ast, sourceMap } = await client.getTranspileOutput(model.uri.toString());
@@ -145,11 +145,11 @@ function OutputPane() {
     const theme = useMonacoTheme();
     const { source, lua, sourceMap, ast, results } = useContext(EditorContext);
     const [isAstView, setAstView] = useState(false);
-    const toggleAstView = useCallback(() => setAstView(x => !x), []);
+    const toggleAstView = useCallback(() => setAstView((x) => !x), []);
     const sourceMapUrl = useMemo(() => {
         const inputs = [lua, sourceMap, source]
             // Replace non-ASCII characters, because btoa not supports them
-            .map(s => btoa(s.replace(/[^\x00-\x7F]/g, "?")))
+            .map((s) => btoa(s.replace(/[^\x00-\x7F]/g, "?")))
             .join(",");
         return `https://sokra.github.io/source-map-visualization#base64,${inputs}`;
     }, [lua, sourceMap, source]);

@@ -29,7 +29,7 @@ export function getInitialCode() {
 
     if (window.location.hash.startsWith("#code/")) {
         const code = window.location.hash.replace("#code/", "").trim();
-        return lzstring.decompressFromEncodedURIComponent(code);
+        return lzstring.decompressFromEncodedURIComponent(code) ?? "";
     }
 
     return example;

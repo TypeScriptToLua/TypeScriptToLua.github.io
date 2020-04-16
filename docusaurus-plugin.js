@@ -4,7 +4,7 @@ const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 // Not used directly in playground, because it imports typescript
 const { SyntaxKind: LuaSyntaxKind } = require("typescript-to-lua/dist/LuaAST");
 
-const resolve = query => path.resolve(__dirname, query);
+const resolve = (query) => path.resolve(__dirname, query);
 
 /** @returns {import('@docusaurus/types').Plugin<any>} */
 module.exports = () => ({
@@ -32,12 +32,12 @@ module.exports = () => ({
                     {
                         test: /\.scss$/,
                         exclude: /\.module\.scss$/,
-                        use: [...config.module.rules.find(r => String(r.test) === "/\\.css$/").use, "sass-loader"],
+                        use: [...config.module.rules.find((r) => String(r.test) === "/\\.css$/").use, "sass-loader"],
                     },
                     {
                         test: /\.module\.scss$/,
                         use: [
-                            ...config.module.rules.find(r => String(r.test) === "/\\.module\\.css$/").use,
+                            ...config.module.rules.find((r) => String(r.test) === "/\\.module\\.css$/").use,
                             "sass-loader",
                         ],
                     },
