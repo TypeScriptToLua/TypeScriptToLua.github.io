@@ -6,7 +6,10 @@ export type LuaMessage = { type: "print"; text: string };
 
 const workerContext = globalThis as typeof globalThis & { printStream: string[] };
 
-const redirectPrintStream = `
+const setupCode = `
+    package.path = ""
+    package.jspath = ""
+
     local js = require("js")
     print = function(...)
         local elements = {}
@@ -46,7 +49,7 @@ function executeLua(code: string): LuaMessage[] {
     lualib.luaL_openlibs(L);
     lauxlib.luaL_requiref(L, to_luastring("js"), interop.luaopen_js, 1);
     lua.lua_pop(L, 1);
-    lauxlib.luaL_dostring(L, to_luastring(redirectPrintStream));
+    lauxlib.luaL_dostring(L, to_luastring(setupCode));
 
     const status = lauxlib.luaL_dostring(L, to_luastring(code));
     const messageType = status === lua.LUA_OK ? "Module" : "Error";
