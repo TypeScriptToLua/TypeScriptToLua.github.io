@@ -2,6 +2,11 @@ import * as worker from "monaco-editor/esm/vs/editor/editor.worker";
 import { TypeScriptWorker } from "monaco-editor/esm/vs/language/typescript/tsWorker";
 import * as tstl from "typescript-to-lua";
 
+// Mock unsupported in path-browserify@0.0.1 parse and format functions used for normalization in
+// https://github.com/TypeScriptToLua/TypeScriptToLua/blob/3ebc76745f74ce709bf0ba39f830a8f5cf94c473/src/transformation/visitors/modules/import.ts#L25-L28
+require("path").parse = (x: any) => x;
+require("path").format = (x: any) => x;
+
 const libContext = require.context(`raw-loader!typescript-to-lua/dist/lualib`, true, /(.+)(?<!lualib_bundle)\.lua$/);
 const emitHost: tstl.EmitHost = {
     getCurrentDirectory: () => "",
@@ -35,6 +40,7 @@ export class CustomTypeScriptWorker extends TypeScriptWorker {
         const program = this._languageService.getProgram()!;
 
         const compilerOptions: tstl.CompilerOptions = program.getCompilerOptions();
+        compilerOptions.rootDir = "inmemory://model/";
         compilerOptions.luaLibImport = tstl.LuaLibImportKind.Inline;
         compilerOptions.luaTarget = tstl.LuaTarget.Lua53;
 
