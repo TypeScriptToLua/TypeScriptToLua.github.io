@@ -27,6 +27,7 @@ Basic recommended configuration:
   "compilerOptions": {
     "target": "esnext",
     "lib": ["esnext"],
+    "moduleResolution": "node",
     "types": [],
     "strict": true
   },
