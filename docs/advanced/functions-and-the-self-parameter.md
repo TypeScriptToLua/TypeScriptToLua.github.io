@@ -91,7 +91,7 @@ myLibFunction("foo")
 
 </SideBySide>
 
-This works on methods as well, which can be useful if you have class methods which should be called with a dot `.` instead of a colon `:`.
+This works on methods as well, which can be useful if you have class methods which should be **called with a dot `.` instead of a colon `:`**.
 
 **Example**
 
