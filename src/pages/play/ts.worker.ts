@@ -11,7 +11,7 @@ const libContext = require.context(`raw-loader!typescript-to-lua/dist/lualib`, t
 const emitHost: tstl.EmitHost = {
     getCurrentDirectory: () => "",
     readFile: (fileName: string) => {
-        const [, featureName] = fileName.match(/\/dist\/lualib\/(.+)\.lua$/) ?? [];
+        const [, featureName] = fileName.match(/\/dist\/lualib\/(.+)\.lua$/) || [];
         if (featureName === undefined) {
             throw new Error(`Unexpected file to read: ${fileName}`);
         }

@@ -72,9 +72,9 @@ export default ({ children, className: languageClassName, metastring = "" }) => 
     const { showCopied, handleCopyCode, target, button } = useClipboard();
 
     const code = children.trim();
-    const [, title] = metastring.match(/title=(.+)( |$)/) ?? [];
+    const [, title] = metastring.match(/title=(.+)( |$)/) || [];
 
-    const [, highlightLinesRange] = metastring.match(/{([\d,-]+)}/) ?? [];
+    const [, highlightLinesRange] = metastring.match(/{([\d,-]+)}/) || [];
     const highlightLines =
         highlightLinesRange != null ? rangeParser.parse(highlightLinesRange).filter((n) => n > 0) : [];
 
