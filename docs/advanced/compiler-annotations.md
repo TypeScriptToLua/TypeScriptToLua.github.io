@@ -218,7 +218,7 @@ Denotes a type is a Lua iterator. When an object of a type with this annotation 
 /** @luaIterator */
 type LuaIterable<T> = Iterable<T>;
 
-declare function myIterator(): LuaIterator<string>;
+declare function myIterator(): LuaIterable<string>;
 for (const s of myIterator()) {}
 ```
 

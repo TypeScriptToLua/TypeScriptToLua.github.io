@@ -22,6 +22,10 @@ module.exports = {
             theme: require("prism-react-renderer/themes/github"),
             darkTheme: require("prism-react-renderer/themes/vsDark"),
         },
+        algolia: {
+            apiKey: "c0cf59beed38709e9ed6b0ac80b24ee5",
+            indexName: "typescripttolua",
+        },
     },
     presets: [
         [
