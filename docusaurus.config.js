@@ -39,7 +39,7 @@ module.exports = {
                     customCss: require.resolve("./src/custom.scss"),
                 },
                 pages: {
-                    include: ["index.tsx", "play/index.tsx"],
+                    include: ["index.tsx", "play/index.tsx", "benchviz/index.tsx"],
                 },
             },
         ],
