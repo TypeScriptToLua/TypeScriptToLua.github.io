@@ -5,7 +5,7 @@
         "build": "docusaurus build",
         "lint": "npm run lint:prettier",
         "lint:prettier": "prettier --check .",
-        "fix:prettier": "prettier --check --write \"**/*.{js,ts,tsx,html,scss,yml,json,md}\""
+        "fix:prettier": "prettier --write ."
     },
     "prettier": {
         "printWidth": 120,
