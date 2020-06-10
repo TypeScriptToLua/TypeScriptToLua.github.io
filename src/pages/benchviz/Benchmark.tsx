@@ -38,7 +38,7 @@ export default function Benchmark() {
 
         return (
             <tr key={i} style={{ color: rowColor }}>
-                <td>{bm.left?.benchmarkName}</td>
+                <td>{bm.left!.benchmarkName}</td>
                 <td>{formatMemory(benchmarkGarbage(bm.left!))}</td>
                 <td>{formatMemory(benchmarkGarbage(bm.right!))}</td>
                 <td>{change}</td>
@@ -48,20 +48,20 @@ export default function Benchmark() {
 
     // Comparison data master garbage created vs commit garbate created (PERCENTAGE CHANGE)
     const generatedGarbageChangeData = benchmarksSortedByPercentDifference.map((bm) => {
-        const oldValue = bm.left?.categories[MemoryBenchmarkCategory.Garbage]!;
-        const newValue = bm.right?.categories[MemoryBenchmarkCategory.Garbage]!;
+        const oldValue = bm.left!.categories[MemoryBenchmarkCategory.Garbage]!;
+        const newValue = bm.right!.categories[MemoryBenchmarkCategory.Garbage]!;
 
         return {
-            name: formatBenchmarkName(bm.left?.benchmarkName ?? bm.right?.benchmarkName!),
+            name: formatBenchmarkName(bm.left!.benchmarkName || bm.right!.benchmarkName!),
             value: (100 * (newValue - oldValue)) / oldValue,
         };
     });
 
     // Comparison data master garbage created vs commit garbate created (ABSOLUTE)
     const generatedGarbageData = benchmarksSortedByPercentDifference.map((bm) => ({
-        name: formatBenchmarkName(bm.left?.benchmarkName ?? bm.right?.benchmarkName!),
-        oldValue: bm.left?.categories[MemoryBenchmarkCategory.Garbage] ?? 0,
-        newValue: bm.right?.categories[MemoryBenchmarkCategory.Garbage] ?? 0,
+        name: formatBenchmarkName(bm.left!.benchmarkName || bm.right!.benchmarkName!),
+        oldValue: bm.left!.categories[MemoryBenchmarkCategory.Garbage] || 0,
+        newValue: bm.right!.categories[MemoryBenchmarkCategory.Garbage] || 0,
     }));
 
     useEffect(() => {
