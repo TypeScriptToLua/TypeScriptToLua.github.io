@@ -1,4 +1,3 @@
-import Layout from "@theme/Layout";
 import * as d3 from "d3";
 import React, { useEffect, useRef } from "react";
 import * as zlib from "zlib";
@@ -83,9 +82,9 @@ export default function Benchmark() {
     });
 
     return (
-        <Layout title="BenchViz">
-            {/* Results table */}
+        <>
             <h2>Benchmark results</h2>
+            {/* Results table */}
             <table>
                 <thead>
                     <tr style={{ fontWeight: "bold" }}>
@@ -113,7 +112,7 @@ export default function Benchmark() {
                 width={garbageCreatedComparisonGraphWidth}
                 height={garbageCreatedComparisonGraphHeight}
             ></svg>
-        </Layout>
+        </>
     );
 }
 
