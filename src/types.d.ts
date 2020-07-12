@@ -16,6 +16,11 @@ declare module "*.module.scss" {
     export default _default;
 }
 
+declare module "!!raw-loader*" {
+    const _default: string;
+    export default _default;
+}
+
 declare module "worker-loader*" {
     class WebpackWorker extends Worker {
         constructor();

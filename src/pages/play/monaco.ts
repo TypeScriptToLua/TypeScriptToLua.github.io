@@ -27,7 +27,8 @@ function addLibsFromContext(context: __WebpackModuleApi.RequireContext) {
 }
 
 addLibsFromContext(require.context("!!raw-loader!typescript/lib/", false, /lib(\.es(.+))?\.d\.ts$/));
-addLibsFromContext(require.context("!!raw-loader!lua-types/core", true, /\.d\.ts$/));
+monaco.languages.typescript.typescriptDefaults.addExtraLib(require("!!raw-loader!./execute/console.d.ts").default);
+addLibsFromContext(require.context("!!raw-loader!lua-types/core/", true, /\.d\.ts$/));
 // TODO: Generate it from lua-types/special/5.3.d.ts
 for (const module of [
     require("!!raw-loader!lua-types/special/5.2-plus.d.ts"),
