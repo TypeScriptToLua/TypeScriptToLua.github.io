@@ -1,41 +1,25 @@
 import useThemeContext from "@theme/hooks/useThemeContext";
 import clsx from "clsx";
+import { Console as ConsoleFeed } from "console-feed";
 import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 import JSONTree from "react-json-tree";
 import MonacoEditor from "react-monaco-editor";
 import { version as tstlVersion } from "typescript-to-lua/package.json";
 import { version as tsVersion } from "typescript/package.json";
-import FengariWorker from "worker-loader?name=fengari.worker.js!./fengari.worker";
 import { debounce } from "../../utils";
 import { getInitialCode, updateCodeHistory } from "./code";
-import type { LuaMessage } from "./fengari.worker";
+import { ConsoleMessage, executeLua } from "./execute";
 import { monaco, useMonacoTheme } from "./monaco";
 import styles from "./styles.module.scss";
+import { consoleFeedTheme, jsonTreeTheme } from "./themes";
 import type { CustomTypeScriptWorker } from "./ts.worker";
-
-let fengariWorker = new FengariWorker();
-async function executeLua(code: string) {
-    return new Promise<LuaMessage[]>((resolve) => {
-        const timeout = setTimeout(() => {
-            resolve([{ type: "print", text: "Lua code execution timed out" }]);
-            fengariWorker.terminate();
-            fengariWorker = new FengariWorker();
-        }, 2500);
-
-        fengariWorker.postMessage({ code });
-        fengariWorker.addEventListener("message", (event) => {
-            clearTimeout(timeout);
-            resolve(event.data.messages);
-        });
-    });
-}
 
 interface EditorState {
     source: string;
     lua: string;
     sourceMap: string;
     ast: object;
-    results: LuaMessage[];
+    results: ConsoleMessage[];
 }
 
 const EditorContext = React.createContext<EditorContext>(null!);
@@ -67,7 +51,7 @@ const commonMonacoOptions: monaco.editor.IEditorConstructionOptions = {
 
 function InputPane() {
     const theme = useMonacoTheme();
-    const ref = useRef<MonacoEditor>(null!);
+    const ref = useRef<MonacoEditor>(null);
     const { updateModel } = useContext(EditorContext);
 
     useEffect(() => {
@@ -96,35 +80,15 @@ function InputPane() {
     );
 }
 
-const astTheme = {
-    scheme: "monokai",
-    author: "wimer hazenberg (http://www.monokai.nl)",
-    base00: "#1e1e1e",
-    base01: "#383830",
-    base02: "#49483e",
-    base03: "#75715e",
-    base04: "#a59f85",
-    base05: "#f8f8f2",
-    base06: "#f5f4f1",
-    base07: "#f9f8f5",
-    base08: "#f92672",
-    base09: "#fd971f",
-    base0A: "#f4bf75",
-    base0B: "#a6e22e",
-    base0C: "#a1efe4",
-    base0D: "#66d9ef",
-    base0E: "#ae81ff",
-    base0F: "#cc6633",
-};
-
 const LuaSyntaxKind = __LUA_SYNTAX_KIND__;
 function LuaAST({ ast }: { ast: object }) {
     const { isDarkTheme } = useThemeContext();
+
     return (
         <JSONTree
             data={ast}
             hideRoot={true}
-            theme={astTheme}
+            theme={jsonTreeTheme}
             invertTheme={!isDarkTheme}
             valueRenderer={(raw, value, lastKey) => {
                 if (lastKey === "kind") {
@@ -137,9 +101,28 @@ function LuaAST({ ast }: { ast: object }) {
     );
 }
 
+function LuaOutput() {
+    const { isDarkTheme } = useThemeContext();
+    const { results } = useContext(EditorContext);
+
+    return (
+        <div className={styles.editorOutput}>
+            <div className={styles.editorOutputLineNumbers}>{">_"}</div>
+            <div className={styles.editorOutputTerminal}>
+                <ConsoleFeed
+                    key={isDarkTheme} // It does not update styles without re-mount
+                    logs={results as any}
+                    variant={isDarkTheme ? "dark" : "light"}
+                    styles={consoleFeedTheme(isDarkTheme)}
+                />
+            </div>
+        </div>
+    );
+}
+
 function OutputPane() {
     const theme = useMonacoTheme();
-    const { source, lua, sourceMap, ast, results } = useContext(EditorContext);
+    const { source, lua, sourceMap, ast } = useContext(EditorContext);
     const [isAstView, setAstView] = useState(false);
     const toggleAstView = useCallback(() => setAstView((x) => !x), []);
     const sourceMapUrl = useMemo(() => {
@@ -183,14 +166,7 @@ function OutputPane() {
                 </div>
             </div>
 
-            <div className={styles.editorOutput}>
-                <div className={styles.editorOutputLineNumbers}>>_</div>
-                <div className={styles.editorOutputTerminal}>
-                    {results.map((message, idx) => (
-                        <div key={idx}>{message.text}</div>
-                    ))}
-                </div>
-            </div>
+            <LuaOutput />
         </div>
     );
 }
@@ -204,7 +180,7 @@ export default function Playground() {
                     <a
                         href="https://github.com/TypeScriptToLua/TypeScriptToLua/blob/master/CHANGELOG.md"
                         target="_blank"
-                        rel="noopener noreferrer"
+                        rel="noopener"
                     >
                         <b>v{tstlVersion}</b>
                     </a>

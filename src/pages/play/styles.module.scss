@@ -63,7 +63,7 @@ $navbar-height: 50px;
     background-color: var(--monaco-background);
 }
 
-$output-height: 120px;
+$output-height: 180px;
 
 .outputEditor {
     height: calc(100% - #{$output-height});
@@ -98,9 +98,5 @@ $output-height: 120px;
 
 .editorOutputTerminal {
     width: 100%;
-    padding: 10px;
-    overflow: auto;
-    font-weight: bold;
-    font-size: 12px;
-    white-space: pre;
+    overflow-y: auto;
 }
