@@ -9,6 +9,11 @@ import TsWorker from "worker-loader?name=ts.worker.js!./ts.worker";
 
 export { monaco };
 
+export function useMonacoTheme() {
+    const { isDarkTheme } = useThemeContext();
+    return isDarkTheme ? "vs-dark" : "vs";
+}
+
 // TODO: MonacoEnvironment should be a var
 (globalThis as { MonacoEnvironment?: typeof MonacoEnvironment }).MonacoEnvironment = {
     getWorker(_workerId, label) {
@@ -39,7 +44,7 @@ for (const module of [
     monaco.languages.typescript.typescriptDefaults.addExtraLib(module.default);
 }
 
-export function useMonacoTheme() {
-    const { isDarkTheme } = useThemeContext();
-    return isDarkTheme ? "vs-dark" : "vs";
-}
+monaco.languages.typescript.typescriptDefaults.setCompilerOptions({
+    ...monaco.languages.typescript.typescriptDefaults.getCompilerOptions(),
+    strict: true,
+});
