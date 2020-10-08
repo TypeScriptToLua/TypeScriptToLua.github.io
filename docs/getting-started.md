@@ -31,10 +31,10 @@ Basic recommended configuration:
     "lib": ["ESNext"],
     "moduleResolution": "Node",
     "types": [],
-    "strict": true
+    "strict": true,
   },
   "tstl": {
-    "luaTarget": "JIT"
+    "luaTarget": "JIT",
   }
 }
 ```
