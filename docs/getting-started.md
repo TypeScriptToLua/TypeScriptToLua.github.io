@@ -24,10 +24,12 @@ Basic recommended configuration:
 
 ```json title=tsconfig.json
 {
+  // For reference, all TypeScript compiler options can be found at:
+  // https://www.typescriptlang.org/docs/handbook/compiler-options.html
   "compilerOptions": {
-    "target": "esnext",
-    "lib": ["esnext"],
-    "moduleResolution": "node",
+    "target": "ESNext",
+    "lib": ["ESNext"],
+    "moduleResolution": "Node",
     "types": [],
     "strict": true
   },
