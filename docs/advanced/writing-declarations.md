@@ -510,9 +510,9 @@ declare module "creator" {
 
 ### Operator Overloads
 
-Lua supports overloading of mathematical operators such as `+`, `-` or `*`. (This is done via adding a function to `__add`, `__sub`, `__mul`, and so forth.) Since TypeScript does not support operator overloading in its type system, this feature is hard to replicate. Unfortunately, this is not something that can be fixed properly right now without forking off our custom TypeScript version.
+Lua supports overloading of mathematical operators such as `+`, `-` or `*`, using [metatable methods](https://www.lua.org/manual/5.4/manual.html#2.4) such as `__add`, `__sub`, `__mul`, and so forth. Since TypeScript does not support operator overloading in its type system, this feature is hard to replicate. Unfortunately, this is not something that can be fixed properly right now without forking off our custom TypeScript version.
 
-However, there is a workaround that works decently: if you declare a type as intersection type with number it will inherit all mathematical operators. For example:
+However, there is a workaround that works decently: if you declare a type as an intersection type with `number`, it will inherit all mathematical operators. For example:
 
 ```ts
 declare type Vector = number & {
