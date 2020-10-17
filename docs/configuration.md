@@ -25,7 +25,7 @@ To customize transpilation behavior we add a new group of options to the `tsconf
 | `sourceMapTraceback` | `true`, `false` (default: `false`)                                   | Overrides Lua's `debug.traceback` to apply sourcemaps to Lua stacktraces. This will make error messages point to your original TypeScript code instead of the generated Lua. |
 | `luaBundle`          | File path (relative to the `tsconfig.json`)                          | Will bundle all output lua files into a single bundle file. Requires **luaBundleEntry** to be set!                                                                           |
 | `luaBundleEntry`     | File path (relative to the `tsconfig.json`)                          | This should be the name/path of the TS file in your project that will serve as entry point to the bundled code.                                                              |
-| `luaPlugins`         | `Array<{ name: string; import?: string }>`                           | List of [TypeScriptToLua plugins](plugins.md).                                                                                                                               |
+| `luaPlugins`         | `Array<{ name: string; import?: string }>`                           | List of [TypeScriptToLua plugins](api/plugins.md).                                                                                                                           |
 
 ## Standard options
 

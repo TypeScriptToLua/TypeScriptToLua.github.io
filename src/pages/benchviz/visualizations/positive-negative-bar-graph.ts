@@ -35,12 +35,12 @@ export function positiveNegativeBarGraph(
 
     selection
         .append("g")
-        .attr("transform", `translate(0, ${yScale(0) + 5})`)
+        .attr("transform", `translate(0, ${yScale(0)! + 5})`)
         .call(xAxis);
 
     selection.append("g").attr("transform", `translate(${GRAPH_MARGIN.left}, ${GRAPH_MARGIN.top})`).call(yAxis);
 
-    const barSize = (val: number) => Math.abs(height / 2 - yScale(val));
+    const barSize = (val: number) => Math.abs(height / 2 - yScale(val)!);
 
     const bars = selection.selectAll("rect").data(data).enter();
 

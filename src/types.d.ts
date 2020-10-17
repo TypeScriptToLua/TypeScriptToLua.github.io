@@ -26,7 +26,7 @@ declare module "worker-loader*" {
         constructor();
     }
 
-    export = WebpackWorker;
+    export default WebpackWorker;
 }
 
 declare module "monaco-editor/esm/vs/editor/editor.worker" {
@@ -38,8 +38,8 @@ declare module "monaco-editor/esm/vs/editor/editor.worker" {
 }
 
 declare module "monaco-editor/esm/vs/language/typescript/tsWorker" {
-    import * as ts from "typescript";
     import monaco from "monaco-editor/esm/vs/editor/editor.api";
+    import * as ts from "typescript";
 
     export interface TypeScriptWorker extends monaco.languages.typescript.TypeScriptWorker {}
     export class TypeScriptWorker {

@@ -4,8 +4,8 @@ import "monaco-editor/esm/vs/editor/edcore.main";
 import "monaco-editor/esm/vs/basic-languages/lua/lua.contribution";
 import "monaco-editor/esm/vs/basic-languages/typescript/typescript.contribution";
 import "monaco-editor/esm/vs/language/typescript/monaco.contribution";
-import EditorWorker from "worker-loader?name=editor.worker.js!monaco-editor/esm/vs/editor/editor.worker.js";
-import TsWorker from "worker-loader?name=ts.worker.js!./ts.worker";
+import EditorWorker from "worker-loader?filename=editor.worker.js!monaco-editor/esm/vs/editor/editor.worker.js";
+import TsWorker from "worker-loader?filename=ts.worker.js!./ts.worker";
 
 export { monaco };
 

@@ -23,7 +23,9 @@ module.exports = () => ({
                     )]: require.resolve("typescript"),
 
                     // Exclude builtin monaco-typescript libs
-                    [require.resolve("monaco-editor/esm/vs/language/typescript/lib/lib.js")]: resolve("src/empty.ts"),
+                    [require.resolve("monaco-editor/esm/vs/language/typescript/lib/lib.js")]: resolve(
+                        "src/monaco-typescript-lib-stub.ts",
+                    ),
                 },
             },
             module: {
@@ -45,7 +47,9 @@ module.exports = () => ({
             },
             plugins: [
                 new DefinePlugin({ __LUA_SYNTAX_KIND__: JSON.stringify(LuaSyntaxKind) }),
-                ...(isServer ? [] : [new ForkTsCheckerWebpackPlugin({ tsconfig: resolve("src/tsconfig.json") })]),
+                ...(isServer
+                    ? []
+                    : [new ForkTsCheckerWebpackPlugin({ typescript: { configFile: resolve("src/tsconfig.json") } })]),
             ],
         };
     },

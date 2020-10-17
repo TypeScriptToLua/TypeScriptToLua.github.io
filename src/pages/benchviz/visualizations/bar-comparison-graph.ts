@@ -51,8 +51,8 @@ export function barComparisonGraph(
         .append("rect")
         .attr("width", barWidth)
         .attr("x", (d) => xScale(d.name)! + 0.5 * bandWidth - barWidth - 1)
-        .attr("height", (d) => barMaxHeight - yScale(d.oldValue))
-        .attr("y", (d) => yScale(d.oldValue))
+        .attr("height", (d) => barMaxHeight - yScale(d.oldValue)!)
+        .attr("y", (d) => yScale(d.oldValue)!)
         .style("fill", COLOR_OLD);
     //.style("stroke", "currentColor");
 
@@ -60,8 +60,8 @@ export function barComparisonGraph(
         .append("rect")
         .attr("width", barWidth)
         .attr("x", (d) => xScale(d.name)! + 0.5 * bandWidth + 1)
-        .attr("height", (d) => barMaxHeight - yScale(d.newValue))
-        .attr("y", (d) => yScale(d.newValue))
+        .attr("height", (d) => barMaxHeight - yScale(d.newValue)!)
+        .attr("y", (d) => yScale(d.newValue)!)
         .style("fill", COLOR_NEW);
     //.style("stroke", "currentColor");
 

@@ -1,4 +1,4 @@
-import FengariWorker from "worker-loader?name=fengari.worker.js!./fengari.worker";
+import FengariWorker from "worker-loader?filename=fengari.worker.js!./fengari.worker";
 import type { ConsoleMessage } from "./fengari.worker";
 
 export type { ConsoleMessage };
