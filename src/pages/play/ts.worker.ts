@@ -1,5 +1,6 @@
 import * as worker from "monaco-editor/esm/vs/editor/editor.worker";
 import { TypeScriptWorker } from "monaco-editor/esm/vs/language/typescript/tsWorker";
+import * as ts from "typescript";
 import * as tstl from "typescript-to-lua";
 
 // Mock unsupported in path-browserify@0.0.1 parse and format functions used for normalization in
@@ -18,13 +19,15 @@ const emitHost: tstl.EmitHost = {
 
         return libContext(`./${featureName}.lua`).default;
     },
+    writeFile() {},
 };
+
+const transpiler = new tstl.Transpiler({ emitHost });
 
 export class CustomTypeScriptWorker extends TypeScriptWorker {
     public async getTranspileOutput(fileName: string) {
-        const { transpiledFiles } = this.transpileLua(fileName);
-        const [file] = transpiledFiles;
-        return { lua: file.lua!, ast: file.luaAst!, sourceMap: file.sourceMap! };
+        const { ast, lua, sourceMap } = this.transpileLua(fileName);
+        return { ast, lua, sourceMap };
     }
 
     public async getSemanticDiagnostics(fileName: string) {
@@ -38,13 +41,43 @@ export class CustomTypeScriptWorker extends TypeScriptWorker {
 
     private transpileLua(fileName: string) {
         const program = this._languageService.getProgram()!;
+        const sourceFile = program.getSourceFile(fileName)!;
 
         const compilerOptions: tstl.CompilerOptions = program.getCompilerOptions();
         compilerOptions.rootDir = "inmemory://model/";
         compilerOptions.luaLibImport = tstl.LuaLibImportKind.Inline;
         compilerOptions.luaTarget = tstl.LuaTarget.Lua53;
+        compilerOptions.sourceMap = true;
 
-        return tstl.transpile({ program, emitHost, sourceFiles: [program.getSourceFile(fileName)!] });
+        let ast!: tstl.Block;
+        let lua!: string;
+        let sourceMap!: string;
+        const { diagnostics } = transpiler.emit({
+            program,
+            sourceFiles: [sourceFile],
+            writeFile(fileName, data, _writeBOM, _onError, sourceFiles = []) {
+                if (!sourceFiles.includes(sourceFile)) return;
+                if (fileName.endsWith(".lua")) lua = data;
+                if (fileName.endsWith(".lua.map")) sourceMap = data;
+            },
+            plugins: [
+                {
+                    visitors: {
+                        [ts.SyntaxKind.SourceFile](node, context) {
+                            const [file] = context.superTransformNode(node) as [tstl.Block];
+
+                            if (node === sourceFile) {
+                                ast = file;
+                            }
+
+                            return file;
+                        },
+                    },
+                },
+            ],
+        });
+
+        return { diagnostics, ast, lua, sourceMap };
     }
 }
 
