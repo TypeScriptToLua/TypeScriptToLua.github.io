@@ -49,7 +49,7 @@ export class CustomTypeScriptWorker extends TypeScriptWorker {
         compilerOptions.luaTarget = tstl.LuaTarget.Lua53;
         compilerOptions.sourceMap = true;
 
-        let ast!: tstl.Block;
+        let ast!: tstl.File;
         let lua!: string;
         let sourceMap!: string;
         const { diagnostics } = transpiler.emit({
@@ -64,7 +64,7 @@ export class CustomTypeScriptWorker extends TypeScriptWorker {
                 {
                     visitors: {
                         [ts.SyntaxKind.SourceFile](node, context) {
-                            const [file] = context.superTransformNode(node) as [tstl.Block];
+                            const [file] = context.superTransformNode(node) as [tstl.File];
 
                             if (node === sourceFile) {
                                 ast = file;
