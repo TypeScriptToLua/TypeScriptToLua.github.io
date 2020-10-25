@@ -1,8 +1,10 @@
 <!DOCTYPE html>
+<!-- Not using @docusaurus/plugin-client-redirects, because it doesn't preserve url parameters and fragment -->
 <html>
     <head>
-        <script>
-            location.href = "/play" + (location.search || "") + (location.hash || "");
-        </script>
+        <meta charset="UTF-8" />
     </head>
+    <script>
+        location.href = "/play" + (location.search || "") + (location.hash || "");
+    </script>
 </html>
