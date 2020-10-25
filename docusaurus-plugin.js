@@ -49,7 +49,12 @@ module.exports = () => ({
                 new DefinePlugin({ __LUA_SYNTAX_KIND__: JSON.stringify(LuaSyntaxKind) }),
                 ...(isServer
                     ? []
-                    : [new ForkTsCheckerWebpackPlugin({ typescript: { configFile: resolve("src/tsconfig.json") } })]),
+                    : [
+                          new ForkTsCheckerWebpackPlugin({
+                              logger: { devServer: false },
+                              typescript: { configFile: resolve("src/tsconfig.json") },
+                          }),
+                      ]),
             ],
         };
     },
