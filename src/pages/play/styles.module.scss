@@ -48,7 +48,7 @@ $navbar-height: 50px;
 
 .content {
     width: 100%;
-    height: calc(100vh - #{$navbar-height} - 60px);
+    height: calc(100vh - var(--ifm-navbar-height) - #{$navbar-height});
     display: flex;
     flex-wrap: wrap;
 }
@@ -59,7 +59,6 @@ $navbar-height: 50px;
     display: flex;
     flex-flow: column;
     position: relative;
-    overflow: hidden;
     background-color: var(--monaco-background);
 }
 

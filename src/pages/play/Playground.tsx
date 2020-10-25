@@ -47,6 +47,7 @@ const commonMonacoOptions: monaco.editor.IEditorConstructionOptions = {
     minimap: { enabled: false },
     automaticLayout: true,
     scrollbar: { useShadows: false },
+    fixedOverflowWidgets: true,
 };
 
 function InputPane() {
