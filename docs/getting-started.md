@@ -67,7 +67,7 @@ npm run dev
 ```
 
 :::note
-For testing purposes you also can run `tstl` directly from your terminal with `node_modules/.bin/tstl` or `npx --no-install tstl`.
+For testing purposes you also can run `tstl` directly from your terminal with `node_modules/.bin/tstl` or `npx tstl`.
 :::
 
 ## Declarations
