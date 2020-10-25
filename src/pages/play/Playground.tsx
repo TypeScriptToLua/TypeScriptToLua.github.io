@@ -171,23 +171,33 @@ function OutputPane() {
     );
 }
 
+function PlaygroundNavbar() {
+    const tstlLink = "https://github.com/TypeScriptToLua/TypeScriptToLua/blob/master/CHANGELOG.md";
+    const tsMajor = tsVersion.split(".")[0];
+    const tsMinor = tsVersion.split(".")[1];
+    const tsLink = `https://www.typescriptlang.org/docs/handbook/release-notes/typescript-${tsMajor}-${tsMinor}.html`;
+
+    return (
+        <nav className={styles.navbar}>
+            <div className={styles.navbarVersions}>
+                TSTL{" "}
+                <a href={tstlLink} target="_blank" rel="noopener">
+                    <b>v{tstlVersion}</b>
+                </a>
+                <br />
+                &nbsp;&nbsp;TS{" "}
+                <a href={tsLink} target="_blank" rel="noopener">
+                    <b>v{tsVersion}</b>
+                </a>
+            </div>
+        </nav>
+    );
+}
+
 export default function Playground() {
     return (
         <>
-            <nav className={styles.navbar}>
-                <div className={styles.navbarVersion}>
-                    TSTL{" "}
-                    <a
-                        href="https://github.com/TypeScriptToLua/TypeScriptToLua/blob/master/CHANGELOG.md"
-                        target="_blank"
-                        rel="noopener"
-                    >
-                        <b>v{tstlVersion}</b>
-                    </a>
-                    <br />
-                    &nbsp;&nbsp;TS <b>v{tsVersion}</b>
-                </div>
-            </nav>
+            <PlaygroundNavbar />
             <div className={styles.content}>
                 <EditorContextProvider>
                     <InputPane />
