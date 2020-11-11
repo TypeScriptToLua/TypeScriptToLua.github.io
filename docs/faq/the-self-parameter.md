@@ -12,6 +12,8 @@ Telling TypeScript not to allow `this` to be used will eliminate that parameter 
 
 Other workarounds are available for removing this too.
 
+> Disabling this self parameter should mainly be done when writing declarations for Lua interop purposes.
+
 ## Removing it
 
 ### `this: void`
