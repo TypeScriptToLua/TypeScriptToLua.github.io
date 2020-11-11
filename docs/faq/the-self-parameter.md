@@ -14,48 +14,6 @@ Other workarounds are available for removing this too.
 
 ## Removing it
 
-### `noImplicitSelf`
-
-Use this option if you do not want implemented functions to have a self parameter.
-
-Ambient functions (functions described, not implemented) as well as classes and interfaces ignore this option.
-
-:::note
-Use this with `strict` or `noImplicitThis` to ensure you don't use an "implicit this" type in your code.
-:::
-
-_When enabled, if `this` has a type other than an implicit `any`, a `self` parameter will be added for its containing function._
-
-```json title=tsconfig.json
-{
-  "tstl": {
-    "noImplicitSelf": true
-  }
-}
-```
-
-<SideBySide>
-
-```typescript
-function f() {}
-function f2(this: any) {}
-const a = () => {};
-class C {
-  method() {}
-}
-```
-
-```lua
-function f() end
-function f2(self) end
-local a = function() end
-
-local C = __TS__Class()
-function C:method(self) end -- still has self
-```
-
-</SideBySide>
-
 ### `this: void`
 
 This is a type-safe solution usable whenever describing something callable.
@@ -135,8 +93,6 @@ end)
 
 </SideBySide>
 
-## Removing it via annotations
-
 ### `@noSelf`
 
 If you wish to specify that all functions in a class, interface or namespace should not have a context parameter, you can use the [`@noSelf`](../advanced/compiler-annotations.md#noself) annotation.
@@ -186,6 +142,48 @@ Namespace:foo("foo")
 If you want to specify that all functions in a file should have no context, you can use [`@noSelfInFile`](../advanced/compiler-annotations.md#noselfinfile) at the top of the file.
 
 For more information on [`@noSelf`](../advanced/compiler-annotations.md#noself) and [`@noSelfInFile`](../advanced/compiler-annotations.md#noselfinfile), please refer to [Compiler Annotations](../advanced/compiler-annotations).
+
+### `noImplicitSelf`
+
+Use this option if you do not want implemented functions to have a self parameter.
+
+Ambient functions (functions described, not implemented) as well as classes and interfaces ignore this option.
+
+:::note
+Use this with `strict` or `noImplicitThis` to ensure you don't use an "implicit this" type in your code.
+:::
+
+_When enabled, if `this` has a type other than an implicit `any`, a `self` parameter will be added for its containing function._
+
+```json title=tsconfig.json
+{
+  "tstl": {
+    "noImplicitSelf": true
+  }
+}
+```
+
+<SideBySide>
+
+```typescript
+function f() {}
+function f2(this: any) {}
+const a = () => {};
+class C {
+  method() {}
+}
+```
+
+```lua
+function f() end
+function f2(self) end
+local a = function() end
+
+local C = __TS__Class()
+function C:method(self) end -- still has self
+```
+
+</SideBySide>
 
 ## Assignment Errors
 
