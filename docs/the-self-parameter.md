@@ -1,5 +1,5 @@
 ---
-title: The self parameter
+title: The Self Parameter
 ---
 
 import { SideBySide } from "@site/src/components/SideBySide";
@@ -97,7 +97,7 @@ end)
 
 ### `@noSelf`
 
-If you wish to specify that all functions in a class, interface or namespace should not have a context parameter, you can use the [`@noSelf`](../advanced/compiler-annotations.md#noself) annotation.
+If you wish to specify that all functions in a class, interface or namespace should not have a context parameter, you can use the [`@noSelf`](./advanced/compiler-annotations.md#noself) annotation.
 
 **Example**
 
@@ -141,9 +141,9 @@ Namespace:foo("foo")
 
 ### `@noSelfInFile`
 
-If you want to specify that all functions in a file should have no context, you can use [`@noSelfInFile`](../advanced/compiler-annotations.md#noselfinfile) at the top of the file.
+If you want to specify that all functions in a file should have no context, you can use [`@noSelfInFile`](./advanced/compiler-annotations.md#noselfinfile) at the top of the file.
 
-For more information on [`@noSelf`](../advanced/compiler-annotations.md#noself) and [`@noSelfInFile`](../advanced/compiler-annotations.md#noselfinfile), please refer to [Compiler Annotations](../advanced/compiler-annotations).
+For more information on [`@noSelf`](./advanced/compiler-annotations.md#noself) and [`@noSelfInFile`](./advanced/compiler-annotations.md#noselfinfile), please refer to [Compiler Annotations](./advanced/compiler-annotations).
 
 ### `noImplicitSelf`
 
