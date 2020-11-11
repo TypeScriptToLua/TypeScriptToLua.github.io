@@ -7,16 +7,17 @@
         {
             "type": "category",
             "label": "Advanced",
-            "items": [
-                "advanced/writing-declarations",
-                "advanced/compiler-annotations",
-                "advanced/functions-and-the-self-parameter"
-            ]
+            "items": ["advanced/writing-declarations", "advanced/compiler-annotations"]
         },
         {
             "type": "category",
             "label": "API",
             "items": ["api/overview", "api/plugins", "api/printer"]
+        },
+        {
+            "type": "category",
+            "label": "FAQ",
+            "items": ["faq/the-self-parameter"]
         }
     ]
 }
