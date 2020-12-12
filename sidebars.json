@@ -3,15 +3,12 @@
         "getting-started",
         "configuration",
         "caveats",
+        "the-self-parameter",
         "editor-support",
         {
             "type": "category",
             "label": "Advanced",
-            "items": [
-                "advanced/writing-declarations",
-                "advanced/compiler-annotations",
-                "advanced/functions-and-the-self-parameter"
-            ]
+            "items": ["advanced/writing-declarations", "advanced/compiler-annotations"]
         },
         {
             "type": "category",

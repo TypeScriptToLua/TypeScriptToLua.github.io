@@ -416,7 +416,7 @@ NoSelfNS.noSelfFunc("bar")
 
 </SideBySide>
 
-For more information about how the `self` parameter is handled, see [Functions and the `self` Parameter](functions-and-the-self-parameter.md)
+For more information about how the `self` parameter is handled, see [Functions and the `self` Parameter](../the-self-parameter.md)
 
 ## @noSelfInFile
 
