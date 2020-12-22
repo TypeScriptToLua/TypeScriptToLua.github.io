@@ -8,10 +8,12 @@
     @media screen and (min-width: 997px) {
         > :first-child {
             padding-right: 5px;
+            max-width: 50%;
         }
 
         > :last-child {
             padding-left: 5px;
+            max-width: 50%;
         }
     }
 
