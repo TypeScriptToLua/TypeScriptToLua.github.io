@@ -516,14 +516,12 @@ end
 Some annotations are deprecated and will be/have been removed. The docs here are only valid for older versions. In addition the docs include some hints on how to replace the annotations with vanilla TS.
 :::
 
-export const DeprecatedInVersion = ({deprecated, removed}) => (
-<p
-  style={{
-    fontWeight: "bold",
-  }}>
+export const DeprecatedInVersion = ({deprecated, removed}) => (<p
+style={{
+      fontWeight: "bold"
+    }}>
 <SmallCallout>Deprecated:</SmallCallout> <a href={"https://github.com/TypeScriptToLua/TypeScriptToLua/blob/master/CHANGELOG.md#" + deprecated}>v{deprecated} </a>
-<SmallCallout serverity="danger">Removed:</SmallCallout> <a href={"https://github.com/TypeScriptToLua/TypeScriptToLua/blob/master/CHANGELOG.md#" + removed}>v{removed}</a>
-</p>
+<SmallCallout serverity="danger">Removed:</SmallCallout> <a href={"https://github.com/TypeScriptToLua/TypeScriptToLua/blob/master/CHANGELOG.md#" + removed}>v{removed}</a></p>
 );
 
 ## @extension
