@@ -517,14 +517,13 @@ Some annotations are deprecated and will be/have been removed. The docs here are
 :::
 
 export const DeprecatedInVersion = ({deprecated, removed}) => (
-
-  <p
-    style={{
-      fontWeight: "bold",
-    }}>
+<p
+  style={{
+    fontWeight: "bold",
+  }}>
 <SmallCallout>Deprecated:</SmallCallout> <a href={"https://github.com/TypeScriptToLua/TypeScriptToLua/blob/master/CHANGELOG.md#" + deprecated}>v{deprecated} </a>
 <SmallCallout serverity="danger">Removed:</SmallCallout> <a href={"https://github.com/TypeScriptToLua/TypeScriptToLua/blob/master/CHANGELOG.md#" + removed}>v{removed}</a>
-  </p>
+</p>
 );
 
 ## @extension
