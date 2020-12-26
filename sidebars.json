@@ -8,7 +8,7 @@
         {
             "type": "category",
             "label": "Advanced",
-            "items": ["advanced/writing-declarations", "advanced/compiler-annotations"]
+            "items": ["advanced/writing-declarations", "advanced/compiler-annotations", "advanced/language-extensions"]
         },
         {
             "type": "category",
