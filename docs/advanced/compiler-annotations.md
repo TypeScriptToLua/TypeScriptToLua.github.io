@@ -567,14 +567,12 @@ Use an interface to extend your existing class and declare the table of the exis
 
 ```typescript
 interface MyBaseClass extends ExistingClass {
-    myFunction(): void;
+  myFunction(): void;
 }
 
 declare const ExistingClassTable: MyBaseClass;
 
-ExistingClassTable.myFunction = function() {
-
-}
+ExistingClassTable.myFunction = function () {};
 ```
 
 ```lua
@@ -635,14 +633,12 @@ Use an interface to extend your existing class and assign the functions to the m
 
 ```typescript
 interface MyMetaExtension extends MyMetaClass {
-    myFunction(): void;
+  myFunction(): void;
 }
 
 const MyMetaExtensionTable: MyMetaExtension = debug.getregistry().MyMetaClass as MyMetaExtension;
 
-MyMetaExtensionTable.myFunction = function() {
-
-}
+MyMetaExtensionTable.myFunction = function () {};
 ```
 
 ```lua
@@ -746,8 +742,7 @@ Use interface merging.
 declare class MyAbstractClass {}
 interface MyClass extends MyAbstractClass {}
 
-class MyClass {
-}
+class MyClass {}
 ```
 
 ```lua
