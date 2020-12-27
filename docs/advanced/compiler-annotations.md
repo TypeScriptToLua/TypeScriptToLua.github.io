@@ -514,10 +514,10 @@ end
 
 :::warning
 Some annotations are deprecated and will be/have been removed.
-The docs are only valid for older versions and include some instructions on how to replace the annotations with vanilla TS.
+Below are the deprecated annotations and instructions to recreate their behavior with vanilla TypeScript.
 :::
 
-## @extension
+### @extension
 
 <DeprecatedInVersion deprecated="0.37.0" removed="TBD" />
 
@@ -526,29 +526,48 @@ The docs are only valid for older versions and include some instructions on how 
 The Extension decorator marks a class as an extension of an already existing class.
 This causes the class header to not be translated, preventing instantiation and the override of the existing class.
 
-**Example**
+**Default Behavior**
 
 <SideBySide>
 
 ```typescript
-class MyBaseClass {
+class MyClass {
   myFunction(): void {}
 }
 ```
 
 ```lua
-MyBaseClass = __TS__Class()
+MyClass = __TS__Class()
 ...
-function MyBaseClass.prototype.myFunction(self) end
+function MyClass.prototype.myFunction(self) end
 ```
 
 </SideBySide>
+
+**Example 1**
+
+<SideBySide>
+
+```typescript
+/** @extension */
+class MyClass {
+  myFunction(): void {}
+}
+```
+
+```lua
+function MyClass.myFunction(self) end
+```
+
+</SideBySide>
+
+**Example 2**
 
 <SideBySide>
 
 ```typescript
 /** @extension ExistingClassTable */
-class MyBaseClass extends ExistingClass {
+class MyClass extends ExistingClass {
   myFunction(): void {}
 }
 ```
@@ -563,14 +582,16 @@ function ExistingClassTable.myFunction(self) end
 
 Use an interface to extend your existing class and declare the table of the existing class as variable.
 
+**Example**
+
 <SideBySide>
 
 ```typescript
-interface MyBaseClass extends ExistingClass {
+interface ExistingClass {
   myFunction(): void;
 }
 
-declare const ExistingClassTable: MyBaseClass;
+declare const ExistingClassTable: ExistingClass;
 
 ExistingClassTable.myFunction = function () {};
 ```
@@ -581,7 +602,7 @@ function ExistingClassTable.myFunction(self) end
 
 </SideBySide>
 
-## @metaExtension
+### @metaExtension
 
 <DeprecatedInVersion deprecated="0.37.0" removed="TBD" />
 
@@ -632,24 +653,24 @@ Use an interface to extend your existing class and assign the functions to the m
 <SideBySide>
 
 ```typescript
-interface MyMetaExtension extends MyMetaClass {
+interface MyMetaClass {
   myFunction(): void;
 }
 
-const MyMetaExtensionTable: MyMetaExtension = debug.getregistry().MyMetaClass as MyMetaExtension;
+const MyMetaClassTable: MyMetaClass = debug.getregistry().MyMetaClass as MyMetaExtension;
 
-MyMetaExtensionTable.myFunction = function () {};
+MyMetaClassTable.myFunction = function () {};
 ```
 
 ```lua
-MyMetaExtensionTable = debug.getregistry().MyMetaClass
-MyMetaExtensionTable.myFunction = function(self)
+MyMetaClassTable = debug.getregistry().MyMetaClass
+MyMetaClassTable.myFunction = function(self)
 end
 ```
 
 </SideBySide>
 
-## @phantom
+### @phantom
 
 <DeprecatedInVersion deprecated="0.37.0" removed="TBD" />
 
@@ -690,7 +711,11 @@ function myFunction() end
 
 </SideBySide>
 
-## @pureAbstract
+**Upgrade instructions**
+
+Use ECMAScript modules and import/export. Alternatively, use a real (non-phantom) namespace.
+
+### @pureAbstract
 
 <DeprecatedInVersion deprecated="0.37.0" removed="TBD" />
 
@@ -734,7 +759,8 @@ MyClass = __TS__Class()
 
 **Upgrade Instructions**
 
-Use interface merging.
+Try declaring the "classes" of your lua enviroment as interface.
+If that is not possible use interface merging as suggested below.
 
 <SideBySide>
 
