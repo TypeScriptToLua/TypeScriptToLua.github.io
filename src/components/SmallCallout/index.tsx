@@ -1,14 +1,18 @@
 import React from "react";
 
-export function SmallCallout({ children, serverity = "warning" }: { children: React.ReactNode; serverity: string }) {
+type Props = {
+    children: React.ReactNode;
+    severity: string;
+};
+
+export function SmallCallout({ children, severity }: Props) {
     return (
         <span
             style={{
-                backgroundColor: `var(--ifm-color-${serverity})`,
+                backgroundColor: `var(--ifm-color-${severity})`,
                 borderRadius: "2px",
                 color: "var(--ifm-alert-color)",
                 padding: "0.3rem",
-                marginLeft: "0.2rem",
                 marginRight: "0.2rem",
             }}
         >

@@ -519,7 +519,7 @@ The docs are only valid for older versions and include some instructions on how 
 
 ## @extension
 
-<DeprecatedInVersion deprecated="0.37.0" removed="TBD"></DeprecatedInVersion>
+<DeprecatedInVersion deprecated="0.37.0" removed="TBD" />
 
 **Target elements:** `class`
 
@@ -583,7 +583,7 @@ function ExistingClassTable.myFunction(self) end
 
 ## @metaExtension
 
-<DeprecatedInVersion deprecated="0.37.0" removed="TBD"></DeprecatedInVersion>
+<DeprecatedInVersion deprecated="0.37.0" removed="TBD" />
 
 **Target elements:** `class`
 
@@ -651,7 +651,7 @@ end
 
 ## @phantom
 
-<DeprecatedInVersion deprecated="0.37.0" removed="TBD"></DeprecatedInVersion>
+<DeprecatedInVersion deprecated="0.37.0" removed="TBD" />
 
 **Target elements:** `namespace`
 
@@ -692,7 +692,7 @@ function myFunction() end
 
 ## @pureAbstract
 
-<DeprecatedInVersion deprecated="0.37.0" removed="TBD"></DeprecatedInVersion>
+<DeprecatedInVersion deprecated="0.37.0" removed="TBD" />
 
 **Target elements:** `declare class`
 

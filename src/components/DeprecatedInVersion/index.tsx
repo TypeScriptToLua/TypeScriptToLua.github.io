@@ -8,11 +8,11 @@ export function DeprecatedInVersion({ deprecated, removed }: { deprecated: strin
                 fontWeight: "bold",
             }}
         >
-            <SmallCallout serverity="warning">Deprecated:</SmallCallout>
+            <SmallCallout severity="warning">Deprecated:</SmallCallout>
             <a href={"https://github.com/TypeScriptToLua/TypeScriptToLua/blob/master/CHANGELOG.md#" + deprecated}>
                 {deprecated}
-            </a>
-            <SmallCallout serverity="danger">Removed:</SmallCallout>
+            </a>{" "}
+            <SmallCallout severity="danger">Removed:</SmallCallout>
             <a href={"https://github.com/TypeScriptToLua/TypeScriptToLua/blob/master/CHANGELOG.md#" + removed}>
                 {removed}
             </a>
