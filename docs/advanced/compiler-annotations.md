@@ -3,7 +3,7 @@ title: Compiler Annotations
 ---
 
 import { SideBySide } from "@site/src/components/SideBySide";
-import { SmallCallout } from "@site/src/components/SmallCallout";
+import { DeprecatedInVersion } from "@site/src/components/DeprecatedInVersion";
 
 To improve translation and compatibility to different Lua interfaces, the TypeScriptToLua transpiler supports several custom annotations that slightly change translation results. This page documents the supported annotations. The syntax of the compiler annotations use the JSDoc syntax.
 
@@ -513,24 +513,18 @@ end
 ## Deprecated
 
 :::warning
-Some annotations are deprecated and will be/have been removed. The docs here are only valid for older versions. In addition the docs include some hints on how to replace the annotations with vanilla TS.
+Some annotations are deprecated and will be/have been removed.
+The docs are only valid for older versions and include some instructions on how to replace the annotations with vanilla TS.
 :::
-
-export const DeprecatedInVersion = ({deprecated, removed}) => (<p
-style={{
-      fontWeight: "bold"
-    }}>
-<SmallCallout>Deprecated:</SmallCallout> <a href={"https://github.com/TypeScriptToLua/TypeScriptToLua/blob/master/CHANGELOG.md#" + deprecated}>v{deprecated} </a>
-<SmallCallout serverity="danger">Removed:</SmallCallout> <a href={"https://github.com/TypeScriptToLua/TypeScriptToLua/blob/master/CHANGELOG.md#" + removed}>v{removed}</a></p>
-);
 
 ## @extension
 
-<DeprecatedInVersion deprecated="0.37.0" removed="0.38.0"></DeprecatedInVersion>
+<DeprecatedInVersion deprecated="0.37.0" removed="TBD"></DeprecatedInVersion>
 
 **Target elements:** `class`
 
-The Extension decorator marks a class as an extension of an already existing class. This causes the class header to not be translated, preventing instantiation and the override of the existing class.
+The Extension decorator marks a class as an extension of an already existing class.
+This causes the class header to not be translated, preventing instantiation and the override of the existing class.
 
 **Example**
 
@@ -553,25 +547,50 @@ function MyBaseClass.prototype.myFunction(self) end
 <SideBySide>
 
 ```typescript
-/** @extension */
-class MyBaseClass {
+/** @extension ExistingClassTable */
+class MyBaseClass extends ExistingClass {
   myFunction(): void {}
 }
 ```
 
 ```lua
-function MyBaseClass.myFunction(self) end
+function ExistingClassTable.myFunction(self) end
+```
+
+</SideBySide>
+
+**Upgrade Instructions**
+
+Use an interface to extend your existing class and declare the table of the existing class as variable.
+
+<SideBySide>
+
+```typescript
+interface MyBaseClass extends ExistingClass {
+    myFunction(): void;
+}
+
+declare const ExistingClassTable: MyBaseClass;
+
+ExistingClassTable.myFunction = function() {
+
+}
+```
+
+```lua
+function ExistingClassTable.myFunction(self) end
 ```
 
 </SideBySide>
 
 ## @metaExtension
 
-<DeprecatedInVersion deprecated="0.37.0" removed="0.38.0"></DeprecatedInVersion>
+<DeprecatedInVersion deprecated="0.37.0" removed="TBD"></DeprecatedInVersion>
 
 **Target elements:** `class`
 
-The Extension decorator marks a class as an extension of an already existing meta class/table. This causes the class header to not be translated, preventing instantiation and the override of the existing class.
+The Extension decorator marks a class as an extension of an already existing meta class/table.
+This causes the class header to not be translated, preventing instantiation and the override of the existing class.
 
 **Example**
 
@@ -608,13 +627,40 @@ end;
 
 </SideBySide>
 
+**Upgrade Instructions**
+
+Use an interface to extend your existing class and assign the functions to the meta table of the existing class.
+
+<SideBySide>
+
+```typescript
+interface MyMetaExtension extends MyMetaClass {
+    myFunction(): void;
+}
+
+const MyMetaExtensionTable: MyMetaExtension = debug.getregistry().MyMetaClass as MyMetaExtension;
+
+MyMetaExtensionTable.myFunction = function() {
+
+}
+```
+
+```lua
+MyMetaExtensionTable = debug.getregistry().MyMetaClass
+MyMetaExtensionTable.myFunction = function(self)
+end
+```
+
+</SideBySide>
+
 ## @phantom
 
-<DeprecatedInVersion deprecated="0.37.0" removed="0.38.0"></DeprecatedInVersion>
+<DeprecatedInVersion deprecated="0.37.0" removed="TBD"></DeprecatedInVersion>
 
 **Target elements:** `namespace`
 
-This decorator marks a namespace as a phantom namespace. This means all members of the namespace will be translated as if they were not in that namespace. Primarily used to prevent scoping issues.
+This decorator marks a namespace as a phantom namespace.
+This means all members of the namespace will be translated as if they were not in that namespace. Primarily used to prevent scoping issues.
 
 **Example**
 
@@ -650,11 +696,12 @@ function myFunction() end
 
 ## @pureAbstract
 
-<DeprecatedInVersion deprecated="0.37.0" removed="0.38.0"></DeprecatedInVersion>
+<DeprecatedInVersion deprecated="0.37.0" removed="TBD"></DeprecatedInVersion>
 
 **Target elements:** `declare class`
 
-This decorator marks a class declaration as purely abstract. The result is that any class extending the purely abstract class will not extend this class in the resulting Lua.
+This decorator marks a class declaration as purely abstract.
+The result is that any class extending the purely abstract class will not extend this class in the resulting Lua.
 
 **Example**
 
@@ -681,6 +728,26 @@ setmetatable(MyClass.prototype, MyClass.____super.prototype)
 /** @pureAbstract */
 declare class MyAbstractClass {}
 class MyClass extends MyAbstractClass {}
+```
+
+```lua
+MyClass = __TS__Class()
+```
+
+</SideBySide>
+
+**Upgrade Instructions**
+
+Use interface merging.
+
+<SideBySide>
+
+```typescript
+declare class MyAbstractClass {}
+interface MyClass extends MyAbstractClass {}
+
+class MyClass {
+}
 ```
 
 ```lua
