@@ -125,6 +125,10 @@ $output-height: 180px;
         width: 100%;
     }
 
+    .contentPaneHiddenMobile {
+        display: none;
+    }
+
     .outputControls {
         top: 0.5em;
         right: 1em;

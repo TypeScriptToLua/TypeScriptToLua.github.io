@@ -88,7 +88,7 @@ function InputPane() {
     const { activePanel } = useContext(PanelContext);
 
     return (
-        <div style={{ display: activePanel == PanelKind.Input ? "block" : "none" }} className={styles.contentPane}>
+        <div className={clsx(styles.contentPane, activePanel != PanelKind.Input && styles.contentPaneHiddenMobile)}>
             <MonacoEditor
                 theme={theme}
                 language="typescript"
@@ -157,7 +157,7 @@ function OutputPane() {
     const { activePanel } = useContext(PanelContext);
 
     return (
-        <div style={{ display: activePanel == PanelKind.Output ? "block" : "none" }} className={styles.contentPane}>
+        <div className={clsx(styles.contentPane, activePanel != PanelKind.Output && styles.contentPaneHiddenMobile)}>
             <div className={styles.outputEditor}>
                 <div style={{ height: "100%", display: isAstView ? "none" : "block" }}>
                     <MonacoEditor
