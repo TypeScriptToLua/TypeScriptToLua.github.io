@@ -14,6 +14,24 @@ import styles from "./styles.module.scss";
 import { consoleFeedTheme, jsonTreeTheme } from "./themes";
 import type { CustomTypeScriptWorker } from "./ts.worker";
 
+enum PanelKind {
+    Input,
+    Output,
+}
+interface PanelState {
+    activePanel: PanelKind;
+}
+interface PanelContext extends PanelState {
+    setActivePanel(panelID: PanelKind): void;
+}
+
+const PanelContext = React.createContext<PanelContext>(null!);
+
+function PanelContextProvider({ children }: { children: React.ReactNode }) {
+    const [activePanel, setActivePanel] = useState<PanelKind>(PanelKind.Input);
+
+    return <PanelContext.Provider value={{ activePanel, setActivePanel }}>{children}</PanelContext.Provider>;
+}
 interface EditorState {
     source: string;
     lua: string;
@@ -67,8 +85,10 @@ function InputPane() {
         [],
     );
 
+    const { activePanel } = useContext(PanelContext);
+
     return (
-        <div className={styles.contentPane}>
+        <div className={clsx(styles.contentPane, activePanel != PanelKind.Input && styles.contentPaneHiddenMobile)}>
             <MonacoEditor
                 theme={theme}
                 language="typescript"
@@ -107,9 +127,9 @@ function LuaOutput() {
     const { results } = useContext(EditorContext);
 
     return (
-        <div className={styles.editorOutput}>
-            <div className={styles.editorOutputLineNumbers}>{">_"}</div>
-            <div className={styles.editorOutputTerminal}>
+        <div className={styles.luaOutput}>
+            <div className={styles.luaOutputLineNumbers}>{">_"}</div>
+            <div className={styles.luaOutputTerminal}>
                 <ConsoleFeed
                     key={isDarkTheme} // It does not update styles without re-mount
                     logs={results as any}
@@ -134,8 +154,10 @@ function OutputPane() {
         return `https://sokra.github.io/source-map-visualization#base64,${inputs}`;
     }, [lua, sourceMap, source]);
 
+    const { activePanel } = useContext(PanelContext);
+
     return (
-        <div className={styles.contentPane}>
+        <div className={clsx(styles.contentPane, activePanel != PanelKind.Output && styles.contentPaneHiddenMobile)}>
             <div className={styles.outputEditor}>
                 <div style={{ height: "100%", display: isAstView ? "none" : "block" }}>
                     <MonacoEditor
@@ -159,7 +181,7 @@ function OutputPane() {
                         className={clsx("button button--outline button--primary", !isAstView && "button--active")}
                         onClick={toggleAstView}
                     >
-                        {isAstView ? "Lua AST" : "TEXT"}
+                        {isAstView ? "Text" : "Lua AST"}
                     </button>
                     <a className="button button--success" href={sourceMapUrl} target="_blank">
                         Source Map
@@ -178,6 +200,8 @@ function PlaygroundNavbar() {
     const tsMinor = tsVersion.split(".")[1];
     const tsLink = `https://www.typescriptlang.org/docs/handbook/release-notes/typescript-${tsMajor}-${tsMinor}.html`;
 
+    const { activePanel, setActivePanel } = useContext(PanelContext);
+
     return (
         <nav className={styles.navbar}>
             <div className={styles.navbarVersions}>
@@ -191,6 +215,20 @@ function PlaygroundNavbar() {
                     <b>v{tsVersion}</b>
                 </a>
             </div>
+            <div className={styles.navBarPanelSelection}>
+                <button
+                    className={clsx("button button--primary button--outline", activePanel == 0 && "button--active")}
+                    onClick={() => setActivePanel(PanelKind.Input)}
+                >
+                    TS Input
+                </button>
+                <button
+                    className={clsx("button button--primary button--outline", activePanel == 1 && "button--active")}
+                    onClick={() => setActivePanel(PanelKind.Output)}
+                >
+                    Lua Output
+                </button>
+            </div>
         </nav>
     );
 }
@@ -198,13 +236,15 @@ function PlaygroundNavbar() {
 export default function Playground() {
     return (
         <>
-            <PlaygroundNavbar />
-            <div className={styles.content}>
-                <EditorContextProvider>
-                    <InputPane />
-                    <OutputPane />
-                </EditorContextProvider>
-            </div>
+            <PanelContextProvider>
+                <PlaygroundNavbar />
+                <div className={styles.content}>
+                    <EditorContextProvider>
+                        <InputPane />
+                        <OutputPane />
+                    </EditorContextProvider>
+                </div>
+            </PanelContextProvider>
         </>
     );
 }
