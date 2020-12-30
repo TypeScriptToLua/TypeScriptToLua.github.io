@@ -3,6 +3,7 @@ title: Compiler Annotations
 ---
 
 import { SideBySide } from "@site/src/components/SideBySide";
+import { DeprecatedInVersion } from "@site/src/components/DeprecatedInVersion";
 
 To improve translation and compatibility to different Lua interfaces, the TypeScriptToLua transpiler supports several custom annotations that slightly change translation results. This page documents the supported annotations. The syntax of the compiler annotations use the JSDoc syntax.
 
@@ -136,45 +137,6 @@ local inst = MyConstructor(3)
 
 </SideBySide>
 
-## @extension
-
-**Target elements:** `class`
-
-The Extension decorator marks a class as an extension of an already existing class. This causes the class header to not be translated, preventing instantiation and the override of the existing class.
-
-**Example**
-
-<SideBySide>
-
-```typescript
-class MyBaseClass {
-  myFunction(): void {}
-}
-```
-
-```lua
-MyBaseClass = __TS__Class()
-...
-function MyBaseClass.prototype.myFunction(self) end
-```
-
-</SideBySide>
-
-<SideBySide>
-
-```typescript
-/** @extension */
-class MyBaseClass {
-  myFunction(): void {}
-}
-```
-
-```lua
-function MyBaseClass.myFunction(self) end
-```
-
-</SideBySide>
-
 ## @forRange
 
 **Target elements:** `declare function`
@@ -275,47 +237,6 @@ print(tbl.get(foo)); // print(tbl[foo])
 tbl.set(1, "baz"); // tbl[1] = "baz"
 print(tbl.length); // print(#tbl)
 ```
-
-## @metaExtension
-
-**Target elements:** `class`
-
-The Extension decorator marks a class as an extension of an already existing meta class/table. This causes the class header to not be translated, preventing instantiation and the override of the existing class.
-
-**Example**
-
-<SideBySide>
-
-```typescript
-class MyBaseClass {
-  myFunction(): void {}
-}
-```
-
-```lua
-MyBaseClass = __TS__Class()
-...
-function MyBaseClass.prototype.myFunction(self) end
-```
-
-</SideBySide>
-
-<SideBySide>
-
-```typescript
-/** @metaExtension */
-class MyMetaExtension extends MyMetaClass {
-  myFunction(): void {}
-}
-```
-
-```lua
-local __meta__MyMetaClass = debug.getregistry().MyMetaClass
-__meta__MyMetaClass.myFunction = function(self)
-end;
-```
-
-</SideBySide>
 
 ## @noResolution
 
@@ -427,83 +348,6 @@ Indicates that functions in a file do not take in initial `self` argument when c
 This is annotation works the same as [@noSelf](#noself) being applied to a namespace, but affects the entire file.
 
 `@noSelfInFile` must be placed at the top of the file, before the first statement.
-
-## @phantom
-
-**Target elements:** `namespace`
-
-This decorator marks a namespace as a phantom namespace. This means all members of the namespace will be translated as if they were not in that namespace. Primarily used to prevent scoping issues.
-
-**Example**
-
-<SideBySide>
-
-```typescript
-namespace myNameSpace {
-  function myFunction(): void {}
-}
-```
-
-```lua
-myNameSpace = {}
-function myNameSpace.myFunction() end
-```
-
-</SideBySide>
-
-<SideBySide>
-
-```typescript
-/** @phantom */
-namespace myNameSpace {
-  function myFunction(): void {}
-}
-```
-
-```lua
-function myFunction() end
-```
-
-</SideBySide>
-
-## @pureAbstract
-
-**Target elements:** `declare class`
-
-This decorator marks a class declaration as purely abstract. The result is that any class extending the purely abstract class will not extend this class in the resulting Lua.
-
-**Example**
-
-<SideBySide>
-
-```typescript
-declare class MyAbstractClass {}
-class MyClass extends MyAbstractClass {}
-```
-
-```lua
-MyClass = __TS__Class()
-MyClass.__base = MyAbstractClass
-MyClass.____super = MyAbstractClass
-setmetatable(MyClass, MyClass.____super)
-setmetatable(MyClass.prototype, MyClass.____super.prototype)
-```
-
-</SideBySide>
-
-<SideBySide>
-
-```typescript
-/** @pureAbstract */
-declare class MyAbstractClass {}
-class MyClass extends MyAbstractClass {}
-```
-
-```lua
-MyClass = __TS__Class()
-```
-
-</SideBySide>
 
 ## @tupleReturn
 
@@ -662,6 +506,273 @@ function outerFunction(self, ...)
     end
     innerFunction(_G)
 end
+```
+
+</SideBySide>
+
+## Deprecated
+
+:::warning
+Some annotations are deprecated and will be/have been removed.
+Below are the deprecated annotations and instructions to recreate their behavior with vanilla TypeScript.
+:::
+
+### @extension
+
+<DeprecatedInVersion deprecated="0.37.0" removed="TBD" />
+
+**Target elements:** `class`
+
+The Extension decorator marks a class as an extension of an already existing class.
+This causes the class header to not be translated, preventing instantiation and the override of the existing class.
+
+**Default Behavior**
+
+<SideBySide>
+
+```typescript
+class MyClass {
+  myFunction(): void {}
+}
+```
+
+```lua
+MyClass = __TS__Class()
+...
+function MyClass.prototype.myFunction(self) end
+```
+
+</SideBySide>
+
+**Example 1**
+
+<SideBySide>
+
+```typescript
+/** @extension */
+class MyClass {
+  myFunction(): void {}
+}
+```
+
+```lua
+function MyClass.myFunction(self) end
+```
+
+</SideBySide>
+
+**Example 2**
+
+<SideBySide>
+
+```typescript
+/** @extension ExistingClassTable */
+class MyClass extends ExistingClass {
+  myFunction(): void {}
+}
+```
+
+```lua
+function ExistingClassTable.myFunction(self) end
+```
+
+</SideBySide>
+
+**Upgrade Instructions**
+
+Use an interface to extend your existing class and declare the table of the existing class as variable.
+
+**Example**
+
+<SideBySide>
+
+```typescript
+interface ExistingClass {
+  myFunction(): void;
+}
+
+declare const ExistingClassTable: ExistingClass;
+
+ExistingClassTable.myFunction = function () {};
+```
+
+```lua
+function ExistingClassTable.myFunction(self) end
+```
+
+</SideBySide>
+
+### @metaExtension
+
+<DeprecatedInVersion deprecated="0.37.0" removed="TBD" />
+
+**Target elements:** `class`
+
+The Extension decorator marks a class as an extension of an already existing meta class/table.
+This causes the class header to not be translated, preventing instantiation and the override of the existing class.
+
+**Example**
+
+<SideBySide>
+
+```typescript
+class MyBaseClass {
+  myFunction(): void {}
+}
+```
+
+```lua
+MyBaseClass = __TS__Class()
+...
+function MyBaseClass.prototype.myFunction(self) end
+```
+
+</SideBySide>
+
+<SideBySide>
+
+```typescript
+/** @metaExtension */
+class MyMetaExtension extends MyMetaClass {
+  myFunction(): void {}
+}
+```
+
+```lua
+local __meta__MyMetaClass = debug.getregistry().MyMetaClass
+__meta__MyMetaClass.myFunction = function(self)
+end;
+```
+
+</SideBySide>
+
+**Upgrade Instructions**
+
+Use an interface to extend your existing class and assign the functions to the meta table of the existing class.
+
+<SideBySide>
+
+```typescript
+interface MyMetaClass {
+  myFunction(): void;
+}
+
+const MyMetaClassTable: MyMetaClass = debug.getregistry().MyMetaClass as MyMetaExtension;
+
+MyMetaClassTable.myFunction = function () {};
+```
+
+```lua
+MyMetaClassTable = debug.getregistry().MyMetaClass
+MyMetaClassTable.myFunction = function(self)
+end
+```
+
+</SideBySide>
+
+### @phantom
+
+<DeprecatedInVersion deprecated="0.37.0" removed="TBD" />
+
+**Target elements:** `namespace`
+
+This decorator marks a namespace as a phantom namespace.
+This means all members of the namespace will be translated as if they were not in that namespace. Primarily used to prevent scoping issues.
+
+**Example**
+
+<SideBySide>
+
+```typescript
+namespace myNameSpace {
+  function myFunction(): void {}
+}
+```
+
+```lua
+myNameSpace = {}
+function myNameSpace.myFunction() end
+```
+
+</SideBySide>
+
+<SideBySide>
+
+```typescript
+/** @phantom */
+namespace myNameSpace {
+  function myFunction(): void {}
+}
+```
+
+```lua
+function myFunction() end
+```
+
+</SideBySide>
+
+**Upgrade instructions**
+
+Use ECMAScript modules and import/export. Alternatively, use a real (non-phantom) namespace.
+
+### @pureAbstract
+
+<DeprecatedInVersion deprecated="0.37.0" removed="TBD" />
+
+**Target elements:** `declare class`
+
+This decorator marks a class declaration as purely abstract.
+The result is that any class extending the purely abstract class will not extend this class in the resulting Lua.
+
+**Example**
+
+<SideBySide>
+
+```typescript
+declare class MyAbstractClass {}
+class MyClass extends MyAbstractClass {}
+```
+
+```lua
+MyClass = __TS__Class()
+MyClass.__base = MyAbstractClass
+MyClass.____super = MyAbstractClass
+setmetatable(MyClass, MyClass.____super)
+setmetatable(MyClass.prototype, MyClass.____super.prototype)
+```
+
+</SideBySide>
+
+<SideBySide>
+
+```typescript
+/** @pureAbstract */
+declare class MyAbstractClass {}
+class MyClass extends MyAbstractClass {}
+```
+
+```lua
+MyClass = __TS__Class()
+```
+
+</SideBySide>
+
+**Upgrade Instructions**
+
+Try declaring the "classes" of your lua enviroment as interface.
+If that is not possible use interface merging as suggested below.
+
+<SideBySide>
+
+```typescript
+declare class MyAbstractClass {}
+interface MyClass extends MyAbstractClass {}
+
+class MyClass {}
+```
+
+```lua
+MyClass = __TS__Class()
 ```
 
 </SideBySide>
