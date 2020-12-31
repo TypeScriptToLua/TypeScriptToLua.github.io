@@ -106,12 +106,6 @@ $output-height: 180px;
     overflow-y: auto;
 }
 
-@media only screen and (max-width: 400px) {
-    .navbarVersions {
-        display: none;
-    }
-}
-
 @media only screen and (max-width: 996px) {
     .content {
         flex-flow: column;
@@ -136,14 +130,54 @@ $output-height: 180px;
             --ifm-button-size-multiplier: 0.8;
         }
     }
+}
 
-    $output-height-mobile: 100px;
+@media only screen and (max-width: 400px) {
+    .navbar {
+        justify-content: center;
+    }
+
+    .navbarVersions {
+        display: none;
+    }
+}
+
+@media only screen and (max-height: 768px) {
+    $output-height-mobile-medium: 140px;
 
     .outputEditor {
-        height: calc(100% - #{$output-height-mobile});
+        height: calc(100% - #{$output-height-mobile-medium});
     }
 
     .luaOutput {
-        height: $output-height-mobile;
+        height: $output-height-mobile-medium;
+    }
+
+    $navbar-height-small: 42px;
+
+    .navbar {
+        height: $navbar-height-small;
+    }
+
+    .content {
+        height: calc(100vh - var(--ifm-navbar-height) - #{$navbar-height-small});
+    }
+
+    .navbar {
+        * {
+            --ifm-button-size-multiplier: 0.9;
+        }
+    }
+}
+
+@media only screen and (max-height: 600px) {
+    $output-height-mobile-small: 120px;
+
+    .outputEditor {
+        height: calc(100% - #{$output-height-mobile-small});
+    }
+
+    .luaOutput {
+        height: $output-height-mobile-small;
     }
 }
