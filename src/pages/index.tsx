@@ -34,8 +34,8 @@ const features: Feature[] = [
         title: "IDE Support",
         description: (
             <>
-                Types enable JavaScript developers to use highly-productive development tools and practices like static
-                checking and code refactoring when developing JavaScript applications. TypeScript extensions are
+                Types enable Lua developers to use highly-productive development tools and practices like static
+                checking and code refactoring when developing Lua applications. TypeScript extensions are
                 available for many text editors.
             </>
         ),
