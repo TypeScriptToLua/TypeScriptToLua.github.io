@@ -31,8 +31,11 @@ function addLibsFromContext(context: __WebpackModuleApi.RequireContext) {
     }
 }
 
+// Add typescript libs
 addLibsFromContext(require.context("!!raw-loader!typescript/lib/", false, /lib(\.es(.+))?\.d\.ts$/));
 monaco.languages.typescript.typescriptDefaults.addExtraLib(require("!!raw-loader!./execute/console.d.ts").default);
+
+// Add lua-types
 addLibsFromContext(require.context("!!raw-loader!lua-types/core/", true, /\.d\.ts$/));
 // TODO: Generate it from lua-types/special/5.3.d.ts
 for (const module of [
@@ -44,6 +47,11 @@ for (const module of [
     monaco.languages.typescript.typescriptDefaults.addExtraLib(module.default);
 }
 
+// Add tstl language extension types
+addLibsFromContext(require.context("!!raw-loader!typescript-to-lua/language-extensions/", true, /\.d\.ts$/));
+monaco.languages.typescript.typescriptDefaults.addExtraLib(require("!!raw-loader!typescript-to-lua/language-extensions/index.d.ts").default);
+
+// Add default ts compiler options
 monaco.languages.typescript.typescriptDefaults.setCompilerOptions({
     ...monaco.languages.typescript.typescriptDefaults.getCompilerOptions(),
     strict: true,
