@@ -35,8 +35,8 @@ const features: Feature[] = [
         description: (
             <>
                 Types enable Lua developers to use highly-productive development tools and practices like static
-                checking and code refactoring when developing Lua applications. TypeScript extensions are
-                available for many text editors.
+                checking and code refactoring when developing Lua applications. TypeScript extensions are available for
+                many text editors.
             </>
         ),
     },
