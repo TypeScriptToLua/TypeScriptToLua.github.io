@@ -49,7 +49,9 @@ for (const module of [
 
 // Add tstl language extension types
 addLibsFromContext(require.context("!!raw-loader!typescript-to-lua/language-extensions/", true, /\.d\.ts$/));
-monaco.languages.typescript.typescriptDefaults.addExtraLib(require("!!raw-loader!typescript-to-lua/language-extensions/index.d.ts").default);
+monaco.languages.typescript.typescriptDefaults.addExtraLib(
+    require("!!raw-loader!typescript-to-lua/language-extensions/index.d.ts").default,
+);
 
 // Add default ts compiler options
 monaco.languages.typescript.typescriptDefaults.setCompilerOptions({
