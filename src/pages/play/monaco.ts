@@ -51,6 +51,7 @@ for (const module of [
 addLibsFromContext(require.context("!!raw-loader!typescript-to-lua/language-extensions/", true, /\.d\.ts$/));
 monaco.languages.typescript.typescriptDefaults.addExtraLib(
     require("!!raw-loader!typescript-to-lua/language-extensions/index.d.ts").default,
+    "/language-extensions/index.d.ts",
 );
 
 // Add default ts compiler options
