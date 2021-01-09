@@ -25,9 +25,14 @@ export function useMonacoTheme() {
     },
 };
 
-function addLibsFromContext(context: __WebpackModuleApi.RequireContext) {
+function addLibsFromContext(context: __WebpackModuleApi.RequireContext, pathPrefix?: string) {
     for (const request of context.keys()) {
-        monaco.languages.typescript.typescriptDefaults.addExtraLib(context(request).default);
+        if (pathPrefix) {
+            const filePath = request.replace("./", pathPrefix + "/");
+            monaco.languages.typescript.typescriptDefaults.addExtraLib(context(request).default, filePath);
+        } else {
+            monaco.languages.typescript.typescriptDefaults.addExtraLib(context(request).default);
+        }
     }
 }
 
@@ -48,7 +53,7 @@ for (const module of [
 }
 
 // Add tstl language extension types
-addLibsFromContext(require.context("!!raw-loader!typescript-to-lua/language-extensions/", true, /\.d\.ts$/));
+addLibsFromContext(require.context("!!raw-loader!typescript-to-lua/language-extensions/", true, /\.d\.ts$/), "/language-extensions");
 monaco.languages.typescript.typescriptDefaults.addExtraLib(
     require("!!raw-loader!typescript-to-lua/language-extensions/index.d.ts").default,
     "/language-extensions/index.d.ts",

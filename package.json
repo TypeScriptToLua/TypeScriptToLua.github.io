@@ -29,7 +29,7 @@
         "react-dom": "^16.14.0",
         "react-json-tree": "^0.13.0",
         "react-monaco-editor": "^0.40.0",
-        "typescript-to-lua": "^0.37.0"
+        "typescript-to-lua": "^0.37.1"
     },
     "devDependencies": {
         "@ark120202/typescript-config": "^2.2.0",
