@@ -89,14 +89,14 @@ export default function Home() {
                     To<b>Lua</b>
                 </h1>
                 <p className="hero__subtitle">Write Lua with TypeScript</p>
-                <div className={styles.buttons}>
+                <div className={styles.quickNavButtons}>
                     <Link
-                        className="button button--outline button--primary button--lg"
+                        className={`button button--outline button--primary button--lg ${styles.quickNavButton}`}
                         to={useBaseUrl("docs/getting-started")}
                     >
                         Get Started
                     </Link>
-                    <Link className="button button--outline button--success button--lg" to={useBaseUrl("play")}>
+                    <Link className={`button button--outline button--success button--lg ${styles.quickNavButton}`} to={useBaseUrl("play")}>
                         Try Online
                     </Link>
                 </div>
