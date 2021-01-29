@@ -1,8 +1,7 @@
 /** @type {import('@docusaurus/types').DocusaurusConfig} */
 module.exports = {
     title: "TypeScriptToLua",
-    // TODO: Remove
-    tagline: "",
+    organizationName: "TypeScriptToLua",
     url: "https://typescripttolua.github.io",
     baseUrl: "/",
     favicon: "images/favicon.ico",
@@ -16,6 +15,55 @@ module.exports = {
                 { href: "https://discord.gg/BWAq58Y", label: "Discord", position: "right" },
                 { href: "https://github.com/TypeScriptToLua/TypeScriptToLua", label: "GitHub", position: "right" },
             ],
+        },
+        footer: {
+            logo: {
+                alt: "TypescriptToLua Logo",
+                src: "images/logo.png",
+                href: "https://github.com/TypescriptToLua",
+            },
+            links: [
+                {
+                    title: "Docs",
+                    items: [
+                        {
+                            label: "Getting Started",
+                            to: "docs/getting-started",
+                        },
+                        {
+                            label: "Configuration",
+                            to: "docs/configuration",
+                        },
+                        {
+                            label: "Advanced",
+                            to: "docs/advanced/writing-declarations",
+                        },
+                    ],
+                },
+                {
+                    title: "Community",
+                    items: [
+                        {
+                            label: "Discord",
+                            href: "https://discord.gg/BWAq58Y",
+                        },
+                    ],
+                },
+                {
+                    title: "More",
+                    items: [
+                        {
+                            label: "Github",
+                            href: "https://github.com/TypeScriptToLua",
+                        },
+                        {
+                            label: "Playground",
+                            to: "play",
+                        },
+                    ],
+                },
+            ],
+            copyright: `Copyright © ${new Date().getFullYear()} TypescriptToLua Contributors`,
         },
         prism: {
             additionalLanguages: ["lua"],
