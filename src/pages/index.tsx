@@ -43,8 +43,8 @@ const features: Feature[] = [
 ];
 
 const exampleSource = `
-function onAbilityCast(this: void, caster: Unit, targetLocation: Vector) {
-    const units = findUnitsInRadius(targetLocation, 500);
+function onAbilityCast(this: void, caster: Unit, targetPos: Vector) {
+    const units = findUnitsInRadius(targetPos, 500);
     const enemies = units.filter(unit => caster.isEnemy(unit));
 
     for (const enemy of enemies) {
@@ -54,8 +54,8 @@ function onAbilityCast(this: void, caster: Unit, targetLocation: Vector) {
 `.trim();
 
 const exampleOutput = `
-function onAbilityCast(caster, targetLocation)
-    local units = findUnitsInRadius(targetLocation, 500)
+function onAbilityCast(caster, targetPos)
+    local units = findUnitsInRadius(targetPos, 500)
     local enemies = __TS__ArrayFilter(
         units,
         function(____, unit) return caster:isEnemy(unit) end
