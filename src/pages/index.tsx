@@ -45,11 +45,13 @@ const features: Feature[] = [
 const exampleSource = `
 function onAbilityCast(this: void, caster: Unit, targetPos: Vector) {
     const units = findUnitsInRadius(targetPos, 500);
+
     const enemies = units.filter(unit => caster.isEnemy(unit));
 
     for (const enemy of enemies) {
         enemy.kill();
     }
+
 }
 `.trim();
 
