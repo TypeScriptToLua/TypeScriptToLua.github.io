@@ -1,0 +1,26 @@
+name: webhook-auto-update
+
+on:
+  repository_dispatch:
+    types:
+      - update-tstl
+
+jobs:
+  build:
+    name: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v1
+        with:
+          node-version: "12"
+      - name: Update TSTL
+        run: npm update typescript-to-lua
+      - name: Commit update
+        run: |
+          git config --global user.name 'lolleko'
+          git config --global user.email 'lolleko@users.noreply.github.com'
+          git commit -am "Automated tstl update"
+          git push
