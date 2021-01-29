@@ -96,7 +96,10 @@ export default function Home() {
                     >
                         Get Started
                     </Link>
-                    <Link className={`button button--outline button--success button--lg ${styles.quickNavButton}`} to={useBaseUrl("play")}>
+                    <Link
+                        className={`button button--outline button--success button--lg ${styles.quickNavButton}`}
+                        to={useBaseUrl("play")}
+                    >
                         Try Online
                     </Link>
                 </div>
