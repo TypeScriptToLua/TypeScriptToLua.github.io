@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    name: build
+    name: Update TSTL
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -16,11 +16,11 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: "12"
-      - name: Update TSTL
+      - name: npm update
         run: npm update typescript-to-lua
-      - name: Commit update
+      - name: commit update
         run: |
-          git config --global user.name 'lolleko'
-          git config --global user.email 'lolleko@users.noreply.github.com'
-          git commit -am "Automated tstl update"
+          git config --global user.name '41898282+github-actions[bot]'
+          git config --global user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -am "Bump tstl version"
           git push
