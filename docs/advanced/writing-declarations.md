@@ -512,9 +512,9 @@ declare module "creator" {
 
 Lua supports overloading of mathematical operators such as `+`, `-` or `*`. This is performed using the [metatable methods](https://www.lua.org/manual/5.4/manual.html#2.4) `__add`, `__sub`, `__mul`, `__div`, and `__unm`. Since TypeScript does not support operator overloading in its type system, this feature is hard to replicate. Unfortunately, this is not something that can be fixed properly right now without forking off our custom TypeScript version.
 
-However, there are workarounds that work decently.
+However, there are two possible workarounds. The first one is to declare a type as an intersection type with `number`. It will then inherit all mathematical operators. Keep in mind that this is only partially type safe and may require some additional casting.
 
-One method is to declare a type as an intersection type with `number`. It will then inherit all mathematical operators. For example:
+Example:
 
 ```ts
 declare type Vector = number & {
@@ -532,26 +532,7 @@ const v3 = (v1 * 4) as Vector;
 const d = v3.dot(v2);
 ```
 
-There are also language extensions that allow declaring special functions which will transpile to operators. For example:
-
-```ts
-declare interface Vector {
-  x: number;
-  y: number;
-};
-
-declare function Vector(x: number, y: number): Vector;
-
-declare namespace Vector {
-  add: LuaAddition<Vector, Vector, Vector>; // operator map function
-}
-
-const v1 = Vector(3, 4);
-const v2 = Vector(4, 5);
-const v3 = Vector.add(v1, v2); // transpiles to 'v3 = v1 + v2'
-```
-
-See [Operator Map Types](language-extensions.md#operator-map-types) for more information.
+The second option was added in version [0.38.0](https://github.com/TypeScriptToLua/TypeScriptToLua/blob/master/CHANGELOG.md#0380). You can now use [language extensions](https://typescripttolua.github.io/docs/advanced/language-extensions) that allow declaring special functions which will transpile to operators. This will be completely type safe if the operators are declared correctly. See [Operator Map Types](language-extensions.md#operator-map-types) for more information.
 
 ### Import and export
 

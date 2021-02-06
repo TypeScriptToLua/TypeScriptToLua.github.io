@@ -112,8 +112,8 @@ declare namespace Vector {
   export const mul: LuaMultiplication<Vector, Vector, number> & LuaMultiplication<Vector, number, Vector>;
 }
 
-const dot = Vector.mul(a, b);
-const scaled = Vector.mul(a, 2);
+const dot: number = Vector.mul(a, b);
+const scaled: Vector = Vector.mul(a, 2);
 ```
 
 ### Supported Operators:
@@ -128,11 +128,11 @@ const scaled = Vector.mul(a, 2);
   - LuaFloorDivision / LuaFloorDivisionMethod (`a // b`, only when targeting Lua 5.3 or later)
   - LuaNegation / LuaNegationMethod (`-x`)
 - Bitwise operators (only when targeting Lua 5.3 or later)
-  - BitwiseAnd / BitwiseAndMethod (`a & b`)
-  - BitwiseOr / BitwiseOrMethod (`a | b`)
-  - BitwiseExclusiveOr / BitwiseExclusiveOrMethod (`a ^ b`)
-  - BitwiseLeftShift / BitwiseLeftShiftMethod (`a << b`)
-  - BitwiseRightShift / BitwiseRightShiftMethod (`a >> b`)
-  - BitwiseNot / BitwiseNotMethod (`~x`)
+  - LuaBitwiseAnd / LuaBitwiseAndMethod (`a & b`)
+  - LuaBitwiseOr / LuaBitwiseOrMethod (`a | b`)
+  - LuaBitwiseExclusiveOr / LuaBitwiseExclusiveOrMethod (`a ^ b`)
+  - LuaBitwiseLeftShift / LuaBitwiseLeftShiftMethod (`a << b`)
+  - LuaBitwiseRightShift / LuaBitwiseRightShiftMethod (`a >> b`)
+  - LuaBitwiseNot / LuaBitwiseNotMethod (`~x`)
 - LuaConcat / LuaConcatMethod (`a .. b`)
 - LuaLength / LuaLengthMethod (`#x`)
