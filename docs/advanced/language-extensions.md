@@ -60,3 +60,73 @@ function myFunc(self)
 end
 foo, four = myFunc(nil)
 ```
+
+## Operator Map Types
+
+Lua supports overloading operators on types using [metatable methods](https://www.lua.org/manual/5.4/manual.html#2.4) such as `__add`. But, Javascript and Typescript do not support this. In order to use overloaded operators on types that support them, you can declare special mapping functions in TS that will translate to those operators in Lua.
+
+A common example of an overloaded operator is addition of a mathematical vector type:
+```ts
+// Vector type supplied by a library, which supports math operators
+declare interface Vector {
+    x: number;
+    y: number;
+}
+
+declare const a: Vector;
+declare const b: Vector;
+const result = a + b; // Not allowed in TS
+```
+
+To support addition for this type, you can declare a special function:
+```ts
+declare const addVector: LuaAddition<Vector, Vector, Vector>;
+const result = addVector(a, b); // transpiles to 'result = a + b'
+```
+
+The mapping function does not have to be declared as global. For example, you could use declaration merging to declare it as a static function on `Vector`:
+```ts
+declare namespace Vector {
+    export const add: LuaAddition<Vector, Vector, Vector>;
+}
+
+const result = Vector.add(a, b); // result = a + b
+```
+
+There are also special variants for the mapping types that allow you do declare operator overloads as methods:
+```ts
+declare interface Vector {
+    add: LuaAdditionMethod<Vector, Vector>;
+}
+const result = a.add(b); // result = a + b
+```
+
+Some operators may have a different return type based on their inputs. You can support this by using intersection types. For example, our `Vector` type might overload the multiplication operator to scale by a number, or perform a dot product on two `Vectors`:
+```ts
+declare namespace Vector {
+    export const mul: LuaMultiplication<Vector, Vector, number> & LuaMultiplication<Vector, number, Vector>;
+}
+
+const dot = Vector.mul(a, b);
+const scaled = Vector.mul(a, 2);
+```
+
+### Supported Operators:
+- Math operators
+  * LuaAddition / LuaAdditionMethod (`a + b`)
+  * LuaSubtraction / LuaSubtractionMethod (`a - b`)
+  * LuaMultiplication / LuaMultiplicationMethod (`a * b`)
+  * LuaDivision / LuaDivisionMethod (`a /b `)
+  * LuaModulo / LuaModuloMethod (`a % b`)
+  * LuaPower / LuaPowerMethod (`a ^ b`)
+  * LuaFloorDivision / LuaFloorDivisionMethod (`a // b`, only when targeting Lua 5.3 or later)
+  * LuaNegation / LuaNegationMethod (`-x`)
+- Bitwise operators (only when targeting Lua 5.3 or later)
+  * BitwiseAnd / BitwiseAndMethod (`a & b`)
+  * BitwiseOr / BitwiseOrMethod (`a | b`)
+  * BitwiseExclusiveOr / BitwiseExclusiveOrMethod (`a ^ b`)
+  * BitwiseLeftShift / BitwiseLeftShiftMethod (`a << b`)
+  * BitwiseRightShift / BitwiseRightShiftMethod (`a >> b`)
+  * BitwiseNot / BitwiseNotMethod (`~x`)
+- LuaConcat / LuaConcatMethod (`a .. b`)
+- LuaLength / LuaLengthMethod (`#x`)
