@@ -551,7 +551,7 @@ const v2 = Vector(4, 5);
 const v3 = Vector.add(v1, v2); // transpiles to 'v3 = v1 + v2'
 ```
 
-See [Operator Map Types](language-extensions#operator-map-types) for more information.
+See [Operator Map Types](language-extensions.md#operator-map-types) for more information.
 
 ### Import and export
 
