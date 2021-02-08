@@ -61,6 +61,29 @@ end
 foo, four = myFunc(nil)
 ```
 
+## $range Iterator Function
+
+Typescript's numeric for loops are less restrictive than Lua's, so they are transpiled into while loops instead. To create a Lua-style numeric for loop, you can use the `$range` language extension in a for...of loop.
+
+Example:
+
+<SideBySide>
+
+<!-- prettier-ignore -->
+```ts
+for (const i of $range(1, 5)) {}
+for (const i of $range(1, 10, 2)) {}
+for (const i of $range(5, 1, -1)) {}
+```
+
+```lua
+for i = 1, 5 do end
+for i = 1, 10, 2 do end
+for i = 5, 1, -1 do end
+```
+
+</SideBySide>
+
 ## Operator Map Types
 
 Lua supports overloading operators on types using [metatable methods](https://www.lua.org/manual/5.4/manual.html#2.4) such as `__add`. But, Javascript and Typescript do not support this. In order to use overloaded operators on types that support them, you can declare special mapping functions in TS that will translate to those operators in Lua.
