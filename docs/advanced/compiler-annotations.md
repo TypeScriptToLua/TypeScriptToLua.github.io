@@ -137,34 +137,6 @@ local inst = MyConstructor(3)
 
 </SideBySide>
 
-## @forRange
-
-**Target elements:** `declare function`
-
-Denotes a function declaration is a Lua numerical iterator. When used in a TypeScript `for...of` loop, the resulting Lua will use a numerical for loop.
-
-The function should not be a real function and an error will be thrown if it is used in any other way.
-
-**Example**
-
-<SideBySide>
-
-<!-- prettier-ignore -->
-```typescript
-/** @forRange */
-declare function forRange(start: number, limit: number, step?: number): number[];
-
-for (const i of forRange(1, 10)) {}
-for (const i of forRange(10, 1, -1)) {}
-```
-
-```lua
-for i = 1, 10 do end
-for i = 10, 1, -1 do end
-```
-
-</SideBySide>
-
 ## @luaIterator
 
 **Target elements:** `(declare) interface`
@@ -773,6 +745,53 @@ class MyClass {}
 
 ```lua
 MyClass = __TS__Class()
+```
+
+</SideBySide>
+
+## @forRange
+
+**Target elements:** `declare function`
+
+Denotes a function declaration is a Lua numerical iterator. When used in a TypeScript `for...of` loop, the resulting Lua will use a numerical for loop.
+
+The function should not be a real function and an error will be thrown if it is used in any other way.
+
+**Example**
+
+<SideBySide>
+
+<!-- prettier-ignore -->
+```typescript
+/** @forRange */
+declare function forRange(start: number, limit: number, step?: number): number[];
+
+for (const i of forRange(1, 10)) {}
+for (const i of forRange(10, 1, -1)) {}
+```
+
+```lua
+for i = 1, 10 do end
+for i = 10, 1, -1 do end
+```
+
+</SideBySide>
+
+**Upgrade Instructions**
+
+Use the [`$range` language extension](language-extensions.md#$range-iterator-function) instead of a custom annotated type.
+
+<SideBySide>
+
+<!-- prettier-ignore -->
+```typescript
+for (const i of $range(1, 10)) {}
+for (const i of $range(10, 1, -1)) {}
+```
+
+```lua
+for i = 1, 10 do end
+for i = 10, 1, -1 do end
 ```
 
 </SideBySide>
