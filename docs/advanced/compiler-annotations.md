@@ -749,7 +749,9 @@ MyClass = __TS__Class()
 
 </SideBySide>
 
-## @forRange
+### @forRange
+
+<DeprecatedInVersion deprecated="0.38.0" removed="TBD" />
 
 **Target elements:** `declare function`
 
