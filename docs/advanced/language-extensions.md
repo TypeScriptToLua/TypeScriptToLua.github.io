@@ -88,7 +88,7 @@ for i = 5, 1, -1 do end
 
 Iterators in Lua work quite differently than in Typescript/Javscript, so a special type is needed to use them.
 
-For example, to declare and use a lua function that returns an iterator for a set of strings, you can do this:
+For example, to declare and use a Lua function that returns an iterator for a set of strings, you can do this:
 
 <SideBySide>
 
@@ -146,7 +146,7 @@ while (true) {
 }
 ```
 
-See the [Lua Reference Manual](https://www.lua.org/manual/5.3/manual.html#3.3.5) for more information on lua for loops.
+See the [Lua Reference Manual](https://www.lua.org/manual/5.3/manual.html#3.3.5) for more information on Lua for loops.
 
 ## Operator Map Types
 
@@ -209,7 +209,7 @@ const scaled: Vector = Vector.mul(a, 2);
   - LuaAddition / LuaAdditionMethod (`a + b`)
   - LuaSubtraction / LuaSubtractionMethod (`a - b`)
   - LuaMultiplication / LuaMultiplicationMethod (`a * b`)
-  - LuaDivision / LuaDivisionMethod (`a /b `)
+  - LuaDivision / LuaDivisionMethod (`a / b `)
   - LuaModulo / LuaModuloMethod (`a % b`)
   - LuaPower / LuaPowerMethod (`a ^ b`)
   - LuaFloorDivision / LuaFloorDivisionMethod (`a // b`, only when targeting Lua 5.3 or later)
@@ -217,7 +217,7 @@ const scaled: Vector = Vector.mul(a, 2);
 - Bitwise operators (only when targeting Lua 5.3 or later)
   - LuaBitwiseAnd / LuaBitwiseAndMethod (`a & b`)
   - LuaBitwiseOr / LuaBitwiseOrMethod (`a | b`)
-  - LuaBitwiseExclusiveOr / LuaBitwiseExclusiveOrMethod (`a ^ b`)
+  - LuaBitwiseExclusiveOr / LuaBitwiseExclusiveOrMethod (`a ~ b`)
   - LuaBitwiseLeftShift / LuaBitwiseLeftShiftMethod (`a << b`)
   - LuaBitwiseRightShift / LuaBitwiseRightShiftMethod (`a >> b`)
   - LuaBitwiseNot / LuaBitwiseNotMethod (`~x`)
