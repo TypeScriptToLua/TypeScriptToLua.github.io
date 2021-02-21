@@ -40,7 +40,7 @@ start, ____end = string.find("Hello, world!", "world")
 Prefer LuaMultiReturn over the similar [@tupleReturn annotation](./compiler-annotations.md#tuplereturn). LuaMultiReturn can do anything tupleReturn can, with the added benefit of being able to distinguish between actual tuple tables and multiple return values in the type system.
 :::
 
-### \$multi
+### $multi
 
 In order to create a function that returns multiple values it needs to return a `LuaMultiReturn<>` type. This is where the `$multi` function comes in. Calling `$multi` in a return statement will create an instance of the `LuaMultiReturn<>` type:
 
@@ -83,6 +83,70 @@ for i = 5, 1, -1 do end
 ```
 
 </SideBySide>
+
+## LuaIterable Type
+
+Iterators in Lua work quite differently than in Typescript/Javscript, so a special type is needed to use them.
+
+For example, to declare and use a Lua function that returns an iterator for a set of strings, you can do this:
+
+<SideBySide>
+
+```ts
+declare function myIterator(): LuaIterable<string>;
+
+for (const s of myIterator()) {
+  console.log(s);
+}
+```
+
+```lua
+for s in myIterator() do
+  print(s)
+end
+```
+
+</SideBySide>
+
+Some iterators return multiple values each iteration. To declare these, combine `LuaIterable` with [`LuaMultiReturn`](#luamultireturn-type):
+
+<SideBySide>
+
+```ts
+declare function myIterator(): LuaIterable<LuaMultiReturn<[string, string]>>;
+
+for (const [a, b] of myIterator()) {
+  console.log(a, b);
+}
+```
+
+```lua
+for a, b in myIterator() do
+  print(a, b)
+end
+```
+
+</SideBySide>
+
+Lua iterators support passing an invisible state object each iteration. If your iterator type does this, you can declare the state type as a second type parameter:
+
+```ts
+type MyStateType = ...
+declare function myIterator(): LuaIterable<string, MyStateType>;
+```
+
+This is only really required if you need to use the iterator outside of a `for...of` loop.
+
+```ts
+let [iteratorFunction, state, lastValue] = myIterator();
+while (true) {
+  const value = iteratorFunction(state, lastValue);
+  console.log(value);
+  lastValue = value;
+}
+```
+
+See the [Lua Reference Manual](https://www.lua.org/manual/5.3/manual.html#3.3.5) for more information on Lua for loops.
 
 ## Operator Map Types
 
@@ -145,7 +209,7 @@ const scaled: Vector = Vector.mul(a, 2);
   - LuaAddition / LuaAdditionMethod (`a + b`)
   - LuaSubtraction / LuaSubtractionMethod (`a - b`)
   - LuaMultiplication / LuaMultiplicationMethod (`a * b`)
-  - LuaDivision / LuaDivisionMethod (`a /b `)
+  - LuaDivision / LuaDivisionMethod (`a / b `)
   - LuaModulo / LuaModuloMethod (`a % b`)
   - LuaPower / LuaPowerMethod (`a ^ b`)
   - LuaFloorDivision / LuaFloorDivisionMethod (`a // b`, only when targeting Lua 5.3 or later)
@@ -153,7 +217,7 @@ const scaled: Vector = Vector.mul(a, 2);
 - Bitwise operators (only when targeting Lua 5.3 or later)
   - LuaBitwiseAnd / LuaBitwiseAndMethod (`a & b`)
   - LuaBitwiseOr / LuaBitwiseOrMethod (`a | b`)
-  - LuaBitwiseExclusiveOr / LuaBitwiseExclusiveOrMethod (`a ^ b`)
+  - LuaBitwiseExclusiveOr / LuaBitwiseExclusiveOrMethod (`a ~ b`)
   - LuaBitwiseLeftShift / LuaBitwiseLeftShiftMethod (`a << b`)
   - LuaBitwiseRightShift / LuaBitwiseRightShiftMethod (`a >> b`)
   - LuaBitwiseNot / LuaBitwiseNotMethod (`~x`)

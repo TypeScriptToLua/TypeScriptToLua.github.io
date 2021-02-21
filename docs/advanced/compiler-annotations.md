@@ -137,55 +137,6 @@ local inst = MyConstructor(3)
 
 </SideBySide>
 
-## @luaIterator
-
-**Target elements:** `(declare) interface`
-
-Denotes a type is a Lua iterator. When an object of a type with this annotation is used in a for...of statement, it will transpile directly as a lua iterator in a for...in statement, instead of being treated as a TypeScript iterable. Typically, this is used on an interface that extends `Iterable` or `Array` so that TypeScript will allow it to be used in a for...of statement.
-
-**Example**
-
-<SideBySide>
-
-<!-- prettier-ignore -->
-```typescript
-/** @luaIterator */
-type LuaIterable<T> = Iterable<T>;
-
-declare function myIterator(): LuaIterable<string>;
-for (const s of myIterator()) {}
-```
-
-```lua
-for s in myIterator() do end
-```
-
-</SideBySide>
-
-This can also be combined with [@tupleReturn](#tuplereturn), if the iterator returns multiple values.
-
-**Example**
-
-<SideBySide>
-
-<!-- prettier-ignore -->
-```typescript
-/** @luaIterator @tupleReturn */
-type LuaTupleIterable<T extends any[]> = Iterable<T>;
-
-declare namespace string {
-  function gmatch(s: string, pattern: string): LuaTupleIterable<string[]>;
-}
-
-for (const [a, b] of string.gmatch("foo", "(.)(.)")) {}
-```
-
-```lua
-for a, b in string.gmatch("foo", "(.)(.)") do end
-```
-
-</SideBySide>
-
 ## @luaTable
 
 **Target elements:** `type`
@@ -794,6 +745,92 @@ for (const i of $range(10, 1, -1)) {}
 ```lua
 for i = 1, 10 do end
 for i = 10, 1, -1 do end
+```
+
+</SideBySide>
+
+### @luaIterator
+
+<DeprecatedInVersion deprecated="0.39.0" removed="TBD" />
+
+**Target elements:** `(declare) interface`
+
+Denotes a type is a Lua iterator. When an object of a type with this annotation is used in a for...of statement, it will transpile directly as a lua iterator in a for...in statement, instead of being treated as a TypeScript iterable. Typically, this is used on an interface that extends `Iterable` or `Array` so that TypeScript will allow it to be used in a for...of statement.
+
+**Example**
+
+<SideBySide>
+
+<!-- prettier-ignore -->
+```typescript
+/** @luaIterator */
+type LuaIterator<T> = Iterable<T>;
+
+declare function myIterator(): LuaIterator<string>;
+for (const s of myIterator()) {}
+```
+
+```lua
+for s in myIterator() do end
+```
+
+</SideBySide>
+
+This can also be combined with [@tupleReturn](#tuplereturn), if the iterator returns multiple values.
+
+**Example**
+
+<SideBySide>
+
+<!-- prettier-ignore -->
+```typescript
+/** @luaIterator @tupleReturn */
+type LuaTupleIterator<T extends any[]> = Iterable<T>;
+
+declare namespace string {
+  function gmatch(s: string, pattern: string): LuaTupleIterator<string[]>;
+}
+
+for (const [a, b] of string.gmatch("foo", "(.)(.)")) {}
+```
+
+```lua
+for a, b in string.gmatch("foo", "(.)(.)") do end
+```
+
+</SideBySide>
+
+**Upgrade Instructions**
+
+Use the [`LuaIterable` and `LuaMultiReturn` language extensions](language-extensions.md#luaiterable-type) instead of a custom annotated types.
+
+<SideBySide>
+
+<!-- prettier-ignore -->
+```typescript
+declare function myIterator(): LuaIterable<string>;
+for (const s of myIterator()) {}
+```
+
+```lua
+for s in myIterator() do end
+```
+
+</SideBySide>
+
+<SideBySide>
+
+<!-- prettier-ignore -->
+```typescript
+declare namespace string {
+  function gmatch(s: string, pattern: string): LuaIterable<LuaMultiReturn<string[]>>;
+}
+
+for (const [a, b] of string.gmatch("foo", "(.)(.)")) {}
+```
+
+```lua
+for a, b in string.gmatch("foo", "(.)(.)") do end
 ```
 
 </SideBySide>
