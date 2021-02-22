@@ -137,30 +137,6 @@ local inst = MyConstructor(3)
 
 </SideBySide>
 
-## @luaTable
-
-**Target elements:** `type`
-
-This annotation signals the transpiler to translate a class as a simple lua table for optimization purposes.
-
-```ts
-/** @luaTable */
-declare class Table<K extends {} = {}, V = any> {
-  readonly length: number;
-  set(key: K, value: V | undefined): void;
-  get(key: K): V | undefined;
-}
-
-const tbl = new Table(); // local tbl = {}
-
-const foo = {};
-tbl.set(foo, "bar"); // tbl[foo] = "bar"
-print(tbl.get(foo)); // print(tbl[foo])
-
-tbl.set(1, "baz"); // tbl[1] = "baz"
-print(tbl.length); // print(#tbl)
-```
-
 ## @noResolution
 
 **Target elements:** `module`
@@ -751,7 +727,7 @@ for i = 10, 1, -1 do end
 
 ### @luaIterator
 
-<DeprecatedInVersion deprecated="0.39.0" removed="TBD" />
+<DeprecatedInVersion deprecated="0.38.1" removed="TBD" />
 
 **Target elements:** `(declare) interface`
 
@@ -834,3 +810,44 @@ for a, b in string.gmatch("foo", "(.)(.)") do end
 ```
 
 </SideBySide>
+
+### @luaTable
+
+<DeprecatedInVersion deprecated="0.39.0" removed="TBD" />
+
+**Target elements:** `type`
+
+This annotation signals the transpiler to translate a class as a simple lua table for optimization purposes.
+
+```ts
+/** @luaTable */
+declare class Table<K extends {} = {}, V = any> {
+  readonly length: number;
+  set(key: K, value: V | undefined): void;
+  get(key: K): V | undefined;
+}
+
+const tbl = new Table(); // local tbl = {}
+
+const foo = {};
+tbl.set(foo, "bar"); // tbl[foo] = "bar"
+print(tbl.get(foo)); // print(tbl[foo])
+
+tbl.set(1, "baz"); // tbl[1] = "baz"
+print(tbl.length); // print(#tbl)
+```
+
+**Upgrade Instructions**
+
+Use the built-in [`LuaTable` language extension](language-extensions.md#lua-table-types) instead of a custom annotated type.
+
+```ts
+const tbl = new LuaTable(); // local tbl = {}
+
+const foo = {};
+tbl.set(foo, "bar"); // tbl[foo] = "bar"
+print(tbl.get(foo)); // print(tbl[foo])
+
+tbl.set(1, "baz"); // tbl[1] = "baz"
+print(tbl.length()); // print(#tbl)
+```
