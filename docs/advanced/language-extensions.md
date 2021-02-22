@@ -289,7 +289,7 @@ interface IdDictionary {
 }
 
 declare const dict: IdDictionary;
-const id: Id = {idStr: "foo"};
+const id: Id = { idStr: "foo" };
 dict.set(id, "bar");
 console.log(dict.get(id));
 ```
