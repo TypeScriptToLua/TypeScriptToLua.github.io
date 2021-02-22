@@ -223,3 +223,101 @@ const scaled: Vector = Vector.mul(a, 2);
   - LuaBitwiseNot / LuaBitwiseNotMethod (`~x`)
 - LuaConcat / LuaConcatMethod (`a .. b`)
 - LuaLength / LuaLengthMethod (`#x`)
+
+:::note
+You can also map functions to table accessors (`__index` and `__newindex`). See [Lua Table Types](#lua-table-types).
+:::
+
+## Lua Table Types
+
+The `LuaTable` type is provided to allow direct creation and manipulation of Lua tables. This is useful if you want to use a table that uses types other than string for its keys, as that is not supported by Typescript. Calls to `get` and `set` on the table will transpile directly to `value = table[key]` and `table[key] = value`.
+
+Example:
+
+<SideBySide>
+
+```ts
+const tbl = new LuaTable();
+
+tbl.set("foo", "bar");
+console.log(tbl.get("foo"));
+
+const objectKey = {};
+tbl.set(objectKey, "baz");
+console.log(tbl.get(objectKey));
+
+tbl.set(1, "bah");
+console.log(tbl.length());
+```
+
+```lua
+tbl = {}
+
+tbl.foo = "bar"
+print(tbl.foo)
+
+objectKey = {}
+tbl[objectKey] = "baz"
+print(tbl[objectKey])
+
+tbl[1] = "bah"
+print(#tbl)
+```
+
+</SideBySide>
+
+`LuaTable` can also be restricted to use only certain types as keys and values:
+
+```ts
+const tbl = new LuaTable<KeyType, ValueType>();
+```
+
+If you have a type that uses non-string keys, you can use `LuaTableGet` and `LuaTableSet` function types to declare your own getters & setters, similar to [Operator Map Types](#operator-map-types).
+
+Example:
+
+<SideBySide>
+
+```ts
+interface Id {
+  idStr: string;
+}
+
+interface IdDictionary {
+  get: LuaTableGetMethod<Id, string>;
+  set: LuaTableSetMethod<Id, string>;
+}
+
+declare const dict: IdDictionary;
+const id: Id = {idStr: "foo"};
+dict.set(id, "bar");
+console.log(dict.get(id));
+```
+
+```lua
+id = {idStr = "foo"}
+dict[id] = "bar"
+print(dict[id])
+```
+
+</SideBySide>
+
+That example uses the `Method` versions of `LuaTableGet` and `LuaTableSet`. There are also stand-alone versions.
+
+Example:
+
+```ts
+declare const idGet: LuaTableGet<IdDictionary, Id, string>;
+declare const idSet: LuaTableSet<IdDictionary, Id, string>;
+idSet(dict, id, "bar");
+console.log(idGet(dict, id));
+```
+
+```ts
+declare namespace IdDictionary {
+  export const get: LuaTableGet<IdDictionary, Id, string>;
+  export const set: LuaTableSet<IdDictionary, Id, string>;
+}
+IdDictionary.set(dict, id, "bar");
+console.log(IdDictionary.get(dict, id));
+```
