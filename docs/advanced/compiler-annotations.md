@@ -418,7 +418,7 @@ Below are the deprecated annotations and instructions to recreate their behavior
 
 ### @extension
 
-<DeprecatedInVersion deprecated="0.37.0" removed="TBD" />
+<DeprecatedInVersion deprecated="0.37.0" removed="0.39.0" />
 
 **Target elements:** `class`
 
@@ -503,7 +503,7 @@ function ExistingClassTable.myFunction(self) end
 
 ### @metaExtension
 
-<DeprecatedInVersion deprecated="0.37.0" removed="TBD" />
+<DeprecatedInVersion deprecated="0.37.0" removed="0.39.0" />
 
 **Target elements:** `class`
 
@@ -571,7 +571,7 @@ end
 
 ### @phantom
 
-<DeprecatedInVersion deprecated="0.37.0" removed="TBD" />
+<DeprecatedInVersion deprecated="0.37.0" removed="0.39.0" />
 
 **Target elements:** `namespace`
 
@@ -616,7 +616,7 @@ Use ECMAScript modules and import/export. Alternatively, use a real (non-phantom
 
 ### @pureAbstract
 
-<DeprecatedInVersion deprecated="0.37.0" removed="TBD" />
+<DeprecatedInVersion deprecated="0.37.0" removed="0.39.0" />
 
 **Target elements:** `declare class`
 
