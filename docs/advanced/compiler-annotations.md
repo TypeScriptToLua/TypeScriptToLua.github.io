@@ -751,6 +751,8 @@ print(tbl.length()); // print(#tbl)
 
 ### @vararg
 
+<DeprecatedInVersion deprecated="0.39.0" removed="TBD" />
+
 **Target elements:** `(declare) interface or type`
 
 Indicates that an array-like type represents a Lua vararg expression (`...`) and should be transpiled to that when used in a spread expression. This is useful for forwarding varargs instead of wrapping them in a table and unpacking them.
