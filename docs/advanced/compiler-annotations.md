@@ -306,109 +306,6 @@ declare function myFunction(n: number): [number, number];
 
 Note that if any overloaded signature of a function implementation has the annotation, all array/tuple return values will unpacked in the transpiled output.
 
-## @vararg
-
-**Target elements:** `(declare) interface or type`
-
-Indicates that an array-like type represents a Lua vararg expression (`...`) and should be transpiled to that when used in a spread expression. This is useful for forwarding varargs instead of wrapping them in a table and unpacking them.
-
-**Example**
-
-<SideBySide>
-
-```typescript
-function varargWrapUnpack(...args: string[]) {
-  console.log(...args);
-}
-```
-
-```lua
-function varargWrapUnpack(self, ...)
-    local args = ({...})
-    print(unpack(args))
-end
-```
-
-</SideBySide>
-
-<SideBySide>
-
-```typescript
-/** @vararg */
-interface Vararg<T> extends Array<T> {}
-
-function varargForward(...args: Vararg<string>) {
-  console.log(...args);
-}
-```
-
-```lua
-function varargForward(self, ...)
-    print(...))
-end
-```
-
-</SideBySide>
-
-This can be used to access the file-scope varargs as well.
-
-**Example**
-
-<SideBySide>
-
-```typescript
-declare const arg: Vararg<string>;
-console.log(...arg);
-const [x, y] = [...arg];
-```
-
-```lua
-print(...)
-local x, y = ...
-```
-
-</SideBySide>
-
-To also support tuple-typed rest parameters, you can define the type like this:
-
-**Example**
-
-```typescript
-/** @vararg */
-type Vararg<T extends unknown[]> = T & { __luaVararg?: never };
-
-function varargForward(...args: Vararg<[string, number]>) {}
-```
-
-**_Warning_**
-
-TypeScriptToLua does not check that the vararg expression is valid in the context it is used. If the array is used in a spread operation in an invalid context (such as a nested function), a deoptimization will occur.
-
-**Example**
-
-<SideBySide>
-
-```typescript
-function outerFunction(...args: Vararg<string>) {
-  function innerFunction() {
-    console.log(...args);
-  }
-  innerFunction();
-}
-```
-
-```lua
-function outerFunction(self, ...)
-    local args = {...}
-    local function innerFunction(self)
-        print(unpack(args))
-    end
-    innerFunction(_G)
-end
-```
-
-</SideBySide>
-
 ## Deprecated
 
 :::warning
@@ -851,3 +748,151 @@ print(tbl.get(foo)); // print(tbl[foo])
 tbl.set(1, "baz"); // tbl[1] = "baz"
 print(tbl.length()); // print(#tbl)
 ```
+
+### @vararg
+
+**Target elements:** `(declare) interface or type`
+
+Indicates that an array-like type represents a Lua vararg expression (`...`) and should be transpiled to that when used in a spread expression. This is useful for forwarding varargs instead of wrapping them in a table and unpacking them.
+
+**Example**
+
+<SideBySide>
+
+```typescript
+function varargWrapUnpack(...args: string[]) {
+  console.log(...args);
+}
+```
+
+```lua
+function varargWrapUnpack(self, ...)
+    local args = ({...})
+    print(unpack(args))
+end
+```
+
+</SideBySide>
+
+<SideBySide>
+
+```typescript
+/** @vararg */
+interface Vararg<T> extends Array<T> {}
+
+function varargForward(...args: Vararg<string>) {
+  console.log(...args);
+}
+```
+
+```lua
+function varargForward(self, ...)
+    print(...))
+end
+```
+
+</SideBySide>
+
+This can be used to access the file-scope varargs as well.
+
+**Example**
+
+<SideBySide>
+
+```typescript
+declare const arg: Vararg<string>;
+console.log(...arg);
+const [x, y] = [...arg];
+```
+
+```lua
+print(...)
+local x, y = ...
+```
+
+</SideBySide>
+
+To also support tuple-typed rest parameters, you can define the type like this:
+
+**Example**
+
+```typescript
+/** @vararg */
+type Vararg<T extends unknown[]> = T & { __luaVararg?: never };
+
+function varargForward(...args: Vararg<[string, number]>) {}
+```
+
+**_Warning_**
+
+TypeScriptToLua does not check that the vararg expression is valid in the context it is used. If the array is used in a spread operation in an invalid context (such as a nested function), a deoptimization will occur.
+
+**Example**
+
+<SideBySide>
+
+```typescript
+function outerFunction(...args: Vararg<string>) {
+  function innerFunction() {
+    console.log(...args);
+  }
+  innerFunction();
+}
+```
+
+```lua
+function outerFunction(self, ...)
+    local args = {...}
+    local function innerFunction(self)
+        print(unpack(args))
+    end
+    innerFunction(_G)
+end
+```
+
+</SideBySide>
+
+**Upgrade Instructions**
+
+`@vararg` is no longer required to prevent vararg parameters from being wrapped in a table. The ellipsis operator will now automatically be used if the parameter is used in a spread expression.
+
+Example:
+
+<SideBySide>
+
+```ts
+function varargForward(...args: string[]) {
+  console.log(...args);
+}
+```
+
+```lua
+function varargForward(...)
+  print(...)
+end
+```
+
+</SideBySide>
+
+However, if the parameter is accessed as an array or tuple, it will be wrapped in a table.
+
+Example:
+
+<SideBySide>
+
+```ts
+function varargAccess(...args: string[]) {
+  console.log(args[0]);
+}
+```
+
+```lua
+function varargAccess(...)
+  local args = {...}
+  print(args[1])
+end
+```
+
+</SideBySide>
+
+Note that are a few cases where the parameter will still be wrapped in a table, even if a spread expression is used, in order to generate correctly functioning Lua.

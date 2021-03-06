@@ -321,3 +321,37 @@ declare namespace IdDictionary {
 IdDictionary.set(dict, id, "bar");
 console.log(IdDictionary.get(dict, id));
 ```
+
+## $vararg Constant
+
+Lua allows use of the ellipsis operator (`...`) to access command line arguments passed when executing a script file. To access this from Typescript, you can use the `$vararg` constant in a spread expression.
+
+Example:
+
+<SideBySide>
+
+```ts
+console.log(...$vararg);
+```
+
+```lua
+print(...)
+```
+
+</SideBySide>
+
+When run:
+
+<SideBySide>
+
+```
+> lua myscript.lua foo bar
+```
+
+```
+foo     bar
+```
+
+</SideBySide>
+
+Use of `$vararg` is only allowed at file scope, and only in a spread expression (`...$vararg`).
