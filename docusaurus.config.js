@@ -9,6 +9,7 @@ module.exports = {
         navbar: {
             title: "TypeScriptToLua",
             logo: { src: "images/logo.png" },
+            hideOnScroll: true,
             items: [
                 { to: "docs/getting-started", label: "Docs", position: "left" },
                 { to: "play", label: "Playground", position: "left" },
