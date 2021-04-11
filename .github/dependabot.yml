@@ -6,3 +6,4 @@ updates:
       interval: "daily"
     allow:
       - dependency-name: "typescript-to-lua"
+      - dependency-name: "lua-types"
