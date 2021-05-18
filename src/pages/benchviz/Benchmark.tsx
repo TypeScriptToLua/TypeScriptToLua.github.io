@@ -117,7 +117,7 @@ export default function Benchmark() {
 }
 
 function decodeBenchmarkData(encodedData: string) {
-    const results = JSON.parse(pako.inflate(btoa(encodedData)).toString());
+    const results = JSON.parse(pako.inflate(atob(encodedData)).toString());
 
     const dataMaster = results.old as BenchmarkResult[];
     const dataCommit = results.new as BenchmarkResult[];
