@@ -13,8 +13,18 @@ module.exports = {
             items: [
                 { to: "docs/getting-started", label: "Docs", position: "left" },
                 { to: "play", label: "Playground", position: "left" },
-                { href: "https://discord.gg/BWAq58Y", label: "Discord", position: "right" },
-                { href: "https://github.com/TypeScriptToLua/TypeScriptToLua", label: "GitHub", position: "right" },
+                {
+                    href: "https://discord.gg/BWAq58Y",
+                    className: "header-discord-link",
+                    "aria-label": "Discord Server",
+                    position: "right",
+                },
+                {
+                    href: "https://github.com/TypeScriptToLua/TypeScriptToLua",
+                    className: "header-github-link",
+                    "aria-label": "GitHub repository",
+                    position: "right",
+                },
             ],
         },
         footer: {
