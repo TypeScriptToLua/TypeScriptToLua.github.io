@@ -230,6 +230,8 @@ You can also map functions to table accessors (`__index` and `__newindex`). See 
 
 ## Lua Table Types
 
+### Getting and Setting
+
 The `LuaTable` type is provided to allow direct creation and manipulation of Lua tables. This is useful if you want to use a table that uses types other than string for its keys, as that is not supported by Typescript. Calls to `get` and `set` on the table will transpile directly to `value = table[key]` and `table[key] = value`.
 
 Example:
@@ -266,11 +268,34 @@ print(#tbl)
 
 </SideBySide>
 
+### Iterating
+
+To iterate over a `LuaTable`, use `pairs()`. (This requires the `lua-types` library to be installed.)
+
+```ts
+const tbl = new LuaTable();
+
+tbl.set(3, "bar");
+tbl.set(4, "bar");
+tbl.set(5, "bar");
+
+for (const [key, value] of pairs(tbl)) {
+  print(key)
+  print(value)
+}
+```
+
+(Remember that in Lua, `pairs()` returns the keys in a random order.)
+
+### Restricting the Types
+
 `LuaTable` can also be restricted to use only certain types as keys and values:
 
 ```ts
 const tbl = new LuaTable<KeyType, ValueType>();
 ```
+
+### Custom Getters and Setters
 
 If you have a type that uses non-string keys, you can use `LuaTableGet` and `LuaTableSet` function types to declare your own getters & setters, similar to [Operator Map Types](#operator-map-types).
 
