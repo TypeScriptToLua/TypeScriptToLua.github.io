@@ -280,8 +280,8 @@ tbl.set(4, "bar");
 tbl.set(5, "bar");
 
 for (const [key, value] of pairs(tbl)) {
-  print(key)
-  print(value)
+  print(key);
+  print(value);
 }
 ```
 
