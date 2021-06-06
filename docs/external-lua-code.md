@@ -2,7 +2,7 @@
 title: External Lua Code
 ---
 
-As of `0.40.0`, tstl supports module resolution for libraries, which means you can *use* and *create* npm packages containing `.lua` files. You can also include lua source files directly into your source code.
+As of `0.40.0`, tstl supports module resolution for libraries, which means you can _use_ and _create_ npm packages containing `.lua` files. You can also include lua source files directly into your source code.
 
 ## Adding Lua files to your project sources
 
@@ -45,17 +45,14 @@ Then add or update your `package.json` so it contains the following information:
 
 ```json title=package.json
 {
-    "name": "example-tstl-lua-package",
-    "version": "1.0.0",
-    "description": "A package created with TypeScriptToLua",
-    "scripts": {
-        "prepublish": "tstl" // Make sure latest lua is built before publishing
-    },
-    // Only include dist files
-    "files": [
-        "dist/**/*.lua",
-        "dist/**/*.d.ts"
-    ]
+  "name": "example-tstl-lua-package",
+  "version": "1.0.0",
+  "description": "A package created with TypeScriptToLua",
+  "scripts": {
+    "prepublish": "tstl" // Make sure latest lua is built before publishing
+  },
+  // Only include dist files
+  "files": ["dist/**/*.lua", "dist/**/*.d.ts"]
 }
 ```
 
@@ -64,4 +61,3 @@ With these two files you are now ready to publish your npm package with `npm pub
 :::warning
 Currently, projects using `"buildMode": "library"` cannot be bundled.
 :::
-
