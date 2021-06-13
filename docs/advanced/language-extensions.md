@@ -63,7 +63,7 @@ foo, four = myFunc(nil)
 
 ## $range Iterator Function
 
-Typescript's numeric for loops are less restrictive than Lua's, so they are transpiled into while loops instead. To create a Lua-style numeric for loop, you can use the `$range` language extension in a for...of loop.
+TypeScript's numeric for loops are less restrictive than Lua's, so they are transpiled into while loops instead. To create a Lua-style numeric for loop, you can use the `$range` language extension in a for...of loop.
 
 Example:
 
@@ -86,7 +86,7 @@ for i = 5, 1, -1 do end
 
 ## LuaIterable Type
 
-Iterators in Lua work quite differently than in Typescript/Javscript, so a special type is needed to use them.
+Iterators in Lua work quite differently than in TypeScript/JavaScript, so a special type is needed to use them.
 
 For example, to declare and use a Lua function that returns an iterator for a set of strings, you can do this:
 
@@ -150,7 +150,7 @@ See the [Lua Reference Manual](https://www.lua.org/manual/5.3/manual.html#3.3.5)
 
 ## Operator Map Types
 
-Lua supports overloading operators on types using [metatable methods](https://www.lua.org/manual/5.4/manual.html#2.4) such as `__add`. But, Javascript and Typescript do not support this. In order to use overloaded operators on types that support them, you can declare special mapping functions in TS that will translate to those operators in Lua.
+Lua supports overloading operators on types using [metatable methods](https://www.lua.org/manual/5.4/manual.html#2.4) such as `__add`. But, JavaScript and TypeScript do not support this. In order to use overloaded operators on types that support them, you can declare special mapping functions in TS that will translate to those operators in Lua.
 
 A common example of an overloaded operator is addition of a mathematical vector type:
 
@@ -230,7 +230,7 @@ You can also map functions to table accessors (`__index` and `__newindex`). See 
 
 ## Lua Table Types
 
-The `LuaTable` type is provided to allow direct creation and manipulation of Lua tables. This is useful if you want to use a table that uses types other than string for its keys, as that is not supported by Typescript. Calls to lua method tables are translated to simple lua:
+The `LuaTable` type is provided to allow direct creation and manipulation of Lua tables. This is useful if you want to use a table that uses types other than string for its keys, as that is not supported by TypeScript. Calls to lua method tables are translated to simple lua:
 
 - `table.get(key)` Get a value by key -> `table[key]`
 - `table.set(key, value)` Set a value for key -> `table[key] = value`
@@ -370,7 +370,7 @@ There are more LuaTable functions other than `LuaTableGet` and `LuaTableSet` tha
 
 ## $vararg Constant
 
-Lua allows use of the ellipsis operator (`...`) to access command line arguments passed when executing a script file. To access this from Typescript, you can use the `$vararg` constant in a spread expression.
+Lua allows use of the ellipsis operator (`...`) to access command line arguments passed when executing a script file. To access this from TypeScript, you can use the `$vararg` constant in a spread expression.
 
 Example:
 
