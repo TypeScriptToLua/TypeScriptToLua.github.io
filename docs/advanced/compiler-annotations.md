@@ -575,7 +575,7 @@ MyClass = __TS__Class()
 
 ### @forRange
 
-<DeprecatedInVersion deprecated="0.38.0" removed="TBD" />
+<DeprecatedInVersion deprecated="0.38.0" removed="0.40.0" />
 
 **Target elements:** `declare function`
 
@@ -624,7 +624,7 @@ for i = 10, 1, -1 do end
 
 ### @luaIterator
 
-<DeprecatedInVersion deprecated="0.38.1" removed="TBD" />
+<DeprecatedInVersion deprecated="0.38.1" removed="0.40.0" />
 
 **Target elements:** `(declare) interface`
 
@@ -710,7 +710,7 @@ for a, b in string.gmatch("foo", "(.)(.)") do end
 
 ### @luaTable
 
-<DeprecatedInVersion deprecated="0.39.0" removed="TBD" />
+<DeprecatedInVersion deprecated="0.39.0" removed="0.40.0" />
 
 **Target elements:** `type`
 
@@ -751,7 +751,7 @@ print(tbl.length()); // print(#tbl)
 
 ### @vararg
 
-<DeprecatedInVersion deprecated="0.39.0" removed="TBD" />
+<DeprecatedInVersion deprecated="0.39.0" removed="0.40.0" />
 
 **Target elements:** `(declare) interface or type`
 
