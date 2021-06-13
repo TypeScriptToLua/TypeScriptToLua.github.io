@@ -230,9 +230,25 @@ You can also map functions to table accessors (`__index` and `__newindex`). See 
 
 ## Lua Table Types
 
+The `LuaTable` type is provided to allow direct creation and manipulation of Lua tables. This is useful if you want to use a table that uses types other than string for its keys, as that is not supported by Typescript. Calls to lua method tables are translated to simple lua:
+
+- `table.get(key)` Get a value by key -> `table[key]`
+- `table.set(key, value)` Set a value for key -> `table[key] = value`
+- `table.has(key)` Check if key is in table -> `table[key] ~= nil`
+- `table.delete(key)` Remove key (and its value) from table -> `table[key] = nil`
+
+### Generic key and value types
+
+`LuaTable` can be used without explicitly providing types for the keys and values, but also allows you to specify the type of keys and values in the table:
+
+```ts
+const typedLuaTable = new LuaTable<KeyType, ValueType>();
+const untypedLuaTable = new LuaTable(); // Same as LuaTable<AnyNotNil, any>
+```
+
 ### Getting and Setting
 
-The `LuaTable` type is provided to allow direct creation and manipulation of Lua tables. This is useful if you want to use a table that uses types other than string for its keys, as that is not supported by Typescript. Calls to `get` and `set` on the table will transpile directly to `value = table[key]` and `table[key] = value`.
+Calls to `get` and `set` on the table will transpile directly to `value = table[key]` and `table[key] = value`.
 
 Example:
 
@@ -273,7 +289,7 @@ print(#tbl)
 To iterate over a `LuaTable`, use `pairs()`. (This requires the `lua-types` library to be installed.)
 
 ```ts
-const tbl = new LuaTable();
+const tbl = new LuaTable<number, string>();
 
 tbl.set(3, "bar");
 tbl.set(4, "bar");
@@ -286,14 +302,6 @@ for (const [key, value] of pairs(tbl)) {
 ```
 
 (Remember that in Lua, `pairs()` returns the keys in a random order.)
-
-### Restricting the Types
-
-`LuaTable` can also be restricted to use only certain types as keys and values:
-
-```ts
-const tbl = new LuaTable<KeyType, ValueType>();
-```
 
 ### Custom Getters and Setters
 
@@ -346,6 +354,19 @@ declare namespace IdDictionary {
 IdDictionary.set(dict, id, "bar");
 console.log(IdDictionary.get(dict, id));
 ```
+
+### All custom LuaTable functions
+
+There are more LuaTable functions other than `LuaTableGet` and `LuaTableSet` that you can use:
+
+- `LuaTableGet` - Standalone function that gets a value by key from a table.
+- `LuaTableGetMethod` - Method that gets a value by key from the table containing this method.
+- `LuaTableSet` - Standlone function that sets a value to a key in a table.
+- `LuaTableSetMethod` - Method that sets a value to a key in the table containing this method.
+- `LuaTableHas` - Standalone function that checks if a key is present in a table.
+- `LuaTableHasMethod` - Method that checks if a key is present in the table containing this method.
+- `LuaTableDelete` - Standalone function that removes a key and its value from a table.
+- `LuaTableDeleteMethod` - Method that removes a key and its value from table containing this method.
 
 ## $vararg Constant
 
