@@ -18,9 +18,8 @@ module.exports = () => ({
             resolve: {
                 alias: {
                     // Replace vendored monaco-typescript services build with typescript, already used by typescript-to-lua
-                    [require.resolve(
-                        "monaco-editor/esm/vs/language/typescript/lib/typescriptServices.js",
-                    )]: require.resolve("typescript"),
+                    [require.resolve("monaco-editor/esm/vs/language/typescript/lib/typescriptServices.js")]:
+                        require.resolve("typescript"),
 
                     // Exclude builtin monaco-typescript libs
                     [require.resolve("monaco-editor/esm/vs/language/typescript/lib/lib.js")]: resolve(
