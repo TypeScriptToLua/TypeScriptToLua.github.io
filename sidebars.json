@@ -4,6 +4,7 @@
         "configuration",
         "caveats",
         "the-self-parameter",
+        "external-lua-code",
         "editor-support",
         {
             "type": "category",
