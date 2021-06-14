@@ -19,9 +19,9 @@ module.exports = {
         },
         footer: {
             logo: {
-                alt: "TypescriptToLua Logo",
+                alt: "TypeScriptToLua Logo",
                 src: "images/logo.png",
-                href: "https://github.com/TypescriptToLua",
+                href: "https://github.com/TypeScriptToLua",
             },
             links: [
                 {
@@ -64,7 +64,7 @@ module.exports = {
                     ],
                 },
             ],
-            copyright: `Copyright © ${new Date().getFullYear()} TypescriptToLua Contributors`,
+            copyright: `Copyright © ${new Date().getFullYear()} TypeScriptToLua Contributors`,
         },
         prism: {
             additionalLanguages: ["lua"],
