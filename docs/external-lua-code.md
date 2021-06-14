@@ -2,11 +2,11 @@
 title: External Lua Code
 ---
 
-As of `0.40.0`, tstl supports module resolution for libraries, which means you can _use_ and _create_ npm packages containing `.lua` files. You can also include lua source files directly into your source code.
+As of `0.40.0`, tstl supports module resolution for libraries, which means you can _use_ and _create_ npm packages containing `.lua` files. You can also include Lua source files directly into your source code.
 
 ## Adding Lua files to your project sources
 
-You can simply add a lua file as part of your project sources if you add [a declaration file](./advanced/writing-declarations.md) with the same name. You can then simply import the Lua code in your TypeScript. Your project should look like:
+You can simply add a Lua file as part of your project sources if you add [a declaration file](./advanced/writing-declarations.md) with the same name. You can then simply import the Lua code in your TypeScript. Your project should look like:
 
 ```
 main.ts
@@ -17,7 +17,7 @@ tsconfig.json
 
 ## Using NPM packages
 
-To use a Lua package, simply `npm install` it and use it as you would for any regular npm package in TypeScript. If the package does not include its own `.d.ts` declaration files, you can create your own by adding a `<package name>.d.ts` [declaration file](./advanced/writing-declarations.md) to your source files.
+To use a Lua package, install it via npm and use it as you would for any regular npm package in TypeScript. If the package does not include its own `.d.ts` declaration files, you can create your own by adding a `<package name>.d.ts` [declaration file](./advanced/writing-declarations.md) to your source files.
 
 :::note
 Including TS or JS files from npm packages is currently NOT supported.
@@ -25,7 +25,7 @@ Including TS or JS files from npm packages is currently NOT supported.
 
 ## Creating Lua NPM packages
 
-If you want to distribute your tstl-created Lua as a library, you will need to enable the library build mode in `tsconfig.json`, and enable the output of declaration files:
+If you want to distribute your tstl created Lua as a library, you will need to enable the library build mode in `tsconfig.json`, and enable the output of declaration files:
 
 ```json title=json.config
 {
