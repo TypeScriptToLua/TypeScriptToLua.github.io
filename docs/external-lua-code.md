@@ -79,9 +79,9 @@ A project using dependencies from its [node_modules directory](https://github.co
 
 ### [A project with Lua sources](https://github.com/TypeScriptToLua/TypeScriptToLua/tree/master/test/transpile/module-resolution/project-with-lua-sources)
 
-This project includes lua source files as part of the project sources (not in node_modules). To use this Lua you also have to provide .d.ts files with the same name and location containing the TyepScript declarations for the contents of the Lua file. Both Lua and .d.ts files should be checked into your repository!
+This project includes Lua files as part of the project's source files. To use the Lua from the files you have to provide declaration files with a matching name and location for each file. For examples `some_dir/library.lua` & `some_dir/library.d.ts`. The declaration files contain the TypeScript declarations of the corresponding Lua file. Both Lua and .d.ts files should be checked into your repository!
 
-This project contains two lua source files:
+This project contains two Lua source files:
 
-- `luafile.lua`: Some lua right next to the .ts files using it.
-- `lua_sources/otherluaFile.lua`: Lua in a separate `lua_sources` directory, in case you want to group all your Lua into one directory.
+- `luafile.lua`: Some Lua right next to the .ts files using it.
+- `lua_sources/otherluaFile.lua`: Lua in a separate `lua_sources` directory, in case you want to group all your Lua files into one directory.
