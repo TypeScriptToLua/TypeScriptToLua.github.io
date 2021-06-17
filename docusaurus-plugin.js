@@ -27,9 +27,8 @@ module.exports = () => ({
                     ),
 
                     // Stub file resolution for playground
-                    [require.resolve("typescript-to-lua/dist/transpilation/resolve.js")]: resolve(
-                        "src/resolve-stub.ts",
-                    ),
+                    [require.resolve("typescript-to-lua/dist/transpilation/resolve.js")]:
+                        resolve("src/resolve-stub.ts"),
                 },
             },
             module: {
