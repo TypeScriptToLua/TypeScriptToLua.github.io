@@ -4,8 +4,8 @@ import { Console as ConsoleFeed } from "console-feed";
 import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 import JSONTree from "react-json-tree";
 import MonacoEditor from "react-monaco-editor";
-import { version as tstlVersion } from "typescript-to-lua/package.json";
-import { version as tsVersion } from "typescript/package.json";
+import tstlPackageJson from "typescript-to-lua/package.json";
+import tsPackageJson from "typescript/package.json";
 import { debounce } from "../../utils";
 import { getInitialCode, updateCodeHistory } from "./code";
 import { ConsoleMessage, executeLua } from "./execute";
@@ -196,8 +196,8 @@ function OutputPane() {
 
 function PlaygroundNavbar() {
     const tstlLink = "https://github.com/TypeScriptToLua/TypeScriptToLua/blob/master/CHANGELOG.md";
-    const tsMajor = tsVersion.split(".")[0];
-    const tsMinor = tsVersion.split(".")[1];
+    const tsMajor = tsPackageJson.version?.split(".")[0];
+    const tsMinor = tsPackageJson.version?.split(".")[1];
     const tsLink = `https://www.typescriptlang.org/docs/handbook/release-notes/typescript-${tsMajor}-${tsMinor}.html`;
 
     const { activePanel, setActivePanel } = useContext(PanelContext);
@@ -207,12 +207,12 @@ function PlaygroundNavbar() {
             <div className={styles.navbarVersions}>
                 TSTL{" "}
                 <a href={tstlLink} target="_blank" rel="noopener">
-                    <b>v{tstlVersion}</b>
+                    <b>v{tstlPackageJson.version}</b>
                 </a>
                 <br />
                 &nbsp;&nbsp;TS{" "}
                 <a href={tsLink} target="_blank" rel="noopener">
-                    <b>v{tsVersion}</b>
+                    <b>v{tsPackageJson.version}</b>
                 </a>
             </div>
             <div className={styles.navBarPanelSelection}>
