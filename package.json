@@ -29,12 +29,12 @@
         "react-dom": "^16.14.0",
         "react-json-tree": "^0.13.0",
         "react-monaco-editor": "^0.40.0",
-        "typescript-to-lua": "^0.39.6"
+        "typescript-to-lua": "^0.40.0"
     },
     "devDependencies": {
         "@ark120202/typescript-config": "^2.2.0",
-        "@docusaurus/core": "^2.0.0-alpha.66",
-        "@docusaurus/preset-classic": "^2.0.0-alpha.66",
+        "@docusaurus/core": "2.0.0-alpha.70",
+        "@docusaurus/preset-classic": "2.0.0-alpha.70",
         "@types/node": "^14.14.2",
         "file-loader": "^6.1.1",
         "fork-ts-checker-webpack-plugin": "^5.2.0",

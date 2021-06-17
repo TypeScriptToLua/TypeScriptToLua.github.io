@@ -25,6 +25,11 @@ module.exports = () => ({
                     [require.resolve("monaco-editor/esm/vs/language/typescript/lib/lib.js")]: resolve(
                         "src/monaco-typescript-lib-stub.ts",
                     ),
+
+                    // Stub file resolution for playground
+                    [require.resolve("typescript-to-lua/dist/transpilation/resolve.js")]: resolve(
+                        "src/resolve-stub.ts",
+                    ),
                 },
             },
             module: {
