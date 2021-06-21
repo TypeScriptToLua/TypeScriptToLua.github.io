@@ -8,6 +8,11 @@
         "editor-support",
         "advanced/writing-declarations",
         "advanced/compiler-annotations",
-        "advanced/language-extensions"
+        "advanced/language-extensions",
+        {
+            "type": "category",
+            "label": "API",
+            "items": ["api/overview", "api/plugins", "api/printer"]
+        }
     ]
 }
