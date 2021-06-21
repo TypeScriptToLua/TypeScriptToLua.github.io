@@ -6,15 +6,8 @@
         "the-self-parameter",
         "external-lua-code",
         "editor-support",
-        {
-            "type": "category",
-            "label": "Advanced",
-            "items": ["advanced/writing-declarations", "advanced/compiler-annotations", "advanced/language-extensions"]
-        },
-        {
-            "type": "category",
-            "label": "API",
-            "items": ["api/overview", "api/plugins", "api/printer"]
-        }
+        "advanced/writing-declarations",
+        "advanced/compiler-annotations",
+        "advanced/language-extensions"
     ]
 }
