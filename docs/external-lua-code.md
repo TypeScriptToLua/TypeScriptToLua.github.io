@@ -59,7 +59,7 @@ Then add or update your `package.json` so it contains the following information:
 With these two files you are now ready to publish your npm package with `npm publish`!
 
 :::warning
-Currently, projects using `"buildMode": "library"` cannot be bundled.
+Currently, projects using `"buildMode": "library"` tsconfig setting must also have the `luaBundle` setting turned off. (However, you can still _consume_ unbundled libraries in projects that use `luaBundle` without any problems.)
 :::
 
 ## Example projects
