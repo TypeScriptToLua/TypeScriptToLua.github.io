@@ -15,12 +15,12 @@ Your `tsconfig.json` file must at least specify the following...
 
 ```json title=tsconfig.json
 {
-    "compilerOptions": {
-      "declaration": true
-    },
-    "tstl": {
-        "buildMode": "library"
-    }
+  "compilerOptions": {
+    "declaration": true
+  },
+  "tstl": {
+    "buildMode": "library"
+  }
 }
 ```
 
@@ -33,7 +33,7 @@ And your `package.json` file should specify the `types` property. You should als
 }
 ```
 
-These must be __relative__ paths within your module __without__ the file's extension.
+These must be **relative** paths within your module **without** the file's extension.
 
 > These are set to `"index"` by default so if you _really_ don't want to specify these you can keep an `index.d.ts` and `index.lua` file at the top level of your package.
 
@@ -46,8 +46,8 @@ This is useful if you don't want to publish your source code.
 ```json title=package.json
 {
   "files": [
-    "dist/**/*.lua",  // publish all Lua files in /dist/
-    "dist/**/*.d.ts"  // publish all declaration files in /dist/
+    "dist/**/*.lua", // publish all Lua files in /dist/
+    "dist/**/*.d.ts" // publish all declaration files in /dist/
   ]
 }
 ```
