@@ -24,3 +24,11 @@ import { myFunction } from "./somelua";
 
 myFunction();
 ```
+
+## Using NPM packages
+
+To use a Lua package, install it via npm and use it as you would for any regular npm package in TypeScript. If the package does not include its own `.d.ts` declaration files, you can create your own by adding a `<package name>.d.ts` [declaration file](./advanced/writing-declarations.md) to your source files.
+
+:::note
+Including TS or JS files from npm packages is currently NOT supported.
+:::
