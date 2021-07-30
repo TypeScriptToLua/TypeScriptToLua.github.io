@@ -7,7 +7,7 @@ As of `0.40.0`, tstl supports module resolution for libraries, which means you c
 - You cannot import `.ts` and `.tsx` source files
 - You must use `"buildMode": "library"`
 - It is recommended you use `"declaration": true`
-- You cannot use `"luaBundle"`
+- You cannot use `"luaBundle"` in packages intended to be included as dependency in another project
 
 ## Project Configuration
 
