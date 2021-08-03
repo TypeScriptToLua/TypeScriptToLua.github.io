@@ -11,19 +11,76 @@ You can simply add a Lua file as part of your project sources if you add [a decl
 Your project should look like:
 
 ```
-main.ts
-somelua.lua
-somelua.d.ts
-tsconfig.json
+project/
+├── main.ts
+├── someLua.lua
+├── someLua.d.ts
+└── tsconfig.json
 ```
 
-And you can use it like so:
-
 ```ts title=main.ts
-import { myFunction } from "./somelua";
+import { myFunction } from "./someLua";
 
 myFunction();
 ```
+
+```lua title=someLua.lua
+local someLua = {}
+
+function someLua:foo()
+  print("hello")
+end
+
+function someLua:bar()
+  print("world")
+end
+
+return someLua
+```
+
+```ts title=someLua.d.ts
+export function foo(): void;
+export function bar(): void;
+```
+
+## Importing Arrays
+
+Building on the previous section, you might want also want to import a Lua array. For example:
+
+```lua title=things.lua
+return {
+    {
+        "foo": 123,
+        "bar": 456,
+    },
+    {
+        "foo": 789,
+        "bar": 987,
+    },
+}
+```
+
+In normal TypeScript code that imports an array, you would typically use the `export default` functionality of ES6 imports. But you can't do that here, because Lua code has no import named `default`. Instead, you have to use `export =` syntax, like so:
+
+```ts title=things.d.ts
+interface Thing {
+  foo: number;
+  bar: number;
+}
+
+declare const things: Thing[];
+export = things;
+```
+
+Then, in your TypeScript code, you can import it exactly like you would expect:
+
+```ts title=main.ts
+import contents from "./module";
+```
+
+Finally, note that for this to work, `esModuleInterop` must be specified as true in your `tsconfig.json` file.
+
+For more information about this export syntax, see [the official TypeScript documentation](https://www.typescriptlang.org/docs/handbook/modules.html#export--and-import--require).
 
 ## Using NPM packages
 
