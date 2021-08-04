@@ -19,9 +19,10 @@ project/
 ```
 
 ```ts title=main.ts
-import { myFunction } from "./someLua";
+import { foo, bar } from "./someLua";
 
-myFunction();
+foo();
+bar();
 ```
 
 ```lua title=someLua.lua
