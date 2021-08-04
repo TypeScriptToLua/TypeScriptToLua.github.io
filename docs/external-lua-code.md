@@ -76,10 +76,10 @@ export = things;
 Then, in your TypeScript code, you can import it exactly like you would expect:
 
 ```ts title=main.ts
-import contents from "./module";
-```
+import * as contents from "./module";
 
-Finally, note that for this to work, `esModuleInterop` must be specified as true in your `tsconfig.json` file.
+print(contents[0]);
+```
 
 For more information about this export syntax, see [the official TypeScript documentation](https://www.typescriptlang.org/docs/handbook/modules.html#export--and-import--require).
 
