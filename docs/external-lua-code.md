@@ -44,24 +44,24 @@ export function foo(): void;
 export function bar(): void;
 ```
 
-## Importing Arrays
+## Importing a Lua module that only exports an array
 
-Building on the previous section, you might want also want to import a Lua array. For example:
+Building on the previous section, you might want also want to import a Lua file that only exports an array. For example, something like:
 
 ```lua title=things.lua
 return {
     {
-        "foo": 123,
-        "bar": 456,
+        foo = 123,
+        bar = 456,
     },
     {
-        "foo": 789,
-        "bar": 987,
+        foo = 789,
+        bar = 987,
     },
 }
 ```
 
-In normal TypeScript code that imports an array, you would typically use the `export default` functionality of ES6 imports. But you can't do that here, because Lua code has no import named `default`. Instead, you have to use `export =` syntax, like so:
+Writing a definitions file for this is tricky, since the Lua file has no named imports and no default export. Here, you have to use `export =` syntax, like so:
 
 ```ts title=things.d.ts
 interface Thing {
@@ -73,12 +73,12 @@ declare const things: Thing[];
 export = things;
 ```
 
-Then, in your TypeScript code, you can import it exactly like you would expect:
+Then, in your TypeScript code, you can import it like:
 
 ```ts title=main.ts
-import * as contents from "./module";
+import * as things from "./module";
 
-print(contents[0]);
+print(things[0].foo); // Prints "123"
 ```
 
 For more information about this export syntax, see [the official TypeScript documentation](https://www.typescriptlang.org/docs/handbook/modules.html#export--and-import--require).
