@@ -6,7 +6,7 @@ import { SideBySide } from "@site/src/components/SideBySide";
 
 TypeScriptToLua provides several extensions to the TypeScript language in the form of types and helper functions. To use these language extensions, add the types to your `tsconfig.json`:
 
-```json
+```json title=tsconfig.json
 {
     "compilerOptions": {
         ...
