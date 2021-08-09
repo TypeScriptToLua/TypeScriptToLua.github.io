@@ -10,7 +10,7 @@
         "advanced/writing-declarations",
         "advanced/compiler-annotations",
         "advanced/language-extensions",
-        "tsx",
+        "jsx",
         {
             "type": "category",
             "label": "API",
