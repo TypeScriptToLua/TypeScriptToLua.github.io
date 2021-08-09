@@ -129,7 +129,7 @@ function createElement(
 - `type` will be a string for intrinsic properties (tag name starts with a lowercase letter), or a function/class component.
 - `props` will be the tag properties as an object/table, or `undefined`/`null`/`nil` if no properties are specified.
 - The remaining parameters form the `children`, and should be collected with a rest parameter (`...`), and not as one array parameter. The type of the children will be strings for inner text, and values passed directly for JSX expressions and nested elements.
-    - No transformations are done on the children parameters, meaning they may have any type (including an arrays) that you may need to handle.
+    - No transformations are done on the children parameters, meaning they may have any type (including arrays) that you may need to handle.
     - Using a jsx children spread syntax `<>{...children}</>` does _not_ affect how the children are passed to the createElement function -- it is equivalent to `<>{children}</>`
 
 The function may process in any way and return any value that you wish.
