@@ -108,7 +108,7 @@ local element = MyNamespace.myCreate(MyNamespace.MyFragment);
 
 ### JSX typings
 
-The types on the jsx factory function itself does _not_ affect how typescript checks JSX types, and no type checking against the jsx factory function is done during transformation.
+The types on the jsx factory function itself do _not_ affect how typescript checks JSX types, and no type checking against the jsx factory function is done during transformation.
 
 Instead, typescript looks for types for jsx on the special `JSX` namespace. You can read more creating JSX types [here](https://www.typescriptlang.org/docs/handbook/jsx.html#type-checking).
 
@@ -135,4 +135,3 @@ function createElement(
 The function may process in any way and return any value that you wish.
 
 It is recommended that the jsx factory function is in a namespace that is the default export of a module, or that the function itself is the default export of a module, and that the namespace/function name matches the `jsxFactory` compiler option. This is for better integration with tooling (import suggestions). This applies similarly for custom fragment components and the `jsxFragmentFactory` compiler option.
-
