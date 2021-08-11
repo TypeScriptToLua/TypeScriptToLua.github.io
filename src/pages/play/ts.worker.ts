@@ -10,6 +10,7 @@ require("path").format = (x: any) => x;
 
 const libContext = require.context(`raw-loader!typescript-to-lua/dist/lualib`, true, /(.+)(?<!lualib_bundle)\.lua$/);
 const emitHost: tstl.EmitHost = {
+    directoryExists: () => false,
     fileExists: (fileName) => ts.sys.fileExists(fileName),
     getCurrentDirectory: () => "",
     readFile: (fileName: string) => {

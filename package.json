@@ -35,7 +35,7 @@
         "react-json-tree": "^0.15.0",
         "react-monaco-editor": "^0.43.0",
         "stream-browserify": "^3.0.0",
-        "typescript-to-lua": "^0.41.0"
+        "typescript-to-lua": "0.42.0"
     },
     "devDependencies": {
         "@ark120202/typescript-config": "^2.2.0",
