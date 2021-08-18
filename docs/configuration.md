@@ -8,7 +8,7 @@ TypeScriptToLua uses the same configuration file as the vanilla TypeScript compi
 
 To customize transpilation behavior we add a new group of options to the `tsconfig.json` file. All of these options should be placed in a `tstl` object.
 
-Optionally, you can specify the json schema in the `$schema` property to recieve custom options hints from the IDE.
+You can use our [VS Code extension](editor-support.md) or manually specify the json schema to receive autocompletion and hints for the configuration file.
 
 ```json title=tsconfig.json
 {
