@@ -14,7 +14,7 @@ You can use our [VS Code extension](editor-support.md) or manually specify the J
 {
   // Optional: Schema file for hints and validation
   "$schema": "https://raw.githubusercontent.com/TypeScriptToLua/vscode-typescript-to-lua/master/tsconfig-schema.json",
-  
+
   // ... tsconfig options
 
   "tstl": {
