@@ -27,6 +27,8 @@ const emitHost: tstl.EmitHost = {
 const transpiler = new tstl.Transpiler({ emitHost });
 
 export class CustomTypeScriptWorker extends TypeScriptWorker {
+    private lastResult?: { diagnostics: readonly ts.Diagnostic[]; ast: tstl.File; lua: string; sourceMap: string };
+
     public async getTranspileOutput(fileName: string) {
         const { ast, lua, sourceMap } = this.transpileLua(fileName);
         return { ast, lua, sourceMap };
@@ -34,7 +36,7 @@ export class CustomTypeScriptWorker extends TypeScriptWorker {
 
     public async getSemanticDiagnostics(fileName: string) {
         const diagnostics = await super.getSemanticDiagnostics(fileName);
-        const { diagnostics: transpileDiagnostics } = this.transpileLua(fileName);
+        const { diagnostics: transpileDiagnostics } = this.lastResult ?? this.transpileLua(fileName);
         return [
             ...diagnostics,
             ...TypeScriptWorker.clearFiles(transpileDiagnostics.map((diag) => ({ ...diag, code: diag.source as any }))),
@@ -79,7 +81,8 @@ export class CustomTypeScriptWorker extends TypeScriptWorker {
             ],
         });
 
-        return { diagnostics, ast, lua, sourceMap };
+        this.lastResult = { diagnostics, ast, lua, sourceMap };
+        return this.lastResult;
     }
 }
 
