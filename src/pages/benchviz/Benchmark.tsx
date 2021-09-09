@@ -1,127 +1,168 @@
+import { Buffer } from "buffer/";
 import * as d3 from "d3";
 import React, { useEffect, useRef } from "react";
 import * as zlib from "zlib";
-import { BenchmarkResult, MemoryBenchmarkCategory } from "./benchmark-types";
+import {
+    BenchmarkKind,
+    BenchmarkResult,
+    isMemoryBenchmarkResult,
+    isRuntimeBenchmarkResult,
+    MemoryBenchmarkCategory,
+    MemoryBenchmarkResult,
+    RuntimeBenchmarkResult,
+} from "./benchmark-types";
 import { joinOnProperty, JoinResult } from "./util";
 import { barComparisonGraph } from "./visualizations/bar-comparison-graph";
 import { positiveNegativeBarGraph } from "./visualizations/positive-negative-bar-graph";
 
-const garbageCreatedComparisonGraphWidth = 1000;
-const garbageCreatedComparisonGraphHeight = 300;
+const comparisonGraphWidth = 1000;
+const comparisonGraphHeight = 300;
 
-const garbageCreatedChangeGraphWidth = 1000;
-const garbageCreatedChangeGraphHeight = 300;
+const changeGraphWidth = 1000;
+const changeGraphHeight = 300;
 
 // Utility functions
 const formatBenchmarkName = (benchmarkName: string) => benchmarkName.replace(".lua", "").split("/").pop()!;
-const formatMemory = (value: number) => `${Math.round(value / 10) / 100} Mb`;
+const percentChange = (oldValue: number, newValue: number) => ((newValue - oldValue) / oldValue) * 100;
+const formatMemory = (value: number) => `${(value / 1000).toFixed(2)} Mb`;
+const formatTime = (value: number) => `${(value * 1000).toFixed(2)} ms`;
+const formatPercent = (value: number) => `${value.toFixed(2)}%`;
 
-const benchmarkGarbage = (bm: BenchmarkResult) => bm.categories[MemoryBenchmarkCategory.Garbage];
-const garbagePercentChange = (result: JoinResult<BenchmarkResult>) =>
-    (benchmarkGarbage(result.right!) - benchmarkGarbage(result.left!)) / benchmarkGarbage(result.left!);
+function BenchmarkCategory<T extends BenchmarkResult>({
+    name,
+    benchmarks,
+    extractValue,
+    formatValue,
+}: {
+    name: string;
+    benchmarks: JoinResult<T>[];
+    extractValue: (result: T) => number;
+    formatValue: (value: number) => string;
+}) {
+    let changeSvgRef = useRef<SVGSVGElement>(null!);
+    let comparisonSvgRef = useRef<SVGSVGElement>(null!);
 
-export default function Benchmark() {
-    let garbageCreatedChangeSvgRef = useRef<SVGSVGElement>(null!);
-    let garbageCreatedComparisonSvgRef = useRef<SVGSVGElement>(null!);
+    const percentChangeForResult = (result: JoinResult<T>) =>
+        percentChange(extractValue(result.left!), extractValue(result.right!));
 
-    const benchmarkData = decodeBenchmarkData(window.location.search.split("?d=")[1]);
-    // Sort by percentage change of garbage created
-    const benchmarksSortedByPercentDifference = benchmarkData.sort(
-        (a, b) => garbagePercentChange(a) - garbagePercentChange(b),
+    // Sort by percentage change
+    const benchmarksSortedByPercentageDiff = benchmarks.sort(
+        (a, b) => percentChangeForResult(a) - percentChangeForResult(b),
     );
 
     // Populate graph with benchmark results
-    const benchmarkResultsTable = benchmarksSortedByPercentDifference.map((bm, i) => {
-        const change = garbagePercentChange(bm);
+    const memoryBenchmarksResultTable = benchmarksSortedByPercentageDiff.map((bm, i) => {
+        const change = percentChangeForResult(bm);
         const rowColor = change === 0 ? "currentColor" : change > 0 ? "red" : "green";
 
         return (
             <tr key={i} style={{ color: rowColor }}>
                 <td>{bm.left!.benchmarkName}</td>
-                <td>{formatMemory(benchmarkGarbage(bm.left!))}</td>
-                <td>{formatMemory(benchmarkGarbage(bm.right!))}</td>
-                <td>{change}</td>
+                <td>{formatValue(extractValue(bm.left!))}</td>
+                <td>{formatValue(extractValue(bm.right!))}</td>
+                <td>{formatPercent(change)}</td>
             </tr>
         );
     });
 
-    // Comparison data master garbage created vs commit garbate created (PERCENTAGE CHANGE)
-    const generatedGarbageChangeData = benchmarksSortedByPercentDifference.map((bm) => {
-        const oldValue = bm.left!.categories[MemoryBenchmarkCategory.Garbage]!;
-        const newValue = bm.right!.categories[MemoryBenchmarkCategory.Garbage]!;
-
-        return {
-            name: formatBenchmarkName(bm.left!.benchmarkName || bm.right!.benchmarkName!),
-            value: (100 * (newValue - oldValue)) / oldValue,
-        };
-    });
-
-    // Comparison data master garbage created vs commit garbate created (ABSOLUTE)
-    const generatedGarbageData = benchmarksSortedByPercentDifference.map((bm) => ({
+    // Comparison data master vs commit (PERCENTAGE CHANGE)
+    const changeData = benchmarksSortedByPercentageDiff.map((bm) => ({
         name: formatBenchmarkName(bm.left!.benchmarkName || bm.right!.benchmarkName!),
-        oldValue: bm.left!.categories[MemoryBenchmarkCategory.Garbage] || 0,
-        newValue: bm.right!.categories[MemoryBenchmarkCategory.Garbage] || 0,
+        value: percentChangeForResult(bm),
+    }));
+
+    // Comparison data master vs commit (ABSOLUTE)
+    const absoluteData = benchmarksSortedByPercentageDiff.map((bm) => ({
+        name: formatBenchmarkName(bm.left!.benchmarkName || bm.right!.benchmarkName!),
+        oldValue: extractValue(bm.left!) || 0,
+        newValue: extractValue(bm.right!) || 0,
     }));
 
     useEffect(() => {
-        // Populate graph showing percentual change in garbage created
-        positiveNegativeBarGraph(
-            d3.select(garbageCreatedChangeSvgRef.current),
-            generatedGarbageChangeData,
-            garbageCreatedChangeGraphWidth,
-            garbageCreatedChangeGraphHeight,
-        );
+        // Populate graph showing percent change
+        positiveNegativeBarGraph(d3.select(changeSvgRef.current), changeData, changeGraphWidth, changeGraphHeight);
 
-        // Populate graph showing absolute garbage created numbers
+        // Populate graph showing absolute numbers
         barComparisonGraph(
-            d3.select(garbageCreatedComparisonSvgRef.current),
-            generatedGarbageData,
-            garbageCreatedComparisonGraphWidth,
-            garbageCreatedComparisonGraphHeight,
+            d3.select(comparisonSvgRef.current),
+            absoluteData,
+            comparisonGraphWidth,
+            comparisonGraphHeight,
         );
     });
 
     return (
         <>
-            <h2>Benchmark results</h2>
+            <h1>{name} results</h1>
             {/* Results table */}
             <table>
                 <thead>
                     <tr style={{ fontWeight: "bold" }}>
                         <td>Benchmark</td>
-                        <td>Garbage Master</td>
-                        <td>Garbage Commit</td>
+                        <td>Master</td>
+                        <td>Commit</td>
                         <td>% Change</td>
                     </tr>
                 </thead>
-                <tbody>{benchmarkResultsTable}</tbody>
+                <tbody>{memoryBenchmarksResultTable}</tbody>
             </table>
 
-            <h2>Garbage created change</h2>
-            {/* [% Delta] Gerbage created */}
-            <svg
-                ref={garbageCreatedChangeSvgRef}
-                width={garbageCreatedChangeGraphWidth}
-                height={garbageCreatedChangeGraphHeight}
-            ></svg>
+            <h2>{name} change</h2>
+            {/* [% Delta] */}
+            <svg ref={changeSvgRef} width={changeGraphWidth} height={changeGraphHeight} />
 
-            <h2>Garbage created</h2>
-            {/* [Absolute] Garbage created comparison */}
-            <svg
-                ref={garbageCreatedComparisonSvgRef}
-                width={garbageCreatedComparisonGraphWidth}
-                height={garbageCreatedComparisonGraphHeight}
-            ></svg>
+            <h2>{name}</h2>
+            {/* [Absolute] comparison */}
+            <svg ref={comparisonSvgRef} width={comparisonGraphWidth} height={comparisonGraphHeight} />
         </>
     );
 }
 
-function decodeBenchmarkData(encodedData: string) {
+export default function Benchmark() {
+    const benchmarkData = decodeBenchmarkData(window.location.search.split("?d=")[1]);
+    return (
+        <>
+            {/* Results table */}
+            <BenchmarkCategory
+                name={"Garbage created"}
+                benchmarks={benchmarkData.memory}
+                extractValue={(bm) => bm.categories[MemoryBenchmarkCategory.Garbage]}
+                formatValue={formatMemory}
+            />
+
+            <BenchmarkCategory
+                name={"Runtime"}
+                benchmarks={benchmarkData.runtime}
+                extractValue={(bm) => bm.time}
+                formatValue={formatTime}
+            />
+        </>
+    );
+}
+
+interface BenchmarkData {
+    [BenchmarkKind.Memory]: JoinResult<MemoryBenchmarkResult>[];
+    [BenchmarkKind.Runtime]: JoinResult<RuntimeBenchmarkResult>[];
+}
+
+function isMemoryBenchmarkJoinResult(r: JoinResult<BenchmarkResult>): r is JoinResult<MemoryBenchmarkResult> {
+    return isMemoryBenchmarkResult(r.left || r.right!);
+}
+
+function isRuntimeBenchmarkJoinResult(r: JoinResult<BenchmarkResult>): r is JoinResult<RuntimeBenchmarkResult> {
+    return isRuntimeBenchmarkResult(r.left || r.right!);
+}
+
+function decodeBenchmarkData(encodedData: string): BenchmarkData {
     const results = JSON.parse(zlib.inflateSync(Buffer.from(encodedData, "base64")).toString());
 
     const dataMaster = results.old as BenchmarkResult[];
     const dataCommit = results.new as BenchmarkResult[];
 
     // Match old/new results by name
-    return joinOnProperty(dataMaster, dataCommit, (bm) => bm.benchmarkName);
+    const joined = joinOnProperty(dataMaster, dataCommit, (bm) => bm.benchmarkName);
+    return {
+        [BenchmarkKind.Memory]: joined.filter(isMemoryBenchmarkJoinResult),
+        [BenchmarkKind.Runtime]: joined.filter(isRuntimeBenchmarkJoinResult),
+    };
 }
