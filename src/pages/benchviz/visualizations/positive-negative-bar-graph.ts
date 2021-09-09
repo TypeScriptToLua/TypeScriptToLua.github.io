@@ -53,7 +53,7 @@ export function positiveNegativeBarGraph(
     //.style("stroke", "currentColor");
 
     bars.append("text")
-        .text((d) => `${d.value > 0 ? "+" : ""}${Math.round(d.value * 100) / 100}%`)
+        .text((d) => `${d.value > 0 ? "+" : ""}${d.value.toFixed(2)}%`)
         .attr("x", (d) => xScale(d.name)! + 0.5 * bandWidth)
         .attr("y", (d) => (d.value > 0 ? height / 2 + barSize(d.value) + 30 : height / 2 - barSize(d.value)))
         .style("fill", "currentColor")
