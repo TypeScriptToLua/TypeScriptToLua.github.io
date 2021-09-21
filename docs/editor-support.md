@@ -8,7 +8,7 @@ To have basic support for TypeScriptToLua it is enough to [configure your editor
 
 Sometimes TypeScriptToLua has to report it's own errors during the compilation. To have the same errors displayed in your editor, you can use a [language service plugin](https://github.com/microsoft/TypeScript/wiki/Writing-a-Language-Service-Plugin).
 
-![](/images/editor-support-diagnostics.png)
+![Autocomplete popup from Visual Studio Code with a TypescriptToLua specific error.](/images/editor-support-diagnostics.png)
 
 To use it either get a [Visual Studio Code extension](https://marketplace.visualstudio.com/items?itemName=ark120202.vscode-typescript-to-lua) or [add it to your project](https://github.com/TypeScriptToLua/typescript-tstl-plugin#installation).
 
