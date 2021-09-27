@@ -10,6 +10,7 @@
         "advanced/writing-declarations",
         "advanced/compiler-annotations",
         "advanced/language-extensions",
+        "advanced/automated-testing",
         "jsx",
         {
             "type": "category",
