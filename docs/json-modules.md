@@ -8,7 +8,6 @@ TypeScriptToLua supports importing JSON files into your TypeScript. This is done
 
 Consider the following project files:
 
-
 ```
 ./
 ├── main.ts
@@ -35,8 +34,8 @@ The file containing JSON is just standard JSON:
 
 ```json title=myjsondata.json
 {
-    "property1": "foo",
-    "property2": "bar"
+  "property1": "foo",
+  "property2": "bar"
 }
 ```
 
