@@ -75,18 +75,27 @@ export default plugin;
 
 ### `printer`
 
-Printer is a function that overrides standard implementation of Lua AST printer. It receives some information about the file and transformed Lua AST. See [Printer](printer.md) page for more information.
+`printer` is a function that overrides the standard implementation of the Lua AST printer. It receives some information about the file and the transformed Lua AST. See the [LuaPrinter](printer.md) page for more information.
 
 Example:
 
 ```ts
+import * as ts from "typescript";
 import * as tstl from "typescript-to-lua";
 
-class CustomLuaPrinter extends tstl.LuaPrinter {}
+const CUSTOM_COMMENT_HEADER = "-- This code was generated with a custom plugin!\n";
+
+class CustomLuaPrinter extends tstl.LuaPrinter {
+  printCustom(file: tstl.File) {
+    const printResult = this.print(file);
+    printResult.code = CUSTOM_COMMENT_HEADER + printResult.code;
+    return printResult;
+  }
+}
 
 const plugin: tstl.Plugin = {
-  printer: (program, emitHost, fileName, block, luaLibFeatures) =>
-    new CustomLuaPrinter(program.getCompilerOptions(), emitHost, fileName).print(block, luaLibFeatures),
+  printer: (program: ts.Program, emitHost: tstl.EmitHost, fileName: string, file: tstl.File) =>
+    new CustomLuaPrinter(emitHost, program, fileName).printCustom(file),
 };
 
 export default plugin;
