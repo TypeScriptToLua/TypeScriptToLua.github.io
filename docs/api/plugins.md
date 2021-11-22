@@ -80,22 +80,30 @@ export default plugin;
 Example:
 
 ```ts
+import { SourceNode } from "source-map";
 import * as ts from "typescript";
 import * as tstl from "typescript-to-lua";
 
 const CUSTOM_COMMENT_HEADER = "-- This code was generated with a custom plugin!\n";
 
-class CustomLuaPrinter extends tstl.LuaPrinter {
-  printCustom(file: tstl.File) {
-    const printResult = this.print(file);
-    printResult.code = CUSTOM_COMMENT_HEADER + printResult.code;
-    return printResult;
+class CustomPrinter extends tstl.LuaPrinter {
+  /* Override printFile */
+  protected printFile(file: tstl.File): SourceNode {
+    const originalResult = super.printFile(file);
+    // Add header comment at the top of the file
+    return this.createSourceNode(file, [`${CUSTOM_COMMENT_HEADER} ${this.luaFile}\n`, originalResult]);
+  }
+
+  /* Override printBoolean */
+  public printBooleanLiteral(expression: tstl.BooleanLiteral): SourceNode {
+    // Print any boolean as 'true'
+    return this.createSourceNode(expression, "true");
   }
 }
 
 const plugin: tstl.Plugin = {
   printer: (program: ts.Program, emitHost: tstl.EmitHost, fileName: string, file: tstl.File) =>
-    new CustomLuaPrinter(emitHost, program, fileName).printCustom(file),
+    new CustomPrinter(emitHost, program, fileName).print(file),
 };
 
 export default plugin;
