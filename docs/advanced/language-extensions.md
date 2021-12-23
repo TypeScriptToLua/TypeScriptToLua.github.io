@@ -148,6 +148,29 @@ while (true) {
 
 See the [Lua Reference Manual](https://www.lua.org/manual/5.3/manual.html#3.3.5) for more information on Lua for loops.
 
+## LuaPairsIterable Type
+
+Some types can be iterated with `pairs()` (for example, if the `__pairs` method is set in their metatable). These can be iterated without explicitly calling `pairs` by extending them from `LuaPairsIterable`.
+
+<SideBySide>
+
+```ts
+interface MyType extends LuaPairsIterable<number, string> {}
+declare const obj: MyType;
+
+for (const [key, value] of obj) {
+  console.log(key, value);
+}
+```
+
+```lua
+for key, value in pairs(obj) do
+  print(key, value)
+end
+```
+
+</SideBySide>
+
 ## Operator Map Types
 
 Lua supports overloading operators on types using [metatable methods](https://www.lua.org/manual/5.4/manual.html#2.4) such as `__add`. But, JavaScript and TypeScript do not support this. In order to use overloaded operators on types that support them, you can declare special mapping functions in TS that will translate to those operators in Lua.
@@ -286,7 +309,9 @@ print(#tbl)
 
 ### Iterating
 
-To iterate over a `LuaTable`, use `pairs()`. (This requires the `lua-types` library to be installed.)
+To iterate over a `LuaTable`, use `for...of`. This will generate a `for...in` statement using `pairs()`.
+
+<SideBySide>
 
 ```ts
 const tbl = new LuaTable<number, string>();
@@ -295,11 +320,26 @@ tbl.set(3, "bar");
 tbl.set(4, "bar");
 tbl.set(5, "bar");
 
-for (const [key, value] of pairs(tbl)) {
-  print(key);
-  print(value);
+for (const [key, value] of tbl) {
+  console.log(key);
+  console.log(value);
 }
 ```
+
+```lua
+tbl = {}
+
+tbl[3] = "bar"
+tbl[4] = "bar"
+tbl[5] = "bar"
+
+for key, value in pairs(tbl) do
+  print(key)
+  print(value)
+end
+```
+
+</SideBySide>
 
 (Remember that in Lua, `pairs()` returns the keys in a random order.)
 
