@@ -108,3 +108,42 @@ const plugin: tstl.Plugin = {
 
 export default plugin;
 ```
+
+### `beforeTransform`
+
+The `beforeTransform` function on plugins is called after gathering the TypeScript program and compiler options, but before any transformation to Lua is done.
+
+It can be used to set up the plugin
+
+```ts
+import * as ts from "typescript";
+import * as tstl from "typescript-to-lua";
+
+class Plugin implements tstl.Plugin {
+  public beforeTransform(program: ts.Program, options: tstl.CompilerOptions, emitHost: EmitHost) {
+    console.log("starting transformation of program", program, "with options", options);
+  }
+}
+
+const plugin = new Plugin();
+export default plugin;
+```
+
+### `afterPrint`
+
+The `afterPrint` function is called _after_ tstl has finished its work, except for resolving dependencies and calculating output paths. You can use this to modify the list of output files and do direct string modifications to them.
+
+```ts
+import * as ts from "typescript";
+import * as tstl from "typescript-to-lua";
+
+const plugin: tstl.Plugin = {
+  afterPrint(program: ts.Program, options: tstl.CompilerOptions, emitHost: EmitHost, result: tstl.ProcessedFile[]) {
+    for (const file of result) {
+      file.code = "-- Commented added by afterPrint plugin\n" + file.code;
+    }
+  },
+};
+
+export default plugin;
+```
