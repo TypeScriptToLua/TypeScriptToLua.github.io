@@ -120,8 +120,8 @@ import * as ts from "typescript";
 import * as tstl from "typescript-to-lua";
 
 class Plugin implements tstl.Plugin {
-  public beforeTransform(program: ts.Program, options: tstl.CompilerOptions, emitHost: EmitHost) {
-    console.log("starting transformation of program", program, "with options", options);
+  public beforeTransform(program: ts.Program, options: tstl.CompilerOptions, emitHost: tstl.EmitHost) {
+    console.log("Starting transformation of program", program, "with options", options);
   }
 }
 
@@ -138,9 +138,14 @@ import * as ts from "typescript";
 import * as tstl from "typescript-to-lua";
 
 const plugin: tstl.Plugin = {
-  afterPrint(program: ts.Program, options: tstl.CompilerOptions, emitHost: EmitHost, result: tstl.ProcessedFile[]) {
+  afterPrint(
+    program: ts.Program,
+    options: tstl.CompilerOptions,
+    emitHost: tstl.EmitHost,
+    result: tstl.ProcessedFile[],
+  ) {
     for (const file of result) {
-      file.code = "-- Commented added by afterPrint plugin\n" + file.code;
+      file.code = "-- Comment added by afterPrint plugin\n" + file.code;
     }
   },
 };
