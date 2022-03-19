@@ -8,12 +8,17 @@ import * as tstl from "typescript-to-lua";
 require("path").parse = (x: any) => x;
 require("path").format = (x: any) => x;
 
-const libContext = require.context(`raw-loader!typescript-to-lua/dist/lualib`, true, /(.+)(?<!lualib_bundle)\.lua$/);
+const libContext = require.context(`raw-loader!typescript-to-lua/dist/lualib`, true, /(.+)(?<!lualib_bundle)\.(lua|json)$/);
 const emitHost: tstl.EmitHost = {
     directoryExists: () => false,
     fileExists: (fileName) => ts.sys.fileExists(fileName),
     getCurrentDirectory: () => "",
     readFile: (fileName: string) => {
+        if (fileName.endsWith("lualib_module_info.json")) {
+            // Make sure this json is read as ra wfile and not as ESM JSON module.
+            return require("typescript-to-lua/dist/lualib/lualib_module_info.json.raw!=!raw-loader!typescript-to-lua/dist/lualib/lualib_module_info.json").default;
+        }
+
         const [, featureName] = fileName.match(/\/dist\/lualib\/(.+)\.lua$/) || [];
         if (featureName === undefined) {
             throw new Error(`Unexpected file to read: ${fileName}`);
