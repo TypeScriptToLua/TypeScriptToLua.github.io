@@ -131,7 +131,7 @@ export default plugin;
 
 ### `afterPrint`
 
-The `afterPrint` function is called _after_ tstl has finished its work, except for resolving dependencies and calculating output paths. You can use this to modify the list of output files and do direct string modifications to them.
+The `afterPrint` function is called _after_ tstl has translated the input program to Lua, but before resolving dependencies and before bundling if configured. You can use this to modify the list of output files and do direct string modifications to them.
 
 ```ts
 import * as ts from "typescript";
@@ -146,6 +146,29 @@ const plugin: tstl.Plugin = {
   ) {
     for (const file of result) {
       file.code = "-- Comment added by afterPrint plugin\n" + file.code;
+    }
+  },
+};
+
+export default plugin;
+```
+
+### `beforeEmit`
+
+The `beforeEmit` function is called after the input program has been translated to Lua, after external dependencies have been resolved and included, and after bundling (if configured).
+
+```ts
+import * as ts from "typescript";
+import * as tstl from "typescript-to-lua";
+
+const plugin: tstl.Plugin = {
+  beforeEmit(program: ts.Program, options: tstl.CompilerOptions, emitHost: tstl.EmitHost, result: tstl.EmitFile[]) {
+    void program;
+    void options;
+    void emitHost;
+
+    for (const file of result) {
+      file.code = "-- Comment added by beforeEmit plugin\n" + file.code;
     }
   },
 };
