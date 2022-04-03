@@ -16,9 +16,11 @@ export function positiveNegativeBarGraph(
     const minValue = d3.min(data.map((bm) => bm.value))!;
     const maxValue = d3.max(data.map((bm) => bm.value))!;
 
+    const range = maxValue - minValue;
+
     const yScale = d3
         .scaleLinear()
-        .domain([minValue * 1.2, maxValue * 1.2])
+        .domain([minValue - 0.2 * range, maxValue + 0.2 * range])
         .range([0, height - 10]);
 
     const yAxis = d3.axisLeft(yScale);
@@ -29,7 +31,7 @@ export function positiveNegativeBarGraph(
         .range([GRAPH_MARGIN.left, width - GRAPH_MARGIN.right]);
 
     const bandWidth = xScale.bandwidth();
-    const barWidth = 25;
+    const barWidth = Math.min(25, (0.5 * width) / data.length);
 
     const xAxis = d3.axisBottom(xScale);
 
@@ -40,25 +42,27 @@ export function positiveNegativeBarGraph(
 
     selection.append("g").attr("transform", `translate(${GRAPH_MARGIN.left}, ${GRAPH_MARGIN.top})`).call(yAxis);
 
-    const barSize = (val: number) => Math.abs(height / 2 - yScale(val)!);
+    const barSize = (val: number) => Math.abs(yScale(0)! - yScale(val)!);
 
     const bars = selection.selectAll("rect").data(data).enter();
 
     bars.append("rect")
         .attr("width", barWidth)
         .attr("x", (d) => xScale(d.name)! + 0.5 * bandWidth - 0.5 * barWidth)
-        .attr("height", (d) => barSize(d.value) - 1)
-        .attr("y", (d) => (d.value > 0 ? height / 2 + 10 : height / 2 + 10 - barSize(d.value)))
-        .style("fill", (d) => (d.value > 0 ? "red" : "green"));
-    //.style("stroke", "currentColor");
+        .attr("height", (d) => barSize(d.value))
+        .attr("y", (d) => GRAPH_MARGIN.top + (d.value > 0 ? yScale(0)! : yScale(0)! - barSize(d.value)))
+        .style("fill", (d) => (d.value > 0 ? "red" : "green"))
+        .style("stroke", "currentColor")
+        // Add hover tooltip
+        .append("svg:title")
+        .text((d) => `${d.name}: ${d.value.toFixed(2)}%`);
 
     bars.append("text")
         .text((d) => `${d.value > 0 ? "+" : ""}${d.value.toFixed(2)}%`)
         .attr("x", (d) => xScale(d.name)! + 0.5 * bandWidth)
-        .attr("y", (d) => (d.value > 0 ? height / 2 + barSize(d.value) + 30 : height / 2 - barSize(d.value)))
+        .attr("y", (d) => (d.value > 0 ? Math.max(yScale(0)! + 40, yScale(d.value)! + 20) : yScale(d.value)!))
         .style("fill", "currentColor")
         .style("text-anchor", "middle");
-    //.style("stroke", "currentColor");
 
     return selection;
 }

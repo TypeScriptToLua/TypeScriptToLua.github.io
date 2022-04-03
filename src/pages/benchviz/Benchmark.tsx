@@ -15,10 +15,10 @@ import { joinOnProperty, JoinResult } from "./util";
 import { barComparisonGraph } from "./visualizations/bar-comparison-graph";
 import { positiveNegativeBarGraph } from "./visualizations/positive-negative-bar-graph";
 
-const comparisonGraphWidth = 1000;
+const comparisonGraphWidth = 1200;
 const comparisonGraphHeight = 300;
 
-const changeGraphWidth = 1000;
+const changeGraphWidth = 1200;
 const changeGraphHeight = 300;
 
 // Utility functions
@@ -53,7 +53,7 @@ function BenchmarkCategory<T extends BenchmarkResult>({
     // Populate graph with benchmark results
     const memoryBenchmarksResultTable = benchmarksSortedByPercentageDiff.map((bm, i) => {
         const change = percentChangeForResult(bm);
-        const rowColor = change === 0 ? "currentColor" : change > 0 ? "red" : "green";
+        const rowColor = change <= -0.01 ? "green" : change >= 0.01 ? "red" : "currentColor";
 
         return (
             <tr key={i} style={{ color: rowColor }}>
@@ -133,7 +133,7 @@ export default function Benchmark() {
             <BenchmarkCategory
                 name={"Runtime"}
                 benchmarks={benchmarkData.runtime}
-                extractValue={(bm) => bm.time}
+                extractValue={(bm) => bm.time * 1000}
                 formatValue={formatTime}
             />
         </>
