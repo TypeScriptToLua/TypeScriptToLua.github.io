@@ -12,11 +12,11 @@ interface Feature {
 
 const features: Feature[] = [
     {
-        title: "Extend existing APIs",
+        title: "Declare and use existing APIs",
         description: (
             <>
-                This project is useful in any environment where Lua code is accepted, with the powerful option of simply
-                declaring any existing API using TypeScript declaration files.
+                This project is useful in any environment where Lua code is accepted, with the powerful option of
+                declaring types for any existing API using TypeScript declaration files.
             </>
         ),
     },
@@ -43,7 +43,7 @@ const features: Feature[] = [
 ];
 
 const exampleSource = `
-function onAbilityCast(this: void, caster: Unit, targetPos: Vector) {
+function onAbilityCast(caster: Unit, targetPos: Vector) {
     const units = findUnitsInRadius(targetPos, 500);
 
     const enemies = units.filter(unit => caster.isEnemy(unit));

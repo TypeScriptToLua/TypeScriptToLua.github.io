@@ -27,7 +27,7 @@ export function barComparisonGraph(
         .range([GRAPH_MARGIN.left, width - GRAPH_MARGIN.right]);
 
     const bandWidth = xScale.bandwidth();
-    const barWidth = 25;
+    const barWidth = Math.min(25, (0.3 * width) / data.length);
 
     const xAxis = d3.axisBottom(xScale);
     selection.append("g").attr("transform", `translate(0, ${barMaxHeight})`).call(xAxis);
@@ -47,14 +47,20 @@ export function barComparisonGraph(
     // Create bars for each entry
     const entries = selection.selectAll("rect").data(data).enter();
 
+    const formatTooltip = (d: ComparisonData) =>
+        `${d.name}\nOld: ${d.oldValue.toFixed(2)}\nNew: ${d.newValue.toFixed(2)}`;
+
     entries
         .append("rect")
         .attr("width", barWidth)
         .attr("x", (d) => xScale(d.name)! + 0.5 * bandWidth - barWidth - 1)
         .attr("height", (d) => barMaxHeight - yScale(d.oldValue)!)
         .attr("y", (d) => yScale(d.oldValue)!)
-        .style("fill", COLOR_OLD);
-    //.style("stroke", "currentColor");
+        .style("fill", COLOR_OLD)
+        .style("stroke", "currentColor")
+        // Add hover tooltip
+        .append("svg:title")
+        .text(formatTooltip);
 
     entries
         .append("rect")
@@ -62,8 +68,11 @@ export function barComparisonGraph(
         .attr("x", (d) => xScale(d.name)! + 0.5 * bandWidth + 1)
         .attr("height", (d) => barMaxHeight - yScale(d.newValue)!)
         .attr("y", (d) => yScale(d.newValue)!)
-        .style("fill", COLOR_NEW);
-    //.style("stroke", "currentColor");
+        .style("fill", COLOR_NEW)
+        .style("stroke", "currentColor")
+        // Add hover tooltip
+        .append("svg:title")
+        .text(formatTooltip);
 
     // Add legend
     const legendEntries: Array<[string, string]> = [
