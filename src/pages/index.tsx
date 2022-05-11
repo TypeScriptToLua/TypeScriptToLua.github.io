@@ -108,10 +108,10 @@ export default function Home() {
                 <section className="padding-vert--md container">
                     <div className="row">
                         <div className={`col col--6 ${styles.example}`}>
-                            <CodeBlock className="typescript">{exampleSource}</CodeBlock>
+                            <CodeBlock language="typescript">{exampleSource}</CodeBlock>
                         </div>
                         <div className={`col col--6 ${styles.example}`}>
-                            <CodeBlock className="lua">{exampleOutput}</CodeBlock>
+                            <CodeBlock language="lua">{exampleOutput}</CodeBlock>
                         </div>
                     </div>
                 </section>
