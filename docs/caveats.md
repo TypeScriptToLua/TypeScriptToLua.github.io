@@ -43,6 +43,8 @@ JavaScript and Lua differ in what they evaluate to true/false. TypeScriptToLua a
 
 TypeScriptToLua makes no difference between `==` and `===` when compiling to Lua, treating all comparisons as strict (`===`).
 
+We recommend that all TypeScriptToLua projects use the [eqeqeq](https://eslint.org/docs/rules/eqeqeq) and [@typescript-eslint/strict-boolean-expressions](https://github.com/typescript-eslint/typescript-eslint/blob/main/packages/eslint-plugin/docs/rules/strict-boolean-expressions.md) ESLint rules. (Setting up ESLint is outside the scope of this section. It is generally a good idea to turn these rules on for _any_ TypeScript project.)
+
 ### Array Length
 
 `Array.prototype.length` is translated to Lua's `#` operator. Due to the way lists are implemented in Lua there can be differences between JavaScript's `list.length` and Lua's `#list`. The transpiler does not do anything to remedy these differences, so when working with lists, the transpiled Lua will use the standard Lua conventions. Generally speaking, the situation where these differences occur happen when adding/removing items to a list in a hacky way, or when setting list items to `undefined`/`null`.
