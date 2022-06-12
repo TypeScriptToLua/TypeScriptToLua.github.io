@@ -1,5 +1,5 @@
 ---
-title: Language extensions
+title: Language Extensions
 ---
 
 import { SideBySide } from "@site/src/components/SideBySide";
