@@ -171,6 +171,27 @@ end
 
 </SideBySide>
 
+Or, if you only care about the key values, you can use `LuaPairsKeyIterable`:
+
+<SideBySide>
+
+```ts
+interface MyType extends LuaPairsKeyIterable<number> {}
+declare const obj: MyType;
+
+for (const key of obj) {
+  console.log(key);
+}
+```
+
+```lua
+for key in pairs(obj) do
+  print(key)
+end
+```
+
+</SideBySide>
+
 ## Operator Map Types
 
 Lua supports overloading operators on types using [metatable methods](https://www.lua.org/manual/5.4/manual.html#2.4) such as `__add`. But, JavaScript and TypeScript do not support this. In order to use overloaded operators on types that support them, you can declare special mapping functions in TS that will translate to those operators in Lua.
@@ -343,6 +364,14 @@ end
 
 (Remember that in Lua, `pairs()` returns the keys in a random order.)
 
+### `LuaMap` and `LuaSet`
+
+Similar to `LuaTable`, the `LuaMap` and `LuaSet` types are provided to represent Lua tables used as a map or set. These are much more performant than the `Set`/`Map` classes, but do not come with all the same features (such as guaranteed insertion order).
+
+- `LuaMap` has the same methods as `LuaTable`, except that `table.get(key)` may also return `undefined`.
+- `LuaSet`, instead of `table.get/table.set`, has `table.add(value)`, which translates to `table[value] = true`.
+- There are also the readonly variants `ReadonlyLuaMap` and `ReadonlyLuaSet`.
+
 ### Custom Getters and Setters
 
 If you have a type that uses non-string keys, you can use `LuaTableGet` and `LuaTableSet` function types to declare your own getters & setters, similar to [Operator Map Types](#operator-map-types).
@@ -395,9 +424,9 @@ IdDictionary.set(dict, id, "bar");
 console.log(IdDictionary.get(dict, id));
 ```
 
-### All custom LuaTable functions
+### All custom Lua table functions
 
-There are more LuaTable functions other than `LuaTableGet` and `LuaTableSet` that you can use:
+There are more Lua table functions other than `LuaTableGet` and `LuaTableSet` that you can use:
 
 - `LuaTableGet` - Standalone function that gets a value by key from a table.
 - `LuaTableGetMethod` - Method that gets a value by key from the table containing this method.
@@ -407,6 +436,8 @@ There are more LuaTable functions other than `LuaTableGet` and `LuaTableSet` tha
 - `LuaTableHasMethod` - Method that checks if a key is present in the table containing this method.
 - `LuaTableDelete` - Standalone function that removes a key and its value from a table.
 - `LuaTableDeleteMethod` - Method that removes a key and its value from table containing this method.
+- `LuaTableAddKey` - Standalone function that sets a given key to `true`
+- `LuaTableAddKeyMethod` - Method that sets a given key to `true`
 
 ## $vararg Constant
 
