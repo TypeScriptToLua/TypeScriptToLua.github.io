@@ -374,7 +374,7 @@ Similar to `LuaTable`, the `LuaMap` and `LuaSet` types are provided to represent
 
 #### Iterating over `LuaMap` & `LuaSet`
 
-If you need to iterate over a `LuaMap` or `LuaSet`, you do so "implicitly", in the same way that you would for `LuaTable`:
+If you need to iterate over a `LuaMap` or a `LuaSet`, you do so in roughly the same way that you would for `LuaTable`:
 
 ```ts
 const luaMap = new LuaMap();
