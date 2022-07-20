@@ -396,7 +396,7 @@ Thus, you might want to use `LuaMap`/`LuaSet`:
 
 - when the table needs to be serialized
 - when you need to interact with other Lua libraries
-- when you are in a critical path where the performance would really matter (measure first!)
+- when you are in a critical path where the marginal improved performance would really matter (measure first!)
 
 ### Custom Getters and Setters
 
