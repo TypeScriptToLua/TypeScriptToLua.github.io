@@ -388,7 +388,7 @@ for (const value of luaSet) {}
 
 #### Should I use `Map`/`Set` or `LuaMap`/`LuaSet`?
 
-In general, it is more painful to use `LuaMap` and `LuaSet`, since they don't have methods like `keys`, `values`, `entries`, and `clear`. Additionally, they don't have the `size` attribute to track how large the data structure is. Additionally, using them results in non-idiomatic TypeScript code that may be harder for others to read and understand.
+In general, it is more painful to use `LuaMap` and `LuaSet`, since they don't have methods like `keys`, `values`, `entries`, and `clear`. Additionally, they don't have the `size` attribute to track how large the data structure is. Furthermore, using them results in non-idiomatic TypeScript code that may be harder for others to read and understand.
 
 For these reasons, we recommend using the normal `Map` and `Set` in order to keep things simple. Only use `LuaMap` and `LuaSet` in critical spots where the extra performance boost will really make a difference.
 
