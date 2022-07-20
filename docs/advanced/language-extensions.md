@@ -378,10 +378,12 @@ If you need to iterate over a `LuaMap` or a `LuaSet`, you do so in roughly the s
 
 ```ts
 const luaMap = new LuaMap();
-for (const [key, value] of luaMap) {}
+for (const [key, value] of luaMap) {
+}
 
 const luaSet = new LuaSet();
-for (const value of luaSet) {}
+for (const value of luaSet) {
+}
 ```
 
 (Under the hood, both of these for loops would transpile to using `pairs` to iterate over the table.)
