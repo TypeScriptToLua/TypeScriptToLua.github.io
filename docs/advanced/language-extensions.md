@@ -274,7 +274,7 @@ You can also map functions to table accessors (`__index` and `__newindex`). See 
 
 ## Lua Table Types
 
-The `LuaTable` type is provided to allow direct creation and manipulation of Lua tables. This is useful if you want to use a table that uses types other than string for its keys, as that is not supported by TypeScript. Calls to lua method tables are translated to simple lua:
+The `LuaTable` type is provided to allow direct creation and manipulation of Lua tables. This is useful if you want to use a table that uses types other than string for its keys, as that is not supported by TypeScript. Calls to Lua method tables are translated to simple Lua:
 
 - `table.get(key)` Get a value by key -> `table[key]`
 - `table.set(key, value)` Set a value for key -> `table[key] = value`
@@ -328,7 +328,7 @@ print(#tbl)
 
 </SideBySide>
 
-### Iterating
+### Iterating over `LuaTable`
 
 To iterate over a `LuaTable`, use `for...of`. This will generate a `for...in` statement using `pairs()`.
 
@@ -366,11 +366,31 @@ end
 
 ### `LuaMap` and `LuaSet`
 
-Similar to `LuaTable`, the `LuaMap` and `LuaSet` types are provided to represent Lua tables used as a map or set. These are much more performant than the `Set`/`Map` classes, but do not come with all the same features (such as guaranteed insertion order).
+Similar to `LuaTable`, the `LuaMap` and `LuaSet` types are provided to represent Lua tables that are used as a map or a set. These are more performant than the `Set`/`Map` classes, but do not come with all of the same features (such as guaranteed insertion order).
 
-- `LuaMap` has the same methods as `LuaTable`, except that `table.get(key)` may also return `undefined`.
-- `LuaSet`, instead of `table.get/table.set`, has `table.add(value)`, which translates to `table[value] = true`.
-- There are also the readonly variants `ReadonlyLuaMap` and `ReadonlyLuaSet`.
+- `LuaMap` has the same methods as `LuaTable`. The exception is that the type of the return value for the `get` method is `V | undefined` instead of `V`, which makes it similar to how a `Map` works. (For this reason, we recommend using `LuaMap` over `LuaTable`, as it provides compiler-safety guarantees whenever you access a value.)
+- `LuaSet` does not have `get` and `set` methods. Instead, it has the `add` method, which transpiles to `table[value] = true`.
+- TSTL also provides the read-only variants of `ReadonlyLuaMap` and `ReadonlyLuaSet`, if needed.
+
+#### Iterating over `LuaMap` & `LuaSet`
+
+If you need to iterate over a `LuaMap` or `LuaSet`, you do so "implicitly", in the same way that you would for `LuaTable`:
+
+```ts
+const luaMap = new LuaMap();
+for (const [key, value] of luaMap) {}
+
+const luaSet = new LuaSet();
+for (const value of luaSet) {}
+```
+
+(Under the hood, both of these for loops would transpile to using `pairs` to iterate over the table.)
+
+#### Should I use `Map`/`Set` or `LuaMap`/`LuaSet`?
+
+In general, it is more painful to use `LuaMap` and `LuaSet`, since they don't have methods like `keys`, `values`, `entries`, and `clear`. Additionally, they don't have the `size` attribute to track how large the data structure is. Additionally, using them results in non-idiomatic TypeScript code that may be harder for others to read and understand.
+
+For these reasons, we recommend using the normal `Map` and `Set` in order to keep things simple. Only use `LuaMap` and `LuaSet` in critical spots where the extra performance boost will really make a difference.
 
 ### Custom Getters and Setters
 
