@@ -393,6 +393,7 @@ for (const value of luaSet) {
 `Map`/`Set` support more features than `LuaMap`/`LuaSet`. Namely, they have the `keys`, `entries`, `values`, and `clear` methods, a `size` attribute, and consistent iteration order (in the order of insertion). On the other hand, `LuaMap` and `LuaSet` transpile directly to a Lua table, so they are more lightweight.
 
 Thus, you might want to use `LuaMap`/`LuaSet`:
+
 - when the table needs to be serialized
 - when you need to interact with other Lua libraries
 - when you are in critical paths where the performance really matters (measure first!)
