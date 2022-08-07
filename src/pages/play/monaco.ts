@@ -31,7 +31,7 @@ function addLibsFromContext(context: __WebpackModuleApi.RequireContext, pathPref
             const filePath = request.replace("./", pathPrefix + "/");
             monaco.languages.typescript.typescriptDefaults.addExtraLib(context(request).default, filePath);
         } else {
-            monaco.languages.typescript.typescriptDefaults.addExtraLib(context(request).default);
+            monaco.languages.typescript.typescriptDefaults.addExtraLib(context(request).default, request);
         }
     }
 }
