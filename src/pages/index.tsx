@@ -26,7 +26,7 @@ const features: Feature[] = [
             <>
                 Static types can ease the mental burden of writing programs, by automatically tracking information the
                 programmer would otherwise have to track mentally in some fashion. Types serve as documentation for
-                yourself and other programmers and provide a ‘gradient’ that tells you what terms make sense to write.
+                yourself and other programmers and provide a check that tells you what terms make sense to write.
             </>
         ),
     },

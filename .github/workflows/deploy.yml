@@ -1,13 +1,22 @@
 name: Deploy
 
-on:
-  push:
-    branches: source
+# on:
+#   push:
+#     branches: source
 
 jobs:
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
+
+    permissions:
+      pages: write
+      id-token: write
+
+    # Deploy to the github-pages environment
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
 
     steps:
       - uses: actions/checkout@v2
@@ -17,8 +26,9 @@ jobs:
           node-version: 12
       - run: npm ci
       - run: npm run build
-      - uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: build
-          publish_branch: master
+      - name: Create gh-pages artifact
+        uses: actions/upload-pages-artifact@v1
+        path: build
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v1
