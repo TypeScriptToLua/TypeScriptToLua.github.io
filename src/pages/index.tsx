@@ -1,3 +1,4 @@
+import Head from "@docusaurus/Head";
 import Link from "@docusaurus/Link";
 import useBaseUrl from "@docusaurus/useBaseUrl";
 import CodeBlock from "@theme/CodeBlock";
@@ -80,6 +81,16 @@ function Feature({ title, description }: Feature) {
 export default function Home() {
     return (
         <Layout>
+            <Head>
+                <meta
+                    property="description"
+                    content="TypeScriptToLua (TSTL) is a transpiler that translates TypeScript code to Lua. This allows working with the great type system and tool support of TypeScript, while keeping compatibility with your Lua environment!"
+                />
+                <meta
+                    property="keywords"
+                    content="typescript-to-lua, typescript to lua, tstl, typescript, lua, transpiler, compiler"
+                />
+            </Head>
             <header className={`hero ${styles.heroBanner} container`}>
                 <h1 className={`hero__title ${styles.title}`}>
                     <b>Type</b>
@@ -129,7 +140,7 @@ export default function Home() {
                             <p>
                                 Getting started with <b>TSTL</b> is easy, simply install typescript-to-lua from npm:
                             </p>
-                            <CodeBlock>$ npm install typescript typescript-to-lua</CodeBlock>
+                            <CodeBlock>$ npm install -D typescript typescript-to-lua</CodeBlock>
                             <p>
                                 You can now run <code>tstl</code> via command line, similar to <code>tsc</code>
                             </p>
