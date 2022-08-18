@@ -1,3 +1,4 @@
+import Head from "@docusaurus/Head";
 import Link from "@docusaurus/Link";
 import useBaseUrl from "@docusaurus/useBaseUrl";
 import CodeBlock from "@theme/CodeBlock";
@@ -80,6 +81,16 @@ function Feature({ title, description }: Feature) {
 export default function Home() {
     return (
         <Layout>
+            <Head>
+                <meta
+                    property="description"
+                    content="TypeScriptToLua (TSTL) is a transpiler that translates TypeScript code to Lua. This allows working with the great type system and tool support of TypeScript, while keeping compatibility with your Lua environment!"
+                />
+                <meta
+                    property="keywords"
+                    content="typescript-to-lua, typescript to lua, tstl, typescript, lua, transpiler, compiler"
+                />
+            </Head>
             <header className={`hero ${styles.heroBanner} container`}>
                 <h1 className={`hero__title ${styles.title}`}>
                     <b>Type</b>
@@ -120,6 +131,25 @@ export default function Home() {
                         {features.map((props, idx) => (
                             <Feature key={idx} {...props} />
                         ))}
+                    </div>
+                </section>
+                <section className="container">
+                    <div className="row">
+                        <div className={`col`}>
+                            <h1>Getting started</h1>
+                            <p>
+                                Getting started with <b>TSTL</b> is easy, simply install typescript-to-lua from npm:
+                            </p>
+                            <CodeBlock>$ npm install -D typescript typescript-to-lua</CodeBlock>
+                            <p>
+                                You can now run <code>tstl</code> via command line, similar to <code>tsc</code>
+                            </p>
+                            <CodeBlock>$ npx tstl</CodeBlock>
+                            <p>
+                                For more information, see{" "}
+                                <a href={useBaseUrl("docs/getting-started")}>tstl Getting Started documentation</a>.
+                            </p>
+                        </div>
                     </div>
                 </section>
             </main>
