@@ -122,6 +122,25 @@ export default function Home() {
                         ))}
                     </div>
                 </section>
+                <section className="container">
+                    <div className="row">
+                        <div className={`col`}>
+                            <h1>Getting started</h1>
+                            <p>
+                                Getting started with <b>TSTL</b> is easy, simply install typescript-to-lua from npm:
+                            </p>
+                            <CodeBlock>$ npm install typescript typescript-to-lua</CodeBlock>
+                            <p>
+                                You can now run <code>tstl</code> via command line, similar to <code>tsc</code>
+                            </p>
+                            <CodeBlock>$ npx tstl</CodeBlock>
+                            <p>
+                                For more information, see{" "}
+                                <a href={useBaseUrl("docs/getting-started")}>tstl Getting Started documentation</a>.
+                            </p>
+                        </div>
+                    </div>
+                </section>
             </main>
         </Layout>
     );

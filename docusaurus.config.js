@@ -6,6 +6,12 @@ module.exports = {
     baseUrl: "/",
     favicon: "images/favicon.ico",
     themeConfig: {
+        metadata: [
+            {
+                name: "keywords",
+                content: "typescript-to-lua, typescript to lua, tstl, typescript, lua, transpiler, compiler",
+            },
+        ],
         navbar: {
             title: "TypeScriptToLua",
             logo: { src: "images/logo.png" },
