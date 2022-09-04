@@ -10,7 +10,7 @@ TypeScriptToLua provides several extensions to the TypeScript language in the fo
 {
     "compilerOptions": {
         ...
-        "types": ["typescript-to-lua/language-extensions"],
+        "types": ["@typescript-to-lua/language-extensions"],
         ...
     },
 }
