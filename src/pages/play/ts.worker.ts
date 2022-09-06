@@ -1,5 +1,5 @@
 import * as worker from "monaco-editor/esm/vs/editor/editor.worker";
-import { TypeScriptWorker } from "monaco-editor/esm/vs/language/typescript/tsWorker";
+import { TypeScriptWorker } from "./tsWorker";
 import * as ts from "typescript";
 import * as tstl from "typescript-to-lua";
 
@@ -11,7 +11,7 @@ require("path").format = (x: any) => x;
 const libContext = require.context(
     `raw-loader!typescript-to-lua/dist/lualib`,
     true,
-    /(.+)(?<!lualib_bundle)\.(lua|json)$/,
+    /(.+)(?<!lualib_bundle)\.(lua)$/,
 );
 const emitHost: tstl.EmitHost = {
     directoryExists: () => false,

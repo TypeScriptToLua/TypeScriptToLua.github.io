@@ -16,20 +16,12 @@ module.exports = () => ({
             },
             resolve: {
                 alias: {
-                    // Replace vendored monaco-typescript services build with typescript, already used by typescript-to-lua
-                    [require.resolve("monaco-editor/esm/vs/language/typescript/lib/typescriptServices.js")]:
-                        require.resolve("typescript"),
-
-                    // Exclude builtin monaco-typescript libs
-                    [require.resolve("monaco-editor/esm/vs/language/typescript/lib/lib.js")]: resolve(
-                        "src/monaco-typescript-lib-stub.ts",
-                    ),
-
                     // Stub file resolution for playground
                     [require.resolve("typescript-to-lua/dist/transpilation/resolve.js")]:
                         resolve("src/resolve-stub.ts"),
                 },
                 fallback: {
+                    os: false,
                     fs: false,
                     perf_hooks: false,
                     buffer: require.resolve("buffer"),
@@ -37,23 +29,6 @@ module.exports = () => ({
                     zlib: require.resolve("browserify-zlib"),
                     path: require.resolve("path-browserify"),
                 },
-            },
-            module: {
-                rules: [
-                    { test: /\.ttf$/, loader: "file-loader" },
-                    {
-                        test: /\.scss$/,
-                        exclude: /\.module\.scss$/,
-                        use: [...config.module.rules.find((r) => String(r.test) === "/\\.css$/").use, "sass-loader"],
-                    },
-                    {
-                        test: /\.module\.scss$/,
-                        use: [
-                            ...config.module.rules.find((r) => String(r.test) === "/\\.module\\.css$/").use,
-                            "sass-loader",
-                        ],
-                    },
-                ],
             },
             plugins: [
                 new ProvidePlugin({

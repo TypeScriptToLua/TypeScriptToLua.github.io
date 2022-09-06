@@ -4,5 +4,5 @@ import Benchmark from "./Benchmark";
 
 export default function CreateBenchmark() {
     const isSSR = typeof window === "undefined";
-    return <Layout title="Benchmark">{!isSSR && <Benchmark />}</Layout>;
+    return <Layout>{!isSSR && <Benchmark />}</Layout>;
 }
