@@ -4,12 +4,12 @@ title: Caveats
 
 ## Feature support
 
-| Feature             | Lua 5.1 | Lua 5.2 | Lua 5.3 | LuaJIT |
-| ------------------- | :-----: | :-----: | :-----: | :----: |
-| [Missing features]  |   ❌    |   ❌    |   ❌    |   ❌   |
-| [Bitwise operators] |   ❌    |   ✔️    |   ✔️    |   ✔️   |
-| [`continue`]        |   ❌    |   ✔️    |   ✔️    |   ✔️   |
-| (everything else)   |   ✔️    |   ✔️    |   ✔️    |   ✔️   |
+| Feature             | Lua 5.0 | Lua 5.1 | Lua 5.2 | Lua 5.3 | LuaJIT |
+| ------------------- | :-----: | :-----: | :-----: | :-----: | :----: |
+| [Missing features]  |   ❌    |   ❌    |   ❌    |   ❌    |   ❌   |
+| [Bitwise operators] |   ❌    |   ❌    |   ✔️    |   ✔️    |   ✔️   |
+| [`continue`]        |   ❌    |   ❌    |   ✔️    |   ✔️    |   ✔️   |
+| (everything else)   |   ✔️    |   ✔️    |   ✔️    |   ✔️    |   ✔️   |
 
 [missing features]: https://github.com/TypeScriptToLua/TypeScriptToLua/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc+label%3A%22missing+feature%22
 [bitwise operators]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Bitwise_Operators
