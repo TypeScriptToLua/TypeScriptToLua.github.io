@@ -16,6 +16,9 @@ module.exports = () => ({
             },
             resolve: {
                 alias: {
+                    // tsWorker downloaded by fetch-tsworker.js for our current TS version
+                    ["cdn.tsWorker"]: resolve("static/cdn.tsWorker.js"),
+
                     // Stub file resolution for playground
                     [require.resolve("typescript-to-lua/dist/transpilation/resolve.js")]:
                         resolve("src/resolve-stub.ts"),

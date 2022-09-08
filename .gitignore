@@ -2,3 +2,4 @@ node_modules
 .docusaurus
 /build
 .DS_Store
+static/tsWorker.js
