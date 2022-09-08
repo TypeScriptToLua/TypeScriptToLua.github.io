@@ -88,7 +88,7 @@ module.exports = {
             darkTheme: require("prism-react-renderer/themes/vsDark"),
         },
         algolia: {
-            appId: 'BH4D9OD16A',
+            appId: "BH4D9OD16A",
             apiKey: "c0cf59beed38709e9ed6b0ac80b24ee5",
             indexName: "typescripttolua",
         },
@@ -110,8 +110,5 @@ module.exports = {
             },
         ],
     ],
-    plugins: [
-        "docusaurus-plugin-sass",
-        require.resolve("./docusaurus-plugin")
-    ],
+    plugins: ["docusaurus-plugin-sass", require.resolve("./docusaurus-plugin")],
 };

@@ -8,11 +8,7 @@ import * as tstl from "typescript-to-lua";
 require("path").parse = (x: any) => x;
 require("path").format = (x: any) => x;
 
-const libContext = require.context(
-    `raw-loader!typescript-to-lua/dist/lualib`,
-    true,
-    /(.+)(?<!lualib_bundle)\.lua$/,
-);
+const libContext = require.context(`raw-loader!typescript-to-lua/dist/lualib`, true, /(.+)(?<!lualib_bundle)\.lua$/);
 const emitHost: tstl.EmitHost = {
     directoryExists: () => false,
     fileExists: (fileName) => ts.sys.fileExists(fileName),
@@ -20,7 +16,7 @@ const emitHost: tstl.EmitHost = {
     readFile: (fileName: string) => {
         // Make sure this json is read as rawfile and not as ESM JSON module.
         if (fileName.endsWith("universal/lualib_module_info.json")) {
-            // Make sure this json is read as rawfile and not as ESM JSON module.
+            // Make sure this json is read as raw file and not as ESM JSON module.
             return require("typescript-to-lua/dist/lualib/universal/lualib_module_info.json.raw!=!raw-loader!typescript-to-lua/dist/lualib/universal/lualib_module_info.json")
                 .default;
         }

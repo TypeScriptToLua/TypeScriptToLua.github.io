@@ -47,4 +47,4 @@ declare module "cdn.tsWorker" {
         constructor(context: any, createData: any);
         protected _languageService: ts.LanguageService;
     }
-    }
+}
