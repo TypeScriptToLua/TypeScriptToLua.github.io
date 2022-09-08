@@ -1,8 +1,8 @@
-import useThemeContext from "@theme/hooks/useThemeContext";
+import { useColorMode } from "@docusaurus/theme-common";
 import clsx from "clsx";
 import { Console as ConsoleFeed } from "console-feed";
 import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
-import JSONTree from "react-json-tree";
+import { JSONTree } from "react-json-tree";
 import MonacoEditor from "react-monaco-editor";
 import tstlPackageJson from "typescript-to-lua/package.json";
 import tsPackageJson from "typescript/package.json";
@@ -103,14 +103,14 @@ function InputPane() {
 
 const LuaSyntaxKind = __LUA_SYNTAX_KIND__;
 function LuaAST({ ast }: { ast: object }) {
-    const { isDarkTheme } = useThemeContext();
+    const { colorMode } = useColorMode();
 
     return (
         <JSONTree
             data={ast}
             hideRoot={true}
             theme={jsonTreeTheme}
-            invertTheme={!isDarkTheme}
+            invertTheme={colorMode !== "dark"}
             valueRenderer={(raw, value, lastKey) => {
                 if (lastKey === "kind") {
                     return <em>{LuaSyntaxKind[value as any]}</em>;
@@ -123,7 +123,8 @@ function LuaAST({ ast }: { ast: object }) {
 }
 
 function LuaOutput() {
-    const { isDarkTheme } = useThemeContext();
+    const { colorMode } = useColorMode();
+    const isDarkTheme = colorMode === "dark";
     const { results } = useContext(EditorContext);
 
     return (
@@ -131,7 +132,6 @@ function LuaOutput() {
             <div className={styles.luaOutputLineNumbers}>{">_"}</div>
             <div className={styles.luaOutputTerminal}>
                 <ConsoleFeed
-                    key={isDarkTheme} // It does not update styles without re-mount
                     logs={results as any}
                     variant={isDarkTheme ? "dark" : "light"}
                     styles={consoleFeedTheme(isDarkTheme)}

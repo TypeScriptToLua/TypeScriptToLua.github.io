@@ -1,5 +1,5 @@
 import * as worker from "monaco-editor/esm/vs/editor/editor.worker";
-import { TypeScriptWorker } from "monaco-editor/esm/vs/language/typescript/tsWorker";
+import { TypeScriptWorker } from "cdn.tsWorker";
 import * as ts from "typescript";
 import * as tstl from "typescript-to-lua";
 
@@ -8,19 +8,16 @@ import * as tstl from "typescript-to-lua";
 require("path").parse = (x: any) => x;
 require("path").format = (x: any) => x;
 
-const libContext = require.context(
-    `raw-loader!typescript-to-lua/dist/lualib`,
-    true,
-    /(.+)(?<!lualib_bundle)\.(lua|json)$/,
-);
+const libContext = require.context(`raw-loader!typescript-to-lua/dist/lualib`, true, /(.+)(?<!lualib_bundle)\.lua$/);
 const emitHost: tstl.EmitHost = {
     directoryExists: () => false,
     fileExists: (fileName) => ts.sys.fileExists(fileName),
     getCurrentDirectory: () => "",
     readFile: (fileName: string) => {
-        if (fileName.endsWith("lualib_module_info.json")) {
-            // Make sure this json is read as ra wfile and not as ESM JSON module.
-            return require("typescript-to-lua/dist/lualib/lualib_module_info.json.raw!=!raw-loader!typescript-to-lua/dist/lualib/lualib_module_info.json")
+        // Make sure this json is read as rawfile and not as ESM JSON module.
+        if (fileName.endsWith("universal/lualib_module_info.json")) {
+            // Make sure this json is read as raw file and not as ESM JSON module.
+            return require("typescript-to-lua/dist/lualib/universal/lualib_module_info.json.raw!=!raw-loader!typescript-to-lua/dist/lualib/universal/lualib_module_info.json")
                 .default;
         }
 

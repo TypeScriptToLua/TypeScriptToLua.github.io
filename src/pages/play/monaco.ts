@@ -1,4 +1,4 @@
-import useThemeContext from "@theme/hooks/useThemeContext";
+import { useColorMode } from "@docusaurus/theme-common";
 import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
 import "monaco-editor/esm/vs/editor/edcore.main";
 import "monaco-editor/esm/vs/basic-languages/lua/lua.contribution";
@@ -10,8 +10,8 @@ import TsWorker from "worker-loader?filename=ts.worker.js!./ts.worker";
 export { monaco };
 
 export function useMonacoTheme() {
-    const { isDarkTheme } = useThemeContext();
-    return isDarkTheme ? "vs-dark" : "vs";
+    const { colorMode } = useColorMode();
+    return colorMode === "dark" ? "vs-dark" : "vs";
 }
 
 // TODO: MonacoEnvironment should be a var
@@ -54,11 +54,11 @@ for (const module of [
 
 // Add tstl language extension types
 addLibsFromContext(
-    require.context("!!raw-loader!typescript-to-lua/language-extensions/", true, /\.d\.ts$/),
+    require.context("!!raw-loader!@typescript-to-lua/language-extensions/", true, /\.d\.ts$/),
     "/language-extensions",
 );
 monaco.languages.typescript.typescriptDefaults.addExtraLib(
-    require("!!raw-loader!typescript-to-lua/language-extensions/index.d.ts").default,
+    require("!!raw-loader!@typescript-to-lua/language-extensions/index.d.ts").default,
     "/language-extensions/index.d.ts",
 );
 

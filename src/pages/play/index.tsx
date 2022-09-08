@@ -5,7 +5,7 @@ const Playground = React.lazy(() => import("./Playground"));
 export default function Play() {
     const isSSR = typeof window === "undefined";
     return (
-        <Layout title="Playground">
+        <Layout>
             {!isSSR && (
                 <React.Suspense fallback={<div />}>
                     <Playground />

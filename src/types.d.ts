@@ -37,7 +37,7 @@ declare module "monaco-editor/esm/vs/editor/editor.worker" {
     export = worker;
 }
 
-declare module "monaco-editor/esm/vs/language/typescript/tsWorker" {
+declare module "cdn.tsWorker" {
     import monaco from "monaco-editor/esm/vs/editor/editor.api";
     import * as ts from "typescript";
 
