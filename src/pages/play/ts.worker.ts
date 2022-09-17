@@ -60,14 +60,14 @@ export class CustomTypeScriptWorker extends TypeScriptWorker {
         compilerOptions.luaTarget = tstl.LuaTarget.Lua53;
         compilerOptions.sourceMap = true;
 
-        let ast!: tstl.File;
-        let lua!: string;
-        let sourceMap!: string;
+        let ast: tstl.File | undefined;
+        let lua: string | undefined;
+        let sourceMap: string | undefined;
         const { diagnostics } = transpiler.emit({
             program,
             sourceFiles: [sourceFile],
             writeFile(fileName, data, _writeBOM, _onError, sourceFiles = []) {
-                if (!sourceFiles.includes(sourceFile)) return;
+                if (!sourceFiles.some(f => f.fileName === sourceFile.fileName)) return;
                 if (fileName.endsWith(".lua")) lua = data;
                 if (fileName.endsWith(".lua.map")) sourceMap = data;
             },
@@ -77,7 +77,7 @@ export class CustomTypeScriptWorker extends TypeScriptWorker {
                         [ts.SyntaxKind.SourceFile](node, context) {
                             const [file] = context.superTransformNode(node) as [tstl.File];
 
-                            if (node === sourceFile) {
+                            if (node.fileName === sourceFile.fileName) {
                                 ast = file;
                             }
 
@@ -87,6 +87,10 @@ export class CustomTypeScriptWorker extends TypeScriptWorker {
                 },
             ],
         });
+
+        if (!ast) throw "Could not get transpiled Lua AST";
+        if (!lua) throw "Could not get transpiled Lua";
+        if (!sourceMap) throw "Could not get tstl source map"
 
         this.lastResult = { diagnostics, ast, lua, sourceMap };
         return this.lastResult;
