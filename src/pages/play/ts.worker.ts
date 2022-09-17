@@ -67,7 +67,7 @@ export class CustomTypeScriptWorker extends TypeScriptWorker {
             program,
             sourceFiles: [sourceFile],
             writeFile(fileName, data, _writeBOM, _onError, sourceFiles = []) {
-                if (!sourceFiles.some(f => f.fileName === sourceFile.fileName)) return;
+                if (!sourceFiles.some((f) => f.fileName === sourceFile.fileName)) return;
                 if (fileName.endsWith(".lua")) lua = data;
                 if (fileName.endsWith(".lua.map")) sourceMap = data;
             },
@@ -90,7 +90,7 @@ export class CustomTypeScriptWorker extends TypeScriptWorker {
 
         if (!ast) throw "Could not get transpiled Lua AST";
         if (!lua) throw "Could not get transpiled Lua";
-        if (!sourceMap) throw "Could not get tstl source map"
+        if (!sourceMap) throw "Could not get tstl source map";
 
         this.lastResult = { diagnostics, ast, lua, sourceMap };
         return this.lastResult;
