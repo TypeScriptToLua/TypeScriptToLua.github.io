@@ -91,6 +91,7 @@ module.exports = {
             appId: "4V397Y2OP8",
             apiKey: "3f8bee8a3aa9cf31191d31230a1e8ba5",
             indexName: "typescripttolua",
+            contextualSearch: false,
         },
     },
     presets: [
