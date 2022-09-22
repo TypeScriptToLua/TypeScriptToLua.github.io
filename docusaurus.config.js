@@ -88,8 +88,8 @@ module.exports = {
             darkTheme: require("prism-react-renderer/themes/vsDark"),
         },
         algolia: {
-            appId: "BH4D9OD16A",
-            apiKey: "c0cf59beed38709e9ed6b0ac80b24ee5",
+            appId: "4V397Y2OP8",
+            apiKey: "3f8bee8a3aa9cf31191d31230a1e8ba5",
             indexName: "typescripttolua",
         },
     },
