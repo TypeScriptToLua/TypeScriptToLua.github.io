@@ -10,7 +10,7 @@ Sometimes TypeScriptToLua has to report it's own errors during the compilation. 
 
 ![Autocomplete popup from Visual Studio Code with a TypescriptToLua specific error.](/images/editor-support-diagnostics.png)
 
-To use it either get a [Visual Studio Code extension](https://marketplace.visualstudio.com/items?itemName=ark120202.vscode-typescript-to-lua) or [add it to your project](https://github.com/TypeScriptToLua/typescript-tstl-plugin#installation).
+To use it either get a [Visual Studio Code extension](https://marketplace.visualstudio.com/items?itemName=typescript-to-lua.vscode-typescript-to-lua) or [add it to your project](https://github.com/TypeScriptToLua/typescript-tstl-plugin#installation).
 
 ## Build Tasks
 
