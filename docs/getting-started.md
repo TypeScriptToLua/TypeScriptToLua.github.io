@@ -82,4 +82,4 @@ The real power of this transpiler is usage together with good declarations for t
 - [World of Warcraft Classic - Addon Development](https://github.com/wartoshika/wow-classic-declarations)
 - [Typed Factorio](https://github.com/GlassBricks/typed-factorio)
 - [The Binding of Isaac: Rebirth](https://isaacscript.github.io)
-- [Retro Gadget](https://github.com/DarkMio/retro-gadgets-typedefs)
+- [Retro Gadget](https://github.com/DarkMio/retro-gadgets-typedefs) ([template](https://github.com/DarkMio/retro-gadgets-template))
