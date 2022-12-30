@@ -44,27 +44,29 @@ const features: Feature[] = [
 ];
 
 const exampleSource = `
+// Give points to all friends around the target position
 function onAbilityCast(caster: Unit, targetPos: Vector) {
     const units = findUnitsInRadius(targetPos, 500);
 
-    const enemies = units.filter(unit => caster.isEnemy(unit));
+    const friends = units.filter(unit => caster.isFriend(unit));
 
-    for (const enemy of enemies) {
-        enemy.kill();
+    for (const friend of friends) {
+        friend.givePoints(50);
     }
 
 }
 `.trim();
 
 const exampleOutput = `
+-- Give points to all friends around the target position
 function onAbilityCast(caster, targetPos)
     local units = findUnitsInRadius(targetPos, 500)
-    local enemies = __TS__ArrayFilter(
+    local friends = __TS__ArrayFilter(
         units,
-        function(____, unit) return caster:isEnemy(unit) end
+        function(____, unit) return caster:isFriend(unit) end
     )
-    for ____, enemy in ipairs(enemies) do
-        enemy:kill()
+    for ____, friend in ipairs(friends) do
+        friend:givePoints(50)
     end
 end
 `.trim();
