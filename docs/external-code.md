@@ -6,7 +6,7 @@ In your TSTL project, you might want to import some existing Lua code. Or, you m
 
 ## Adding Lua files to your project sources
 
-The most straightforward way to add Lua code is to put the Lua file directly next to your TypeScript files. Next, you add [a declaration file](./advanced/writing-declarations.md) with the same name. Then, you can then import the Lua code in your TypeScript.
+The most straightforward way to add Lua code is to put the Lua file directly next to your TypeScript files. Next, you add [a declaration file](./advanced/writing-declarations.md) with the same name. Then, you can import the Lua code in your TypeScript.
 
 For example, a project might look like this:
 
