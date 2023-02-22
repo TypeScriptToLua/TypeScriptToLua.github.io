@@ -128,4 +128,4 @@ As a workaround, you can copy paste TypeScript code from an npm package directly
 
 Alternatively, you could fork an existing package and re-publish it as Lua files (instead of JavaScript) so that it can be directly consumed by other TSTL projects. However, doing this kind of thing will only work for really basic packages, since you would have to also fork all of the dependencies and convert those to Lua as well.
 
-Obviously, TSTL programs will not have access to any of the Node.js standard libraries or APIs (like e.g. `import path from "path";`, so make sure that any code that you integrate into your project is not Node-specific.
+Obviously, TSTL programs will not have access to any of the Node.js standard libraries or APIs (like e.g. `import path from "path";`), so make sure that any code that you integrate into your project is not Node-specific.
