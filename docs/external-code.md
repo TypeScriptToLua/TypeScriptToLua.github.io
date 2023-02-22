@@ -10,7 +10,7 @@ The most straightforward way to add Lua code is to put the Lua file directly nex
 
 For example, a project might look like this:
 
-```
+```text
 project/
 ├── main.ts
 ├── someLua.lua
