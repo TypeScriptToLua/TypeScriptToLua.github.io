@@ -1,14 +1,14 @@
 ---
-title: External Lua Code
+title: External Code
 ---
 
-As of `0.40.0`, tstl supports module resolution for libraries, which means you can _use_ and _create_ npm packages containing `.lua` files. You can also include Lua source files directly into your source code.
+In your TSTL project, you might want to import some existing Lua code. Or, you might want to import a library from [npm](https://www.npmjs.com/). This page describes how to use external code.
 
 ## Adding Lua files to your project sources
 
-You can simply add a Lua file as part of your project sources if you add [a declaration file](./advanced/writing-declarations.md) with the same name. You can then simply import the Lua code in your TypeScript.
+The most straightforward way to add Lua code is to put the Lua file directly next to your TypeScript files. Next, you add [a declaration file](./advanced/writing-declarations.md) with the same name. Then, you can then import the Lua code in your TypeScript.
 
-Your project should look like:
+For example, a project might look like this:
 
 ```
 project/
@@ -46,7 +46,7 @@ export function bar(): void;
 
 ## Importing a Lua module that only exports an array
 
-Building on the previous section, you might want also want to import a Lua file that only exports an array. For example, something like:
+Building on the previous section, you might want also want to import a Lua file that exports an array. For example, something like:
 
 ```lua title=things.lua
 return {
@@ -83,10 +83,49 @@ print(things[0].foo); // Prints "123"
 
 For more information about this export syntax, see [the official TypeScript documentation](https://www.typescriptlang.org/docs/handbook/modules.html#export--and-import--require).
 
-## Using NPM packages
+## Importing and creating Lua packages from npm
 
-To use a Lua package, install it via npm and use it as you would for any regular npm package in TypeScript. If the package does not include its own `.d.ts` declaration files, you can create your own by adding a `<package name>.d.ts` [declaration file](./advanced/writing-declarations.md) to your source files.
+TSTL supports module resolution for libraries, which means you can _use_ and _create_ npm packages containing `.lua` files. (Most packages on npm contain JavaScript files, but npm allows you to create packages with whatever kinds of files you want.)
 
-:::note
-Including TS or JS files from npm packages is currently NOT supported.
-:::
+### Using Lua packages
+
+To use a Lua package, install it via npm and use it in the same way that you would in a normal TypeScript project. In other words:
+
+```sh
+# If you use npm:
+npm install foo --save
+
+# If you use yarn:
+yarn add foo
+
+# If you use pnpm
+pnpm add foo
+```
+
+And then use it in your code:
+
+```ts
+import { someFunction } from "foo";
+
+someFunction();
+```
+
+Since the npm package was presumably made for TSTL users, it will almost certainly include `.d.ts` files alongside the `.lua` files, which is necessary for TSTL to import the Lua files properly. If there are no `.d.ts` files, you can try [creating some for the package yourself](./advanced/writing-declarations.md).
+
+### Creating Lua packages
+
+Right now, there are not very many Lua/TSTL packages on npm. If you do publish one, put the keywords of "typescript-to-lua", "lua", and "tstl" in your "package.json" file so that the module is searchable.
+
+For an example of a Lua/TSTL package published to npm, see [`isaacscript-common`](https://github.com/IsaacScript/isaacscript/tree/main/packages/isaacscript-common).
+
+## Importing JavaScript or TypeScript packages from npm
+
+**Importing JavaScript or TypeScript packages from npm will not work.** This means that it is impossible to use common JavaScript/TypeScript libraries like [Underscore.js](https://underscorejs.org/) and so on.
+
+(It is not possible for TSTL to work with a generic npm package because most TypeScript libraries only publish the compiled JavaScript to npm. And TSTL can't convert JavaScript to Lua because it needs the type information to create correct code. For example, TSTL needs to be able to distinguish between arrays and objects in order to write the correct index.)
+
+As a workaround, you can copy paste TypeScript code from an npm package directly into your project.
+
+Alternatively, you could fork an existing package and re-publish it as Lua files (instead of JavaScript) so that it can be directly consumed by other TSTL projects. However, doing this kind of thing will only work for really basic packages, since you would have to also fork all of the dependencies and convert those to Lua as well.
+
+Obviously, TSTL programs will not have access to any of the Node.js standard libraries or APIs (like e.g. `import path from "path";`, so make sure that any code that you integrate into your project is not Node-specific.
