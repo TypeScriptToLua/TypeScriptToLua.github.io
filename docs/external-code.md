@@ -124,7 +124,7 @@ For an example of a Lua/TSTL package published to npm, see [`isaacscript-common`
 
 (It is not possible for TSTL to work with a generic npm package because most TypeScript libraries only publish the compiled JavaScript to npm. And TSTL can't convert JavaScript to Lua because it needs the type information to create correct code. For example, TSTL needs to be able to distinguish between arrays and objects in order to write the correct index.)
 
-As a workaround, you can copy paste TypeScript code from a package repository into your project, such that it will be included in the TSTL build.
+As a workaround, you can copy paste TypeScript code from a package repository directly into your project. (That way, it will be compiled by TSTL alongside your normal code.)
 
 Alternatively, you could fork an existing package and re-publish it as Lua files (instead of JavaScript) so that it can be directly consumed by other TSTL projects. However, doing this kind of thing will only work for really basic packages, since you would have to also fork all of the dependencies and convert those to Lua as well.
 
