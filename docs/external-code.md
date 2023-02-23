@@ -83,7 +83,7 @@ print(things[0].foo); // Prints "123"
 
 For more information about this export syntax, see [the official TypeScript documentation](https://www.typescriptlang.org/docs/handbook/modules.html#export--and-import--require).
 
-## Importing and creating Lua packages from npm
+## Importing Lua packages from npm
 
 TSTL supports module resolution for libraries, which means you can _use_ and _create_ npm packages containing `.lua` files. (Most packages on npm contain JavaScript files, but npm allows you to create packages with whatever kinds of files you want.)
 
