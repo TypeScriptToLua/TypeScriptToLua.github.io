@@ -83,6 +83,10 @@ print(things[0].foo); // Prints "123"
 
 For more information about this export syntax, see [the official TypeScript documentation](https://www.typescriptlang.org/docs/handbook/modules.html#export--and-import--require).
 
+## Importing a type definitions package from npm
+
+TODO
+
 ## Importing Lua packages from npm
 
 TSTL supports module resolution for libraries, which means you can _use_ and _create_ npm packages containing `.lua` files. (Most packages on npm contain JavaScript files, but npm allows you to create packages with whatever kinds of files you want.)
@@ -111,6 +115,10 @@ someFunction();
 ```
 
 Since the npm package was presumably made for TSTL users, it will almost certainly include `.d.ts` files alongside the `.lua` files, which is necessary for TSTL to import the Lua files properly. If there are no `.d.ts` files, you can try [creating some for the package yourself](./advanced/writing-declarations.md).
+
+### Creating type definition packages
+
+
 
 ### Creating Lua packages
 
