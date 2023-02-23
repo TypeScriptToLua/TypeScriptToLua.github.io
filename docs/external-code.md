@@ -114,7 +114,7 @@ Since the npm package was presumably made for TSTL users, it will almost certain
 
 ### Creating Lua packages
 
-Right now, there are not very many Lua/TSTL packages on npm. If you do publish one, put the keywords of "typescript-to-lua", "lua", and "tstl" in your "package.json" file so that the module is searchable.
+Right now, there are not very many Lua/TSTL packages on npm. If you do publish one, put the keywords of "typescript-to-lua", "lua", and "tstl" in your "package.json" file so that the package is searchable.
 
 For an example of a Lua/TSTL package published to npm, see [`isaacscript-common`](https://github.com/IsaacScript/isaacscript/tree/main/packages/isaacscript-common).
 
