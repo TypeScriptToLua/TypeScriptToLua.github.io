@@ -119,15 +119,7 @@ npm run dev
 
 The best way to use TypeScript is to provide it with information about the format/types of the external functions and variables that you will be using (specific to your environment). This allows the compiler to check your code for mistakes when compiling, instead of having to run the code to find issues. To give TypeScript this information, you will need to provide it with type declarations. You can write these declarations yourself or, if available, install an existing type declarations package for your environment from npm.
 
-For instructions on how to install type declaration packages, see the readme file for the individual package in question. In short, you need to install the package from npm, and then add the following to your `tsconfig.json` file:
-
-```json title=tsconfig.json
-{
-  "compilerOptions": {
-    "types": ["foo"]
-  }
-}
-```
+For instructions on how to install type declaration packages, see the readme file for the individual package in question. In short, you need to install the package from npm, and then add the `types` field to the `compilerOptions` in the `tsconfig.json` file.
 
 ### Type Declaration Packages - Official
 
