@@ -137,6 +137,7 @@ Type declarations exist for some common Lua environments:
 Additionally, type declarations exist for some games:
 
 - [The Binding of Isaac: Rebirth](https://isaacscript.github.io)
+- [ComputerCraft (Minecraft)](https://github.com/MCJack123/cc-tstl-template)
 - [Dota 2](https://github.com/ModDota/API/tree/master/declarations/server) ([template](https://github.com/ModDota/TypeScriptAddonTemplate))
 - [Factorio](https://github.com/GlassBricks/typed-factorio)
 - [Garry's Mod](https://github.com/lolleko/gmod-typescript)
