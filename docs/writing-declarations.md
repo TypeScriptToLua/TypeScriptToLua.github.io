@@ -2,9 +2,11 @@
 title: Writing Declarations
 ---
 
-Using TypeScript instead of Lua is useful because everything plugs together in a verifiable way. With that in mind, `tstl` is not very useful unless you pair it with type declarations for your particular Lua environment. That way, TypeScript can catch the typos when you call some API function or use some API variable.
+The best way to use TypeScript is to provide it with information about the format/types of the external functions and variables that you will be using (specific to your environment). This allows the compiler to check your code for mistakes when compiling, instead of having to run the code to find issues. To give TypeScript this information, you will need to provide it with type declarations. You can write these declarations yourself or, if available, install an existing type declarations package for your environment from npm.
 
-If you need help writing declarations, feel free to [join our Discord server](https://discord.gg/BWAq58Y).
+For more information about installing existing type definition packages, see the [getting started page](getting-started.md#type-declarations).
+
+This page has more information about how to write your own type declarations. This can be tricky, so if you need help, feel free to [join our Discord server](https://discord.gg/BWAq58Y).
 
 ## About Declaration Files
 
