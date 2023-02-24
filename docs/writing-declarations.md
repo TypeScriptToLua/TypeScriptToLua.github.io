@@ -1,5 +1,5 @@
 ---
-title: Type Declarations
+title: Writing Declarations
 ---
 
 Using TypeScript instead of Lua is useful because everything plugs together in a verifiable way. With that in mind, `tstl` is not very useful unless you pair it with type declarations for your particular Lua environment. That way, TypeScript can catch the typos when you call some API function or use some API variable.
@@ -221,7 +221,7 @@ We recommend reading about Mapped and Conditional types. These things can be use
 
 ## Declaration Merging
 
-https://www.typescriptlang.org/docs/handbook/declaration-merging.html
+Declaration merging is a feature of TypeScript that allows you to combine new declarations with ones that already exist. For more information, see [the TypeScript documentation](https://www.typescriptlang.org/docs/handbook/declaration-merging.html).
 
 Some examples of declaration merging have been shown in the above examples.
 
