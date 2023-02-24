@@ -140,7 +140,7 @@ export default function Home() {
                         <div className={`col`}>
                             <h1>Getting started</h1>
                             <p>
-                                Getting started with <b>TSTL</b> is easy. Simply install `typescript-to-lua` from npm:
+                                Getting started with <b>TSTL</b> is easy. Simply install "typescript-to-lua" from npm:
                             </p>
                             <CodeBlock>$ npm install -D typescript typescript-to-lua</CodeBlock>
                             <p>
