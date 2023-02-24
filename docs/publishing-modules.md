@@ -2,11 +2,10 @@
 title: Publishing Modules
 ---
 
-There are three kinds of `tstl` libraries published on npm:
+There are two kinds of `tstl` libraries published on npm:
 
 - **Type declaration libraries** - Provides only _ambient_ types. In other words, these libraries do not contain any code which can be executed.
 - **Lua libraries** - Provides Lua code that can be imported and executed by `tstl` projects.
-- **Mixed** - Provides **both** type declarations and Lua code at the same time. (These kinds of libraries are less common.)
 
 This page describes how to create a Lua package and publish it to npm.
 
