@@ -30,7 +30,7 @@ Your `tsconfig.json` file must include the following fields:
 }
 ```
 
-Your `package.json` file should include:
+Your `package.json` file should include the following fields:
 
 ```json title=package.json
 {
@@ -46,18 +46,18 @@ Your `package.json` file should include:
     "type": "git",
     "url": "git+https://github.com/AUTHOR_NAME/PROJECT_NAME.git"
   },
-  "license": "GPL-3.0",
+  "license": "MIT",
   "author": "AUTHOR_NAME",
   "files": ["dist", "LICENSE", "package.json", "README.md"],
-
-  // Only specify this if your library is a type declaration library.
+  // Only specify "types" if your library is a type declaration library.
   "types": "./dist/index.d.ts",
-
-  // Only specify this if your library is a Lua library.
+  // Only specify "main" if your library is a Lua library.
   // (Do NOT include the file extension here, or things will not work properly.)
   "main": "./dist/index"
 }
 ```
+
+(Change `AUTHOR_NAME`, `PROJECT_NAME`, and the license accordingly.)
 
 ## Publishing
 
