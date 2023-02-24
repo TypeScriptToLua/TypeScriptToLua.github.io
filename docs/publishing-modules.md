@@ -34,21 +34,6 @@ Your `package.json` file should include the following fields:
 
 ```json title=package.json
 {
-  "name": "foo",
-  "version": "1.0.0",
-  "description": "A description of your package.",
-  "keywords": ["typescript-to-lua", "lua", "tstl"],
-  "homepage": "https://github.com/AUTHOR_NAME/PROJECT_NAME",
-  "bugs": {
-    "url": "https://github.com/AUTHOR_NAME/PROJECT_NAME/issues"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/AUTHOR_NAME/PROJECT_NAME.git"
-  },
-  "license": "MIT",
-  "author": "AUTHOR_NAME",
-  "files": ["dist", "LICENSE", "package.json", "README.md"],
   // Only specify "types" if your library is a type declaration library.
   "types": "./dist/index.d.ts",
   // Only specify "main" if your library is a Lua library.
@@ -57,7 +42,9 @@ Your `package.json` file should include the following fields:
 }
 ```
 
-(Change `AUTHOR_NAME`, `PROJECT_NAME`, and the license accordingly.)
+:::note
+There are many other fields that should be in a proper `package.json` file, such as `name`, `author`, `version`, and so on. Use `npm init` to generate a new `package.json` with some basic fields, if necessary.
+:::
 
 ## Publishing
 
