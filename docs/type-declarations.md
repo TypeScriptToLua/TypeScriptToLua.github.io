@@ -1,20 +1,18 @@
 ---
-title: Writing Declarations
+title: Type Declarations
 ---
 
-The real power of the transpiler is unlocked when combining it with declarations for your target environment. Declarations tell TypeScript which Lua API is available in your target context.
+Using TypeScript instead of Lua is useful because everything plugs together in a verifiable way. With that in mind, `tstl` is not very useful unless you pair it with type declarations for your particular Lua environment. That way, TypeScript can catch the typos when you call some API function or use some API variable.
 
-If you need tips or help writing declarations, feel free to [join our Discord](https://discord.gg/BWAq58Y).
+If you need help writing declarations, feel free to [join our Discord server](https://discord.gg/BWAq58Y).
 
 ## About Declaration Files
 
-Declaration files end with the extension _.d.ts_. These contain pure ambient code.
+Declaration files end with the extension `.d.ts` (which stands for "declaration TypeScript file"). Declaration files are different from normal `.ts` files in that they must only contain _ambient_ code. In the context of TypeScript, _ambient_ refers to code that is wiped away by the compiler and not emitted into the actual program output.
 
-For TypeScriptToLua, these files should contain information that describes the target Lua environment.
+In other words, anything you put into a `.d.ts` file will inform the TypeScript compiler about what the format of something is. And it will never appear in the generated `.lua` file.
 
-This means functions, modules, variables and other members of the target Lua environment are primarily described in these files.
-
-They don't contain code that you would execute. Similar to how you'd write an interface in some other languages. TypeScriptToLua doesn't output any information from these files either.
+For TypeScriptToLua, these files should contain information that describes the target Lua environment. This means functions, modules, variables and other members of the target Lua environment are primarily described in these files.
 
 :::note
 You can write ambient declarations inside _.ts_ files as well.
@@ -38,7 +36,7 @@ declare const _VERSION: number;
 
 /**
  * Receives any number of arguments, and prints their values to stdout, using the
- * tostring function to convert them to strings. print is not intended for
+ * `tostring` function to convert them to strings. print is not intended for
  * formatted output, but only as a quick way to show a value, typically for
  * debugging. For formatted output, use string.format.
  * @param args Arguments to print
@@ -555,7 +553,7 @@ declare module "mymodule" {
 }
 ```
 
-## NPM Publishing
+## npm Publishing
 
 It is possible to publish a list of declarations for other users to easily download via [npm](https://www.npmjs.com/).
 
