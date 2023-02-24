@@ -33,8 +33,14 @@ Your `package.json` file should include the following fields:
 
 ```json title=package.json
 {
-  // Only specify "types" if your library is a type declaration library.
+  // An array containing the files that will be published to npm. (See more information below.)
+  "files": [
+    "dist/**/*.lua", // Only specify this if your library is a Lua library.
+    "dist/**/*.d.ts"
+  ],
+
   "types": "./dist/index.d.ts",
+
   // Only specify "main" if your library is a Lua library.
   // (Do NOT include the file extension here, or things will not work properly.)
   "main": "./dist/index"
@@ -46,8 +52,6 @@ There are many other fields that should be in a proper `package.json` file, such
 :::
 
 ## Publishing
-
-The `files` field in the `package.json` file dictates which specific files will be uploaded to npm.
 
 Note that:
 
