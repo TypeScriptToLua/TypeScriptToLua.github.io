@@ -82,3 +82,14 @@ Even though iterating over object keys with `for ... in` does not guarantee orde
 ### Iterating an array with `for ... in`
 
 Not allowed.
+
+### Sorting
+
+A sorting algorithm is [said to be stable](https://stackoverflow.com/questions/1517793/what-is-stability-in-sorting-algorithms-and-why-is-it-important) if two objects with equal keys appear in the same order in sorted output as they appear in the input array to be sorted.
+
+- Sorting is part of the JavaScript standard library via the `Array.sort` method. It is guaraunteed to be [stable](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort).
+- Sorting is also part of the Lua standard library via the `table.sort` method. It is **not** guaraunteed to be [stable](https://www.lua.org/manual/5.3/manual.html#pdf-table.sort).
+
+TypeScriptToLua relies on the Lua standard library for sorting. In other words, it transpiles `[1, 2, 3].sort();` to `table.sort({1, 2, 3})`. So beware that your sorts will no longer be stable!
+
+If you need stable sorting, you have to manually use a custom sorting function. For some examples of this, see the [sorting helper functions from `isaacscript-common`](https://github.com/IsaacScript/isaacscript/blob/main/packages/isaacscript-common/src/functions/sort.ts).
