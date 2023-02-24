@@ -118,7 +118,7 @@ This allows users to modify `this` inside a function and expect behaviour simila
 
 But obviously Lua does not have a `self` parameter for every function, so one of the three options must happen to tell TypeScriptToLua there is no "contextual parameter" (`self`):
 
-1. Use `this: void` as the first parameter of the function / method. This formally describes to TypeScript to not allow `this` to be modified inside this function. (you could also use the [noImplicitThis](../configuration.md#custom-options) option to disallow `this` to be modified if `this` is of an `any` type).
+1. Use `this: void` as the first parameter of the function / method. This formally describes to TypeScript to not allow `this` to be modified inside this function. (you could also use the [noImplicitThis](configuration.md#custom-options) option to disallow `this` to be modified if `this` is of an `any` type).
 2. Use `@noSelf` in the comments of the declaration's owner (the namespace, module, object, etc).
 3. Use `@noSelfInFile` at the beginning of the file in a comment to make sure every function defined in this file does not use a "contextual parameter".
 
