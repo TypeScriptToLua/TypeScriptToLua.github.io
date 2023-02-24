@@ -55,7 +55,7 @@ Your `package.json` file should include:
 
   // Only specify this if your library is a Lua library.
   // (Do NOT include the file extension here, or things will not work properly.)
-  "main": "./dist/index", 
+  "main": "./dist/index"
 }
 ```
 
