@@ -12,8 +12,8 @@ This page describes how to create a Lua package and publish it to npm.
 
 ## Basic Limitations
 
-- You cannot import `.ts` and `.tsx` source files.
-- You cannot use `"luaBundle"` in packages intended to be included as dependency in another project.
+- `tstl` cannot import `.ts` and `.tsx` source files from a `node_modules` library.
+- You cannot use the `luaBundle` compiler flag in packages intended to be included as dependency in another project.
 
 ## Project Configuration
 
