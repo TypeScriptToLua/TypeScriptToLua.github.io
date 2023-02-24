@@ -2,7 +2,7 @@
 title: Getting Started
 ---
 
-Are you ready to start a TypeScript project that will be automatically converted to Lua? This page will help you get started.
+This page will help you set up a new TypeScript project that will be converted to Lua with TypeScriptToLua.
 
 Note that we assume that you are already familiar with how TypeScript works. If you have never coded a project in TypeScript before, or you need a refresher, first read the [official TypeScript tutorial](https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html).
 
