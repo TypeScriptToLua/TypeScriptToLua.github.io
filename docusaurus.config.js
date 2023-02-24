@@ -53,7 +53,7 @@ module.exports = {
                         },
                         {
                             label: "Advanced",
-                            to: "docs/advanced/type-declarations",
+                            to: "docs/advanced/compiler-annotations",
                         },
                     ],
                 },
