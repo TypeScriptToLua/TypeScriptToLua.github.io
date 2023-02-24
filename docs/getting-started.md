@@ -59,7 +59,7 @@ Check out [configuration page](configuration.md) for more information.
 
 ### Strictest Configuration
 
-If you want the TypeScript compiler to be as strict as possible, then you need to enable some additional flags. Handily, we can extend from [the "strictest" TypeScript community config](https://github.com/tsconfig/bases/blob/main/bases/strictest.json) to abstract this away. Adding this to top of your `tsconfig.json` file:
+If you want the TypeScript compiler to be as strict as possible, then you need to enable some additional flags. Handily, we can extend from [the "strictest" TypeScript community config](https://github.com/tsconfig/bases/blob/main/bases/strictest.json) to abstract this away by adding this to top of the `tsconfig.json` file:
 
 ```json
   // We extend the strictest base config:
