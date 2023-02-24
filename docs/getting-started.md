@@ -124,7 +124,7 @@ For instructions on how to install type declaration packages, see the readme fil
 ```json title=tsconfig.json
 {
   "compilerOptions": {
-    "types": ["foo"],
+    "types": ["foo"]
   }
 }
 ```
