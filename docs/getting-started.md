@@ -119,7 +119,15 @@ npm run dev
 
 Using TypeScript instead of Lua is useful because everything plugs together in a verifiable way. With that in mind, `tstl` is not very useful unless you pair it with type declarations for your particular Lua environment. That way, TypeScript can catch the typos when you call some API function or use some API variable.
 
-For instructions on how to install type declaration packages, see the page on [type declarations](type-declarations.md).
+For instructions on how to install type declaration packages, see the readme file for the individual package in question. In short, you need to install the package from npm, and then add the following to your `tsconfig.json` file:
+
+```json title=tsconfig.json
+{
+  "compilerOptions": {
+    "types": ["foo"],
+  }
+}
+```
 
 ### Type Declaration Packages - Official
 
