@@ -170,7 +170,7 @@ Here are some commonly used TSDoc tags used in comments:
 | `@param <name> <description>` | Defines a parameter. e.g. A parameter for a function |
 | `@return <description>`       | Describes the return value of a function / method    |
 
-TypeScriptToLua takes this further. Some "tags" change how the transpiler translates certain pieces of code. These are referred to as [annotations](compiler-annotations.md).
+TypeScriptToLua takes this further. Some "tags" change how the transpiler translates certain pieces of code. These are referred to as [annotations](advanced/compiler-annotations.md).
 
 As an example, `@tupleReturn` marks a function as something which returns multiple values instead of its array.
 
@@ -195,7 +195,7 @@ let [c, d] = array();
 // local c, d = unpack(array())
 ```
 
-See [Compiler Annotations](compiler-annotations.md) page for more information.
+See [Compiler Annotations](advanced/compiler-annotations.md) page for more information.
 
 ## Environmental Declarations
 
@@ -530,7 +530,7 @@ const v3 = (v1 * 4) as Vector;
 const d = v3.dot(v2);
 ```
 
-The second option was added in version [0.38.0](https://github.com/TypeScriptToLua/TypeScriptToLua/blob/master/CHANGELOG.md#0380). You can now use [language extensions](https://typescripttolua.github.io/docs/advanced/language-extensions) that allow declaring special functions which will transpile to operators. This will be completely type safe if the operators are declared correctly. See [Operator Map Types](language-extensions.md#operator-map-types) for more information.
+The second option was added in version [0.38.0](https://github.com/TypeScriptToLua/TypeScriptToLua/blob/master/CHANGELOG.md#0380). You can now use [language extensions](https://typescripttolua.github.io/docs/advanced/language-extensions) that allow declaring special functions which will transpile to operators. This will be completely type safe if the operators are declared correctly. See [Operator Map Types](advanced/language-extensions.md#operator-map-types) for more information.
 
 ### Import and export
 

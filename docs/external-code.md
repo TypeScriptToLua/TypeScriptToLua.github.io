@@ -10,7 +10,7 @@ This page is about importing code that **actually executes something**. In a `ts
 
 ## Adding Lua files to your project sources
 
-The most straightforward way to add Lua code is to put the Lua file directly next to your TypeScript files. Next, you add [a declaration file](./advanced/writing-declarations.md) with the same name. Then, you can import the Lua code in your TypeScript.
+The most straightforward way to add Lua code is to put the Lua file directly next to your TypeScript files. Next, you add [a declaration file](writing-declarations.md) with the same name. Then, you can import the Lua code in your TypeScript.
 
 For example, a project might look like this:
 
@@ -114,7 +114,7 @@ import { someFunction } from "foo";
 someFunction();
 ```
 
-Since the npm package was presumably made for `tstl` users, it will almost certainly include `.d.ts` files alongside the `.lua` files, which is necessary for `tstl` to import the Lua files properly. If there are no `.d.ts` files, you can try [creating some for the package yourself](./advanced/writing-declarations.md).
+Since the npm package was presumably made for `tstl` users, it will almost certainly include `.d.ts` files alongside the `.lua` files, which is necessary for `tstl` to import the Lua files properly. If there are no `.d.ts` files, you can try [creating some for the package yourself](writing-declarations.md).
 
 ### Creating Lua packages
 
