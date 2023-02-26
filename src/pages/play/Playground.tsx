@@ -132,7 +132,11 @@ function LuaOutput() {
             <div className={styles.luaOutputLineNumbers}>{">_"}</div>
             <div className={styles.luaOutputTerminal}>
                 <ConsoleFeed
-                    logs={results as any}
+                    logs={results.map((r, i) => ({
+                        id: i.toString(),
+                        data: r.data?.map((d) => d.toString()) ?? [],
+                        method: r.method,
+                    }))}
                     variant={isDarkTheme ? "dark" : "light"}
                     styles={consoleFeedTheme(isDarkTheme)}
                 />

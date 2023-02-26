@@ -24,7 +24,7 @@
         "browserify-zlib": "^0.2.0",
         "buffer": "^6.0.3",
         "clsx": "^1.1.1",
-        "console-feed": "^3.2.2",
+        "console-feed": "^3.4.3",
         "d3": "^6.2.0",
         "fengari-web": "^0.1.4",
         "lua-types": "^2.13.1",
