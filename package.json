@@ -27,7 +27,7 @@
         "console-feed": "^3.2.2",
         "d3": "^6.2.0",
         "fengari-web": "^0.1.4",
-        "lua-types": "^2.13.0",
+        "lua-types": "^2.13.1",
         "lz-string": "^1.4.4",
         "monaco-editor": "^0.34.0",
         "path-browserify": "^1.0.1",
