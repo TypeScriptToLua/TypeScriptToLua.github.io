@@ -5,12 +5,12 @@ title: External Code
 In your `tstl` project, you might want to import some existing Lua code. Or, you might want to import a library from [npm](https://www.npmjs.com/). This page describes how to use external code.
 
 :::note
-This page is about importing code that **actually executes something**. In a `tstl` project, it is common to depend on external library that provide type declarations. Type declaration libraries only provide types: they do not contribute any code to your actual program output. Thus, they work a little differently from what is discussed on this page. For information on how type declarations work, see the [type declarations page](writing-declarations.md).
+This page is about importing code that **actually executes something**. In a `tstl` project, it is common to depend on external library that provide type declarations. Type declaration libraries only provide types: they do not contribute any code to your actual program output. Thus, they work a little differently from what is discussed on this page. For information on how type declarations work, see the [type declarations page](advanced/writing-declarations.md).
 :::
 
 ## Adding Lua files to your project sources
 
-The most straightforward way to add Lua code is to put the Lua file directly next to your TypeScript files. Next, you add [a declaration file](writing-declarations.md) with the same name. Then, you can import the Lua code in your TypeScript.
+The most straightforward way to add Lua code is to put the Lua file directly next to your TypeScript files. Next, you add [a declaration file](advanced/writing-declarations.md) with the same name. Then, you can import the Lua code in your TypeScript.
 
 For example, a project might look like this:
 
@@ -114,7 +114,7 @@ import { someFunction } from "foo";
 someFunction();
 ```
 
-Since the npm package was presumably made for `tstl` users, it will almost certainly include `.d.ts` files alongside the `.lua` files, which is necessary for `tstl` to import the Lua files properly. If there are no `.d.ts` files, you can try [creating some for the package yourself](writing-declarations.md).
+Since the npm package was presumably made for `tstl` users, it will almost certainly include `.d.ts` files alongside the `.lua` files, which is necessary for `tstl` to import the Lua files properly. If there are no `.d.ts` files, you can try [creating some for the package yourself](advanced/writing-declarations.md).
 
 ### Creating Lua packages
 
