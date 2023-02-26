@@ -3,6 +3,7 @@
     "scripts": {
         "start": "docusaurus start",
         "build": "docusaurus build",
+        "serve": "docusaurus serve",
         "lint": "npm run lint:prettier",
         "lint:prettier": "prettier --check .",
         "fix:prettier": "prettier --write .",
