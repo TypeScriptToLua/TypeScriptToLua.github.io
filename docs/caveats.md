@@ -116,10 +116,8 @@ const FEATURE_CLASSES = [
     Feature101,
 ];
 
-export function initProgram(): void {
-    for (const featureClass of FEATURE_CLASSES) {
-        new featureClass();
-    }
+for (const featureClass of FEATURE_CLASSES) {
+    new featureClass();
 }
 ```
 
@@ -146,10 +144,8 @@ const FEATURE_CLASSES = [
     fc.Feature101,
 ];
 
-export function initProgram(): void {
-    for (const featureClass of FEATURE_CLASSES) {
-        new featureClass();
-    }
+for (const featureClass of FEATURE_CLASSES) {
+    new featureClass();
 }
 ```
 
