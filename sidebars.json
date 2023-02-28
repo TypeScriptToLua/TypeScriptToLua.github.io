@@ -20,8 +20,8 @@
                 "advanced/writing-declarations",
                 "advanced/compiler-annotations",
                 "advanced/language-extensions",
-                "advanced/json-modules",
-                "advanced/jsx"
+                "json-modules",
+                "jsx"
             ]
         },
         {
