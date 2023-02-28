@@ -10,7 +10,7 @@ This page has more information about how to write your own type declarations. Th
 
 ## About Declaration Files
 
-Declaration files end with the extension `.d.ts` (which stands for "declaration TypeScript file"). Declaration files are different from normal `.ts` files in that they must only contain _ambient_ code. In the context of TypeScript, _ambient_ refers to code that not emitted into the actual program output.
+Declaration files end with the extension `.d.ts` (which stands for "declaration TypeScript file"). Declaration files are different from normal `.ts` files in that they must only contain _ambient_ code. In the context of TypeScript, _ambient_ refers to code that only exists at compile-time and is not emitted into the program output.
 
 In other words, anything you put into a `.d.ts` file will inform the TypeScript compiler about what the format of something is. And it will never appear in the generated `.lua` file(s).
 
