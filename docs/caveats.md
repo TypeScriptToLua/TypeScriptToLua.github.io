@@ -149,4 +149,4 @@ for (const featureClass of FEATURE_CLASSES) {
 }
 ```
 
-Importatly, once we have a barrel file, we do not have to artificially split up the number of classes. This is because TSTL does not transpile exports with any local variables at all. Thus, we can have an unlimited number of classes inside of the barrel file without ever hitting the Lua local variable limit.
+Importatly, once we have a barrel file, we do not have to artificially split up the number of classes. This is because TSTL does not transpile exports with any local variables at all. Thus, we can have an unlimited number of exports inside of the barrel file without ever hitting the Lua local variable limit.
