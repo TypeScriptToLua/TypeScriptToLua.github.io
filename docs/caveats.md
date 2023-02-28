@@ -53,7 +53,9 @@ We recommend that you use the [`eqeqeq`](https://eslint.org/docs/latest/rules/eq
 
 ### `undefined` and `null`
 
-In JavaScript, there are two kinds of "zero-value" states: `undefined` and `null`. These two states have different kinds of properties. Specifically, `null` is a value that "really exists". For example:
+`nil` is the Lua equivalent for `undefined`, so TSTL converts `undefined` to `nil`. However, there is no Lua equivlanet for `null`, so TSTL converts `null` to `nil` as well.
+
+This means that TSTL programs with `null` will have different behavior than JavaScript/TypeScript programs. For example:
 
 ```ts
 const foo = {
@@ -63,13 +65,9 @@ const foo = {
 }
 ```
 
-When iterating over the keys of `foo`, we would obviously get `someProp1`. We would also get `someProp2`, because null is a "real" value. However, we would not get `someProp3`, because setting an object value to undefined is the same operation is deleting the key (and/or the key/value pair not existing at all).
+If we iterated over `foo` in a TSTL program, we would _only_ get `someProp1`, instead of both `someProp1` and `someProp2` like we would in a JavaScript/TypeScript program.
 
-`nil` is the Lua equivalent for `undefined`, so TSTL converts `undefined` to `nil`. However, there is no Lua equivlanet for `null`, so TSTL converts `null` to `nil` as well.
-
-This means that TSTL programs with `null` will have different behavior than JavaScript/TypeScript programs. In the above example, if we iterated over `foo` in a TSTL program, we would _only_ get `someProp1` (instead of both `someProp1` and `someProp2`).
-
-In general, we recommend keeping `null` out of your TSTL codebases in favor of `undefined`. Not only will this represent the transpiled Lua code better, [it is more idiomatic in TypeScript to prefer `undefined` over `null` when both would accomplish the same thing](https://basarat.gitbook.io/typescript/recap/null-undefined).
+In general, we recommend keeping `null` out of your TSTL codebases in favor of `undefined`. Not only will this represent the transpiled Lua code better, but [it is more idiomatic in TypeScript to prefer `undefined` over `null` when both would accomplish the same thing](https://basarat.gitbook.io/typescript/recap/null-undefined).
 
 ### Array Length
 
