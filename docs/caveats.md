@@ -136,16 +136,10 @@ export { Feature101 } from "./features/Feature101";
 ```ts title=main.ts
 import * as fc from "./featureClasses.ts";
 
-const FEATURE_CLASSES = [
-    fc.Feature1,
-    fc.Feature2,
-    fc.Feature3,
-    ...
-    fc.Feature101,
-];
+const FEATURE_CLASSES = [fc.Feature1, fc.Feature2, fc.Feature3, ...fc.Feature101];
 
 for (const featureClass of FEATURE_CLASSES) {
-    new featureClass();
+  new featureClass();
 }
 ```
 
