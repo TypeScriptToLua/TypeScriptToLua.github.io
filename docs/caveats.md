@@ -62,7 +62,7 @@ const foo = {
   someProp1: 123,
   someProp2: null,
   someProp3: undefined,
-}
+};
 ```
 
 If we iterated over `foo` in a TSTL program, we would _only_ get `someProp1`, instead of both `someProp1` and `someProp2` like we would in a JavaScript/TypeScript program.
