@@ -99,7 +99,7 @@ local foo = 123
 
 In JavaScript/TypeScript, there is no limit to the amount of variables that you can create. However, in Lua, there is a limit of 200 local variables at any point in time. For big TSTL programs, this can be a problem, causing a run-time error in production that the compiler will not catch!
 
-For example, imagine that a TSTL program consists of 250 individual features that are separated out into different feature classes, each in their own separate file. And upon program startup, all of the classes are instantiated:
+For example, imagine that a TSTL program consists of 101 individual features that are separated out into different feature classes, each in their own separate file. And upon program startup, all of the classes are instantiated:
 
 ```ts
 import { Feature1 } from "./features/Feature1";
