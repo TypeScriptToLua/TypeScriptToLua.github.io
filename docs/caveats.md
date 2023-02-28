@@ -101,7 +101,7 @@ In JavaScript/TypeScript, there is no limit to the amount of variables that you 
 
 For example, imagine that a TSTL program consists of 101 individual features that are separated out into different feature classes, each in their own separate file. And upon program startup, all of the classes are instantiated:
 
-```ts
+```ts title=main.ts
 import { Feature1 } from "./features/Feature1";
 import { Feature2 } from "./features/Feature2";
 import { Feature3 } from "./features/Feature3";
@@ -135,7 +135,7 @@ export { Feature3 } from "./features/Feature1";
 export { Feature101 } from "./features/Feature101";
 ```
 
-```ts
+```ts title=main.ts
 import * as fc from "./featureClasses.ts";
 
 const FEATURE_CLASSES = [
