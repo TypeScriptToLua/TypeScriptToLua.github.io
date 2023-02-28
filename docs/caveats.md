@@ -45,8 +45,6 @@ JavaScript and Lua differ in what they evaluate to true/false. TypeScriptToLua a
 
 We recommend that you use the [`strict-boolean-expression`](https://typescript-eslint.io/rules/strict-boolean-expressions/) ESLint rule in your TSTL projects, which will force you to be explicit and prevent this class of bug entirely.
 
-(In general, it is a good idea to have a fleshed out linting setup for all TypeScript projects, regardless of whether it is a normal TypeScript project or a TSTL project. If you are new to TypeScript and want a quick linting setup, or you want to adopt a mature, fleshed out linting config, then you can try the [`isaacscript-lint`](https://github.com/IsaacScript/isaacscript/tree/main/packages/isaacscript-lint) meta-package.)
-
 ### [Loose equality](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Equality_comparisons_and_sameness#Loose_equality_using)
 
 TypeScriptToLua makes no difference between `==` and `===` when compiling to Lua, treating all comparisons as strict (`===`).
