@@ -2,6 +2,10 @@
 title: Caveats
 ---
 
+Luckily, for most use-cases, you can write modern, idiomatic TypeScript, and TSTL will produce transpiled Lua that will work flawlessly. In other words, you probably will not have to worry about the idiomatic quirks of Lua or the internal decisions that TSTL makes when converting code.
+
+With that said, TSTL does have some "gotchas" that you might run into. This page covers some of those edge-cases.
+
 ## Feature support
 
 | Feature             | Lua 5.0 | Lua 5.1 | Lua 5.2 | Lua 5.3 | LuaJIT |
@@ -17,7 +21,7 @@ title: Caveats
 
 ## Differences from JavaScript
 
-This project aims for both compilation results to have the same behavior as much as possible, but not at all costs. Since TypeScript is based on JavaScript it also inherited some of the quirks in JavaScript that are not present in Lua. This is where behavior between Lua and JavaScript compilation targets diverge. TypeScriptToLua aims to keep identical behavior as long as **sane** TypeScript is used: if JavaScript-specific quirks are used behavior might differ.
+This project aims for both compilation results to have the same behavior as much as possible, but not at all costs. Since TypeScript is based on JavaScript, it also inherited some of the quirks in JavaScript that are not present in Lua. This is where behavior between Lua and JavaScript compilation targets diverge. TypeScriptToLua aims to keep identical behavior as long as **sane** TypeScript is used: if JavaScript-specific quirks are used, behavior might differ.
 
 Below are some of the cases where resulting Lua intentionally behaves different from compiled JS.
 
@@ -39,49 +43,75 @@ JavaScript and Lua differ in what they evaluate to true/false. TypeScriptToLua a
 | `0`               | `false`               | ⚠️`true`       |
 | (Everything else) | `true`                | `true`         |
 
+We recommend that you use the [`strict-boolean-expression`](https://typescript-eslint.io/rules/strict-boolean-expressions/) ESLint rule in your TSTL projects, which will force you to be explicit and prevent this class of bug entirely.
+
+(In general, it is a good idea to have a fleshed out linting setup for all TypeScript projects, regardless of whether it is a normal TypeScript project or a TSTL project. If you are new to TypeScript and want a quick linting setup, or you want to adopt a mature, fleshed out linting config, then you can try the [`isaacscript-lint`](https://github.com/IsaacScript/isaacscript/tree/main/packages/isaacscript-lint) meta-package.)
+
 ### [Loose equality](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Equality_comparisons_and_sameness#Loose_equality_using)
 
 TypeScriptToLua makes no difference between `==` and `===` when compiling to Lua, treating all comparisons as strict (`===`).
 
+We recommend that you use the [`eqeqeq`](https://eslint.org/docs/latest/rules/eqeqeq) ESLint rule, which will force you to be explicit and prevent this class of bug entirely.
+
+### `undefined` and `null`
+
+In JavaScript, there are two kinds of "zero-value" states: `undefined` and `null`. These two states have different kinds of properties. Specifically, `null` is a value that "really exists". For example:
+
+```ts
+const foo = {
+  someProp1: 123,
+  someProp2: null,
+  someProp3: undefined,
+}
+```
+
+When iterating over the keys of `foo`, we would obviously get `someProp1`. We would also get `someProp2`, because null is a "real" value. However, we would not get `someProp3`, because setting an object value to undefined is the same operation is deleting the key (and/or the key/value pair not existing at all).
+
+`nil` is the Lua equivalent for `undefined`, so TSTL converts `undefined` to `nil`. However, there is no Lua equivlanet for `null`, so TSTL converts `null` to `nil` as well.
+
+This means that TSTL programs with `null` will have different behavior than JavaScript/TypeScript programs. In the above example, if we iterated over `foo` in a TSTL program, we would _only_ get `someProp1` (instead of both `someProp1` and `someProp2`).
+
+In general, we recommend keeping `null` out of your TSTL codebases in favor of `undefined`. Not only will this represent the transpiled Lua code better, [it is more idiomatic in TypeScript to prefer `undefined` over `null` when both would accomplish the same thing](https://basarat.gitbook.io/typescript/recap/null-undefined).
+
 ### Array Length
 
-`Array.prototype.length` is translated to Lua's `#` operator. Due to the way lists are implemented in Lua there can be differences between JavaScript's `list.length` and Lua's `#list`. The transpiler does not do anything to remedy these differences, so when working with lists, the transpiled Lua will use the standard Lua conventions. Generally speaking, the situation where these differences occur happen when adding/removing items to a list in a hacky way, or when setting list items to `undefined`/`null`.
+`Array.prototype.length` is translated to Lua's `#` operator. Due to the way arrays are implemented in Lua, there can be differences between JavaScript's `myArray.length` and Lua's `#myArray`. The transpiler does not do anything to remedy these differences. Thus, when working with arrays, the transpiled Lua will use the standard Lua conventions. Generally speaking, the situation where these differences occur happen when adding/removing items to an array in a hacky way, or when setting array items to `undefined` / `null`.
 
-**Examples:**
+For example:
 
-**Safe (no difference):**
+#### Safe (no difference)
 
 ```ts
-const myList = [1, 2, 3];
-myList.push(4);
-myList.pop();
-myList.splice(1, 1);
-// myList.length == 2
+const myArray = [1, 2, 3];
+myArray.push(4);
+myArray.pop();
+myArray.splice(1, 1);
+// myArray.length == 2
 ```
 
-**Differences might occur:**
+#### Differences might occur
 
 ```ts
-const myList = [1, 2, 3];
-myList[1] = undefined;
-// myList.length == 1 (3 in JavaScript)
+const myArray = [1, 2, 3];
+myArray[1] = undefined;
+// myArray.length == 1 (which would be 3 in JavaScript)
 ```
 
 ```ts
-const myList = [1, 2, 3];
-myList[4] = 5;
-// myList.length == 3 (5 in JavaScript)
+const myArray = [1, 2, 3];
+myArray[4] = 5;
+// myArray.length == 3 (which would be 5 in JavaScript)
 ```
 
 ### Key Iteration Order
 
 Even though iterating over object keys with `for ... in` does not guarantee order in either JavaScript or Lua. Therefore, the iteration order in JavaScript is likely different from the order in Lua.
 
-**Note:** If a specific order is required, it is better to use ordered collections like lists instead.
+**Note:** If a specific order is required, it is better to use ordered collections like arrays instead.
 
 ### Iterating an array with `for ... in`
 
-Not allowed.
+Not allowed. Use a `for of` loop instead to iterate over an array.
 
 ### Sorting
 
