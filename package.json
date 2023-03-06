@@ -25,10 +25,10 @@
         "browserify-zlib": "^0.2.0",
         "buffer": "^6.0.3",
         "clsx": "^1.1.1",
-        "console-feed": "^3.2.2",
+        "console-feed": "^3.4.3",
         "d3": "^6.2.0",
         "fengari-web": "^0.1.4",
-        "lua-types": "^2.13.0",
+        "lua-types": "^2.13.1",
         "lz-string": "^1.4.4",
         "monaco-editor": "^0.34.0",
         "path-browserify": "^1.0.1",
@@ -38,7 +38,7 @@
         "react-json-tree": "^0.17.0",
         "react-monaco-editor": "^0.50.1",
         "stream-browserify": "^3.0.0",
-        "typescript-to-lua": "^1.13.1"
+        "typescript-to-lua": "^1.13.2"
     },
     "devDependencies": {
         "@ark120202/typescript-config": "^2.2.0",

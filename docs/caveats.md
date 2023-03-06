@@ -119,3 +119,71 @@ A sorting algorithm is [said to be stable](https://stackoverflow.com/questions/1
 TypeScriptToLua relies on the Lua standard library for sorting. In other words, it transpiles `[1, 2, 3].sort();` to `table.sort({1, 2, 3})`. So beware that your sorts will no longer be stable!
 
 If you need stable sorting, you have to manually use a custom sorting function. For some examples of this, see the [sorting helper functions from `isaacscript-common`](https://github.com/IsaacScript/isaacscript/blob/main/packages/isaacscript-common/src/functions/sort.ts).
+
+### Local Variable Limit
+
+In most cases, TSTL creates Lua code that declares variables using the `local` keyword, which makes the variables local to the function or block. In other words:
+
+```ts
+const foo = 123;
+```
+
+Usually gets transpiled to:
+
+```lua
+local foo = 123
+```
+
+In JavaScript/TypeScript, there is no limit to the amount of variables that you can create. However, in Lua, there is a limit of 200 local variables at any point in time. For big TSTL programs, this can be a problem, causing a run-time error in production that the compiler will not catch!
+
+For example, imagine that a TSTL program consists of 101 individual features that are separated out into different feature classes, each in their own separate file. And upon program startup, all of the classes are instantiated:
+
+```ts title=main.ts
+import { Feature1 } from "./features/Feature1";
+import { Feature2 } from "./features/Feature2";
+import { Feature3 } from "./features/Feature3";
+...
+import { Feature101 } from "./features/Feature101";
+
+const FEATURE_CLASSES = [
+  Feature1,
+  Feature2,
+  Feature3,
+  ...,
+  Feature101,
+];
+
+for (const featureClass of FEATURE_CLASSES) {
+  new featureClass();
+}
+```
+
+Since each transpiled import statement creates two separate local variables, this would create 202 local variables, and the program would immediately crash upon first being loaded.
+
+You can solve this problem in a few different ways. For this specific pattern, we recommend using a [barrel file](https://basarat.gitbook.io/typescript/main-1/barrel), which is a file that contains only imports and exports. Specifically, our fixed program would look like this:
+
+```ts title=featureClasses.ts
+export { Feature1 } from "./features/Feature1";
+export { Feature2 } from "./features/Feature1";
+export { Feature3 } from "./features/Feature1";
+...
+export { Feature101 } from "./features/Feature101";
+```
+
+```ts title=main.ts
+import * as fc from "./featureClasses.ts";
+
+const FEATURE_CLASSES = [
+  fc.Feature1,
+  fc.Feature2,
+  fc.Feature3,
+  ...,
+  fc.Feature101,
+];
+
+for (const featureClass of FEATURE_CLASSES) {
+  new featureClass();
+}
+```
+
+Importatly, once we have a barrel file, we do not have to artificially split up the number of classes. This is because TSTL does not transpile exports with any local variables at all. Thus, we can have an unlimited number of exports inside of the barrel file without ever hitting the Lua local variable limit.
