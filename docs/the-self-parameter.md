@@ -28,12 +28,12 @@ This tells TypeScript that `this` cannot be used in the context of this function
 
 <SideBySide>
 
-```typescript
+```typescript title=input.ts
 declare function f(this: void, arg: string): void;
 f("foo");
 ```
 
-```lua
+```lua title=output.lua
 f("foo")
 ```
 
@@ -45,7 +45,7 @@ Also useful if you have class methods which should be called with a dot `.` inst
 
 <SideBySide>
 
-```typescript
+```typescript title=input.ts
 declare class Class {
   colon(arg: string): void;
   dot(this: void, arg: string): void;
@@ -56,7 +56,7 @@ c.colon("foo");
 c.dot("foo");
 ```
 
-```lua
+```lua title=output.lua
 local c = __TS__New(Class)
 c:colon("foo")
 c.dot("foo")
@@ -71,7 +71,7 @@ Common Lua libraries use callback functions that don't have a `self` parameter s
 <SideBySide>
 
 <!-- prettier-ignore -->
-```typescript
+```typescript title=input.ts
 type Callback = (
   this: void,
   arg: string
@@ -87,7 +87,7 @@ useCallback(arg => {
 });
 ```
 
-```lua
+```lua title=output.lua
 useCallback(function(arg)
   print(arg)
 end)
@@ -103,7 +103,7 @@ If you wish to specify that all functions in a class, interface or namespace sho
 
 <SideBySide>
 
-```typescript
+```typescript title=input.ts
 /** @noSelf **/
 declare namespace Namespace {
   function foo(arg: string): void;
@@ -112,7 +112,7 @@ declare namespace Namespace {
 Namespace.foo("foo");
 ```
 
-```lua
+```lua title=output.lua
 Namespace.foo("foo")
 ```
 
@@ -124,7 +124,7 @@ You can override `@noSelf` on a per-function basis by specifying a `this` parame
 
 <SideBySide>
 
-```typescript
+```typescript title=input.ts
 /** @noSelf **/
 declare namespace Namespace {
   function foo(this: any, arg: string): void;
@@ -133,7 +133,7 @@ declare namespace Namespace {
 Namespace.foo("foo");
 ```
 
-```lua
+```lua title=output.lua
 Namespace:foo("foo")
 ```
 
@@ -167,7 +167,7 @@ _When enabled, if `this` has a type other than an implicit `any`, a `self` param
 
 <SideBySide>
 
-```typescript
+```typescript title=input.ts
 function f() {}
 function f2(this: any) {}
 const a = () => {};
@@ -176,7 +176,7 @@ class C {
 }
 ```
 
-```lua
+```lua title=output.lua
 function f() end
 function f2(self) end
 local a = function() end
@@ -222,12 +222,12 @@ To fix this, an arrow function can be used.
 
 <SideBySide>
 
-```typescript
+```typescript title=input.ts
 useCallback((arg) => callback(arg));
 // argument type: (this: void, arg: string) => void
 ```
 
-```lua
+```lua title=output.lua
 useCallback(function(arg)
   return callback(nil, arg)
 end)

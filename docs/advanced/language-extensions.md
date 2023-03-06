@@ -70,13 +70,13 @@ Example:
 <SideBySide>
 
 <!-- prettier-ignore -->
-```ts
+```ts title=input.ts
 for (const i of $range(1, 5)) {}
 for (const i of $range(1, 10, 2)) {}
 for (const i of $range(5, 1, -1)) {}
 ```
 
-```lua
+```lua title=output.lua
 for i = 1, 5 do end
 for i = 1, 10, 2 do end
 for i = 5, 1, -1 do end
@@ -92,7 +92,7 @@ For example, to declare and use a Lua function that returns an iterator for a se
 
 <SideBySide>
 
-```ts
+```ts title=input.ts
 declare function myIterator(): LuaIterable<string>;
 
 for (const s of myIterator()) {
@@ -100,7 +100,7 @@ for (const s of myIterator()) {
 }
 ```
 
-```lua
+```lua title=output.lua
 for s in myIterator() do
   print(s)
 end
@@ -112,7 +112,7 @@ Some iterators return multiple values each iteration. To declare these, combine 
 
 <SideBySide>
 
-```ts
+```ts title=input.ts
 declare function myIterator(): LuaIterable<LuaMultiReturn<[string, string]>>;
 
 for (const [a, b] of myIterator()) {
@@ -120,7 +120,7 @@ for (const [a, b] of myIterator()) {
 }
 ```
 
-```lua
+```lua title=output.lua
 for a, b in myIterator() do
   print(a, b)
 end
@@ -154,7 +154,7 @@ Some types can be iterated with `pairs()` (for example, if the `__pairs` method 
 
 <SideBySide>
 
-```ts
+```ts title=input.ts
 interface MyType extends LuaPairsIterable<number, string> {}
 declare const obj: MyType;
 
@@ -163,7 +163,7 @@ for (const [key, value] of obj) {
 }
 ```
 
-```lua
+```lua title=output.lua
 for key, value in pairs(obj) do
   print(key, value)
 end
@@ -175,7 +175,7 @@ Or, if you only care about the key values, you can use `LuaPairsKeyIterable`:
 
 <SideBySide>
 
-```ts
+```ts title=input.ts
 interface MyType extends LuaPairsKeyIterable<number> {}
 declare const obj: MyType;
 
@@ -184,7 +184,7 @@ for (const key of obj) {
 }
 ```
 
-```lua
+```lua title=output.lua
 for key in pairs(obj) do
   print(key)
 end
@@ -298,7 +298,7 @@ Example:
 
 <SideBySide>
 
-```ts
+```ts title=input.ts
 const tbl = new LuaTable();
 
 tbl.set("foo", "bar");
@@ -312,7 +312,7 @@ tbl.set(1, "bah");
 console.log(tbl.length());
 ```
 
-```lua
+```lua title=output.lua
 tbl = {}
 
 tbl.foo = "bar"
@@ -334,7 +334,7 @@ To iterate over a `LuaTable`, use `for...of`. This will generate a `for...in` st
 
 <SideBySide>
 
-```ts
+```ts title=input.ts
 const tbl = new LuaTable<number, string>();
 
 tbl.set(3, "bar");
@@ -347,7 +347,7 @@ for (const [key, value] of tbl) {
 }
 ```
 
-```lua
+```lua title=output.lua
 tbl = {}
 
 tbl[3] = "bar"
@@ -406,7 +406,7 @@ Example:
 
 <SideBySide>
 
-```ts
+```ts title=input.ts
 interface Id {
   idStr: string;
 }
@@ -422,7 +422,7 @@ dict.set(id, "bar");
 console.log(dict.get(id));
 ```
 
-```lua
+```lua title=output.lua
 id = {idStr = "foo"}
 dict[id] = "bar"
 print(dict[id])
@@ -473,25 +473,25 @@ Example:
 
 <SideBySide>
 
-```ts
+```typescript title=input.ts
 console.log(...$vararg);
 ```
 
-```lua
+```lua title=output.lua
 print(...)
 ```
 
 </SideBySide>
 
-When run:
+When executing the above output lua with CLI arguments:
 
 <SideBySide>
 
-```
+```plaintext title=cli
 > lua myscript.lua foo bar
 ```
 
-```
+```plaintext title=stdout
 foo     bar
 ```
 

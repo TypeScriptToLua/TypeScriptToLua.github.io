@@ -17,7 +17,7 @@ This decorator removes an enumeration's name after compilation and only leaves i
 
 <SideBySide>
 
-```typescript
+```typescript title=input.ts
 declare enum MyEnum {
   MY_ENUM_MEMBER_A,
   MY_ENUM_MEMBER_B,
@@ -26,7 +26,7 @@ declare enum MyEnum {
 print(MyEnum.MY_ENUM_MEMBER_A);
 ```
 
-```lua
+```lua title=output.lua
 print(MyEnum.MY_ENUM_MEMBER_A)
 ```
 
@@ -34,7 +34,7 @@ print(MyEnum.MY_ENUM_MEMBER_A)
 
 <SideBySide>
 
-```typescript
+```typescript title=input.ts
 /** @compileMembersOnly */
 declare enum MyEnum {
   MY_ENUM_MEMBER_A,
@@ -44,7 +44,7 @@ declare enum MyEnum {
 print(MyEnum.MY_ENUM_MEMBER_A);
 ```
 
-```lua
+```lua title=output.lua
 print(MY_ENUM_MEMBER_A)
 ```
 
@@ -54,7 +54,7 @@ print(MY_ENUM_MEMBER_A)
 
 <SideBySide>
 
-```typescript
+```typescript title=input.ts
 enum MyEnum {
   MY_ENUM_MEMBER_A,
   MY_ENUM_MEMBER_B,
@@ -64,7 +64,7 @@ enum MyEnum {
 print(MyEnum.MY_ENUM_MEMBER_A);
 ```
 
-```lua
+```lua title=output.lua
 MyEnum = {}
 MyEnum.MY_ENUM_MEMBER_A = 0
 MyEnum.MY_ENUM_MEMBER_B = 1
@@ -77,7 +77,7 @@ print(MyEnum.MY_ENUM_MEMBER_A)
 
 <SideBySide>
 
-```typescript
+```typescript title=input.ts
 /** @compileMembersOnly */
 enum MyEnum {
   MY_ENUM_MEMBER_A,
@@ -88,7 +88,7 @@ enum MyEnum {
 print(MyEnum.MY_ENUM_MEMBER_A);
 ```
 
-```lua
+```lua title=output.lua
 MY_ENUM_MEMBER_A = 0
 MY_ENUM_MEMBER_B = 1
 MY_ENUM_MEMBER_C = "c"
@@ -108,14 +108,14 @@ Changes the way new instances of this class are made. Takes exactly one argument
 
 <SideBySide>
 
-```typescript
+```typescript title=input.ts
 declare class MyClass {
   constructor(x: number);
 }
 const inst = new MyClass(3);
 ```
 
-```lua
+```lua title=output.lua
 local inst = __TS__New(MyClass, 3)
 ```
 
@@ -123,7 +123,7 @@ local inst = __TS__New(MyClass, 3)
 
 <SideBySide>
 
-```typescript
+```typescript title=input.ts
 /** @customConstructor MyConstructor */
 declare class MyClass {
   constructor(x: number);
@@ -131,7 +131,7 @@ declare class MyClass {
 const inst = new MyClass(3);
 ```
 
-```lua
+```lua title=output.lua
 local inst = MyConstructor(3)
 ```
 
@@ -147,12 +147,12 @@ Prevents tstl from trying to resolve the module path. When importing this module
 
 <SideBySide>
 
-```typescript
+```typescript title=input.ts
 declare module "mymodule" {}
 import module from "mymodule";
 ```
 
-```lua
+```lua title=output.lua
 ...
 local module = require("src.mymodule");
 ```
@@ -161,13 +161,13 @@ local module = require("src.mymodule");
 
 <SideBySide>
 
-```typescript
+```typescript title=input.ts
 /** @noResolution */
 declare module "mymodule" {}
 import module from "mymodule";
 ```
 
-```lua
+```lua title=output.lua
 ...
 local module = require("mymodule");
 ```
@@ -186,7 +186,7 @@ When applied to a class or interface, this only affects the type's declared meth
 
 <SideBySide>
 
-```typescript
+```typescript title=input.ts
 declare interface NormalInterface {
   normalMethod(s: string): void;
 }
@@ -202,7 +202,7 @@ x.normalMethod("foo");
 y.noSelfMethod("bar");
 ```
 
-```lua
+```lua title=output.lua
 x:normalMethod("foo")
 y.noSelfMethod("bar")
 ```
@@ -215,7 +215,7 @@ When applied to a namespace, all functions declared within the namespace will tr
 
 <SideBySide>
 
-```typescript
+```typescript title=input.ts
 declare namespace NormalNS {
   function normalFunc(s: string): string;
 }
@@ -229,7 +229,7 @@ NormalNS.normalFunc("foo");
 NoSelfNS.noSelfFunc("bar");
 ```
 
-```lua
+```lua title=output.lua
 NormalNS:normalFunc("foo")
 NoSelfNS.noSelfFunc("bar")
 ```
