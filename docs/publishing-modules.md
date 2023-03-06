@@ -61,7 +61,6 @@ Note that:
 
 When you are ready to publish:
 
-- Use `npm login` to cache your npm credentials.
 - Use `npm publish --dry-run` to see what files would be published without actually uploading anything.
 - Use `npm publish` to actually upload it.
 

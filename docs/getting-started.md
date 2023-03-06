@@ -11,14 +11,7 @@ Note that we assume that you are already familiar with how TypeScript works. If 
 TypeScriptToLua is built using [Node.js](https://nodejs.org/) and distributed via [npm](https://www.npmjs.com/). To install it, you need to create a `package.json` file in the root of your project, containing at least `{}`. Then, you can add the latest version of TypeScriptToLua to your project:
 
 ```bash
-# If you use npm:
-npm install --save-dev typescript-to-lua
-
-# If you use yarn:
-yarn add --dev typescript-to-lua
-
-# If you use pnpm:
-pnpm add --save-dev typescript-to-lua
+npm install --save-dev typescript-to-lua typescript
 ```
 
 (If you don't know the difference between the package managers, choose `npm`.)
@@ -49,23 +42,13 @@ TypeScriptToLua is configured using a `tsconfig.json` file. (This is the same fi
 }
 ```
 
-If your target Lua environment is not [LuaJIT](https://luajit.org/), make sure to change the value of `luaTarget`. Valid values are `JIT`, `5.3`, `5.2`, `5.1`, `5.0`, and `universal`.
+Make sure to set the value of `luaTarget` to the Lua version of your environment. Valid values are `JIT`, `5.4`, `5.3`, `5.2`, `5.1`, `5.0`, and `universal`.
 
 :::note
 You can find out the version of your Lua environment by running: `print(_VERSION)`
 :::
 
 Check out [configuration page](configuration.md) for more information.
-
-### Strictest Configuration
-
-If you want the TypeScript compiler to be as strict as possible, then you need to enable some additional flags. Handily, we can extend from [the "strictest" TypeScript community config](https://github.com/tsconfig/bases/blob/main/bases/strictest.json) to abstract this away by adding this to top of the `tsconfig.json` file:
-
-```json
-  // We extend the strictest base config:
-  // https://github.com/tsconfig/bases/blob/main/bases/strictest.json
-  "extends": "@tsconfig/strictest/tsconfig.json",
-```
 
 ## Building your project
 
@@ -74,14 +57,7 @@ Our command line interface is called `tstl` and it works almost exactly the same
 Since `tstl` is installed locally to your project, you cannot run it as a bare command in your terminal. Instead, use:
 
 ```bash
-# If you use npm:
 npx tstl
-
-# If you use yarn (yarn also uses npx):
-npx tstl
-
-# If you use pnpm:
-pnpm exec tstl
 ```
 
 :::note

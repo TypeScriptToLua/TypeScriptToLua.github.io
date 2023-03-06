@@ -2,7 +2,7 @@
 title: External Code
 ---
 
-In your `tstl` project, you might want to import some existing Lua code. Or, you might want to import a library from [npm](https://www.npmjs.com/). This page describes how to use external code.
+In your `tstl` project, you might want to use some existing Lua code. Or you might want to import a Lua library from [npm](https://www.npmjs.com/). This page describes how to use external Lua with your TypeScript code and TSTL.
 
 :::note
 This page is about importing code that **actually executes something**. In a `tstl` project, it is common to depend on external library that provide type declarations. Type declaration libraries only provide types: they do not contribute any code to your actual program output. Thus, they work a little differently from what is discussed on this page. For information on how type declarations work, see the [type declarations page](advanced/writing-declarations.md).

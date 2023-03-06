@@ -8,6 +8,7 @@
                 "configuration",
                 "caveats",
                 "the-self-parameter",
+                "advanced/writing-declarations",
                 "external-code",
                 "publishing-modules",
                 "editor-support"
@@ -16,13 +17,7 @@
         {
             "type": "category",
             "label": "Advanced",
-            "items": [
-                "advanced/writing-declarations",
-                "advanced/compiler-annotations",
-                "advanced/language-extensions",
-                "json-modules",
-                "jsx"
-            ]
+            "items": ["advanced/language-extensions", "json-modules", "jsx", "advanced/compiler-annotations"]
         },
         {
             "type": "category",

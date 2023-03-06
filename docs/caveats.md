@@ -2,7 +2,7 @@
 title: Caveats
 ---
 
-Luckily, for most use-cases, you can write modern, idiomatic TypeScript, and TSTL will produce transpiled Lua that will work flawlessly. In other words, you probably will not have to worry about the idiomatic quirks of Lua or the internal decisions that TSTL makes when converting code.
+TSTL aims to support almost all modern, idiomatic TypeScript without any modifications. In other words, you probably will not have to worry about the idiomatic quirks of Lua or other internal decisions that TSTL makes when converting code.
 
 With that said, TSTL does have some "gotchas" that you might run into. This page covers some of those edge-cases.
 
@@ -21,7 +21,7 @@ With that said, TSTL does have some "gotchas" that you might run into. This page
 
 ## Differences from JavaScript
 
-This project aims for both compilation results to have the same behavior as much as possible, but not at all costs. Since TypeScript is based on JavaScript, it also inherited some of the quirks in JavaScript that are not present in Lua. This is where behavior between Lua and JavaScript compilation targets diverge. TypeScriptToLua aims to keep identical behavior as long as **sane** TypeScript is used: if JavaScript-specific quirks are used, behavior might differ.
+This project aims for JavaScript and Lua compilation results to have the same runtime behavior as much as possible, but not at all costs. Since TypeScript is based on JavaScript, it also inherited some of the quirks in JavaScript that are not present in Lua. This is where behavior between Lua and JavaScript compilation targets diverge. TypeScriptToLua aims to keep identical behavior as long as **sane** TypeScript is used: if JavaScript-specific quirks are used, behavior might differ.
 
 Below are some of the cases where resulting Lua intentionally behaves different from compiled JS.
 
@@ -118,7 +118,7 @@ A sorting algorithm is [said to be stable](https://stackoverflow.com/questions/1
 
 TypeScriptToLua relies on the Lua standard library for sorting. In other words, it transpiles `[1, 2, 3].sort();` to `table.sort({1, 2, 3})`. So beware that your sorts will no longer be stable!
 
-If you need stable sorting, you have to manually use a custom sorting function. For some examples of this, see the [sorting helper functions from `isaacscript-common`](https://github.com/IsaacScript/isaacscript/blob/main/packages/isaacscript-common/src/functions/sort.ts).
+If you need stable sorting, you will have to implement your own sorting algorithm or find a library that provides one.
 
 ### Local Variable Limit
 
