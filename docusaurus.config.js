@@ -53,7 +53,7 @@ module.exports = {
                         },
                         {
                             label: "Advanced",
-                            to: "docs/advanced/writing-declarations",
+                            to: "docs/advanced/compiler-annotations",
                         },
                     ],
                 },

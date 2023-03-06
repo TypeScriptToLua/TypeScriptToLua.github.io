@@ -2,19 +2,19 @@
 title: Writing Declarations
 ---
 
-The real power of the transpiler is unlocked when combining it with declarations for your target environment. Declarations tell TypeScript which Lua API is available in your target context.
+The best way to use TypeScript is to provide it with information about the format/types of the external functions and variables that you will be using (specific to your environment). This allows the compiler to check your code for mistakes when compiling, instead of having to run the code to find issues. To give TypeScript this information, you will need to provide it with type declarations. You can write these declarations yourself or, if available, install an existing type declarations package for your environment from npm.
 
-If you need tips or help writing declarations, feel free to [join our Discord](https://discord.gg/BWAq58Y).
+For more information about installing existing type definition packages, see the [getting started page](getting-started.md#type-declarations).
+
+This page has more information about how to write your own type declarations. This can be tricky, so if you need help, feel free to [join our Discord server](https://discord.gg/BWAq58Y).
 
 ## About Declaration Files
 
-Declaration files end with the extension _.d.ts_. These contain pure ambient code.
+Declaration files end with the extension `.d.ts` (which stands for "declaration TypeScript file"). Declaration files are different from normal `.ts` files in that they must only contain _ambient_ code. In the context of TypeScript, _ambient_ refers to code that only exists at compile-time and is not emitted into the program output.
 
-For TypeScriptToLua, these files should contain information that describes the target Lua environment.
+In other words, anything you put into a `.d.ts` file will inform the TypeScript compiler about what the format of something is. And it will never appear in the generated `.lua` file(s).
 
-This means functions, modules, variables and other members of the target Lua environment are primarily described in these files.
-
-They don't contain code that you would execute. Similar to how you'd write an interface in some other languages. TypeScriptToLua doesn't output any information from these files either.
+For TypeScriptToLua, these files should contain information that describes the target Lua environment. This means functions, modules, variables and other members of the target Lua environment are primarily described in these files.
 
 :::note
 You can write ambient declarations inside _.ts_ files as well.
@@ -38,7 +38,7 @@ declare const _VERSION: number;
 
 /**
  * Receives any number of arguments, and prints their values to stdout, using the
- * tostring function to convert them to strings. print is not intended for
+ * `tostring` function to convert them to strings. print is not intended for
  * formatted output, but only as a quick way to show a value, typically for
  * debugging. For formatted output, use string.format.
  * @param args Arguments to print
@@ -120,7 +120,7 @@ This allows users to modify `this` inside a function and expect behaviour simila
 
 But obviously Lua does not have a `self` parameter for every function, so one of the three options must happen to tell TypeScriptToLua there is no "contextual parameter" (`self`):
 
-1. Use `this: void` as the first parameter of the function / method. This formally describes to TypeScript to not allow `this` to be modified inside this function. (you could also use the [noImplicitThis](../configuration.md#custom-options) option to disallow `this` to be modified if `this` is of an `any` type).
+1. Use `this: void` as the first parameter of the function / method. This formally describes to TypeScript to not allow `this` to be modified inside this function. (you could also use the [noImplicitThis](configuration.md#custom-options) option to disallow `this` to be modified if `this` is of an `any` type).
 2. Use `@noSelf` in the comments of the declaration's owner (the namespace, module, object, etc).
 3. Use `@noSelfInFile` at the beginning of the file in a comment to make sure every function defined in this file does not use a "contextual parameter".
 
@@ -172,7 +172,7 @@ Here are some commonly used TSDoc tags used in comments:
 | `@param <name> <description>` | Defines a parameter. e.g. A parameter for a function |
 | `@return <description>`       | Describes the return value of a function / method    |
 
-TypeScriptToLua takes this further. Some "tags" change how the transpiler translates certain pieces of code. These are referred to as [annotations](compiler-annotations.md).
+TypeScriptToLua takes this further. Some "tags" change how the transpiler translates certain pieces of code. These are referred to as [annotations](advanced/compiler-annotations.md).
 
 As an example, `@tupleReturn` marks a function as something which returns multiple values instead of its array.
 
@@ -197,7 +197,7 @@ let [c, d] = array();
 // local c, d = unpack(array())
 ```
 
-See [Compiler Annotations](compiler-annotations.md) page for more information.
+See [Compiler Annotations](advanced/compiler-annotations.md) page for more information.
 
 ## Environmental Declarations
 
@@ -223,7 +223,7 @@ We recommend reading about Mapped and Conditional types. These things can be use
 
 ## Declaration Merging
 
-https://www.typescriptlang.org/docs/handbook/declaration-merging.html
+Declaration merging is a feature of TypeScript that allows you to combine new declarations with ones that already exist. For more information, see [the TypeScript documentation](https://www.typescriptlang.org/docs/handbook/declaration-merging.html).
 
 Some examples of declaration merging have been shown in the above examples.
 
@@ -532,7 +532,7 @@ const v3 = (v1 * 4) as Vector;
 const d = v3.dot(v2);
 ```
 
-The second option was added in version [0.38.0](https://github.com/TypeScriptToLua/TypeScriptToLua/blob/master/CHANGELOG.md#0380). You can now use [language extensions](https://typescripttolua.github.io/docs/advanced/language-extensions) that allow declaring special functions which will transpile to operators. This will be completely type safe if the operators are declared correctly. See [Operator Map Types](language-extensions.md#operator-map-types) for more information.
+The second option was added in version [0.38.0](https://github.com/TypeScriptToLua/TypeScriptToLua/blob/master/CHANGELOG.md#0380). You can now use [language extensions](https://typescripttolua.github.io/docs/advanced/language-extensions) that allow declaring special functions which will transpile to operators. This will be completely type safe if the operators are declared correctly. See [Operator Map Types](advanced/language-extensions.md#operator-map-types) for more information.
 
 ### Import and export
 
@@ -555,7 +555,7 @@ declare module "mymodule" {
 }
 ```
 
-## NPM Publishing
+## npm Publishing
 
 It is possible to publish a list of declarations for other users to easily download via [npm](https://www.npmjs.com/).
 

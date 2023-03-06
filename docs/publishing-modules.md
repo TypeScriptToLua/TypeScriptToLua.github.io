@@ -2,16 +2,21 @@
 title: Publishing Modules
 ---
 
-As of `0.40.0`, tstl supports module resolution for libraries, which means you can _use_ and _create_ npm packages containing `.lua` files. You can also include Lua source files directly into your source code.
+There are two kinds of `tstl` libraries published on npm:
 
-- You cannot import `.ts` and `.tsx` source files
-- You must use `"buildMode": "library"`
-- It is recommended you use `"declaration": true`
-- You cannot use `"luaBundle"` in packages intended to be included as dependency in another project
+- **Type declaration libraries** - Provides only _ambient_ types. In other words, these libraries do not contain any code which can be executed.
+- **Lua libraries** - Provides Lua code that can be imported and executed by `tstl` projects.
+
+This page describes how to create a Lua package and publish it to npm.
+
+## Basic Limitations
+
+- `tstl` cannot import `.ts` and `.tsx` source files from a `node_modules` library.
+- `tstl` Lua libraries can not be bundled with the `luaBundle` compiler flag. (The end-users consuming the library will decide whether they want the final product to use `luaBundle` or not.)
 
 ## Project Configuration
 
-Your `tsconfig.json` file must at least specify the following...
+Your `tsconfig.json` file must include the following fields:
 
 ```json title=tsconfig.json
 {
@@ -24,65 +29,51 @@ Your `tsconfig.json` file must at least specify the following...
 }
 ```
 
-And your `package.json` file should specify the `types` property. You should also specify the `main` property if your module contains runnable Lua code.
+Your `package.json` file should include the following fields:
 
 ```json title=package.json
 {
-  "main": "./dist/index", // points to ./dist/index.lua
-  "types": "./dist/index" // points to ./dist/index.d.ts
+  // An array containing the files that will be published to npm. (See more information below.)
+  "files": [
+    "dist/**/*.lua", // Only specify this if your library is a Lua library.
+    "dist/**/*.d.ts"
+  ],
+
+  "types": "./dist/index.d.ts",
+
+  // Only specify "main" if your library is a Lua library.
+  // (Do NOT include the file extension here, or things will not work properly.)
+  "main": "./dist/index"
 }
 ```
 
-These must be **relative** paths within your module **without** the file's extension.
-
-> These are set to `"index"` by default so if you _really_ don't want to specify these you can keep an `index.d.ts` and `index.lua` file at the top level of your package.
+:::note
+There are many other fields that should be in a proper `package.json` file, such as `name`, `author`, `version`, and so on. Use `npm init` to generate a new `package.json` with some basic fields, if necessary.
+:::
 
 ## Publishing
 
-Within your `package.json` you can specify the `files` field to mark what files to publish.
+Note that:
 
-This is useful if you don't want to publish your source code.
-
-```json title=package.json
-{
-  "files": [
-    "dist/**/*.lua", // publish all Lua files in /dist/
-    "dist/**/*.d.ts" // publish all declaration files in /dist/
-  ]
-}
-```
-
-You can use `npm publish --dry-run` to see what files would be published without publishing your package.
-
-- Some files will always be published e.g. `package.json`, `README.md`.
+- Regardless of the contents of the `files` field, some files will always be published, like `package.json` and `README.md`.
 - Modules specified in `"devDependencies"` will not be available to the module at runtime.
-- The `tsconfig.json` file does nothing for users of your module.
+- There is no need to publish the `tsconfig.json` file, as it will do nothing for the users of your module.
 
-And when you're happy, your `package.json` has a `name`, `version`, `description`, and you are logged into NPM on your machine... you can run `npm publish` to publish your module.
+When you are ready to publish:
+
+- Use `npm login` to cache your npm credentials.
+- Use `npm publish --dry-run` to see what files would be published without actually uploading anything.
+- Use `npm publish` to actually upload it.
 
 ## Using the Module
 
-Assuming the module is available on NPM, users of your module can download it like so.
-
-```bash
-npm install <package-name>
-# OR
-yarn add <package-name>
-```
-
-Now they can start using it.
-
-```ts title=example.ts
-import { func } from "<package-name>";
-
-func();
-```
-
-TypeScriptToLua will handle the module resolution from here.
+See [the page on using Lua packages](external-code.md#using-lua-packages).
 
 ## Example projects
 
-For example projects using external Lua, you can look at the projects used in the TypeScriptToLua tests:
+For an example of a Lua package published to npm, see [`isaacscript-common`](https://github.com/IsaacScript/isaacscript/tree/main/packages/isaacscript-common).
+
+You can also reference the projects used in the TypeScriptToLua tests:
 
 ### [A project using Lua from node_modules packages](https://github.com/TypeScriptToLua/TypeScriptToLua/tree/master/test/transpile/module-resolution/project-with-node-modules)
 

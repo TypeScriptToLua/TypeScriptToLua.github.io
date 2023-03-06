@@ -2,32 +2,44 @@
 title: Getting Started
 ---
 
-This is a quick introduction into project setup and our CLI. For a TypeScript quick start please read: https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html
+This page will help you set up a new TypeScript project that will be converted to Lua with TypeScriptToLua.
+
+Note that we assume that you are already familiar with how TypeScript works. If you have never coded a project in TypeScript before, or you need a refresher, first read the [official TypeScript tutorial](https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html).
 
 ## Installation
 
-TypeScriptToLua is built using [Node.js](https://nodejs.org/) and distributed via [npm](https://www.npmjs.com/). To install it, you need to create a `package.json` file in the root of your project, containing at least `{}`. Then you can use this command to add the latest version of TypeScriptToLua to your project:
+TypeScriptToLua is built using [Node.js](https://nodejs.org/) and distributed via [npm](https://www.npmjs.com/). To install it, you need to create a `package.json` file in the root of your project, containing at least `{}`. Then, you can add the latest version of TypeScriptToLua to your project:
 
 ```bash
-npm install -D typescript-to-lua
+# If you use npm:
+npm install --save-dev typescript-to-lua
+
+# If you use yarn:
+yarn add --dev typescript-to-lua
+
+# If you use pnpm:
+pnpm add --save-dev typescript-to-lua
 ```
 
+(If you don't know the difference between the package managers, choose `npm`.)
+
 :::note
-Installing `tstl` locally is recommended to keep your build reproducible and prevent version conflicts between projects. However, it is also possible to install it globally with `npm install --global typescript-to-lua` or run it without install using `npx typescript-to-lua`.
+Installing `tstl` locally is recommended to keep your build reproducible and prevent version conflicts between projects. However, it is also possible to install it globally with `npm install --global typescript-to-lua`.
 :::
 
 ## Project setup
 
-TypeScriptToLua shares the configuration format with vanilla TypeScript. This file is called `tsconfig.json` and should be located in your project's root.
+TypeScriptToLua is configured using a `tsconfig.json` file. (This is the same file used to configure vanilla TypeScript.) It should be located in your project's root.
 
-Basic recommended configuration:
+### Basic Configuration
 
 ```json title=tsconfig.json
 {
+  "$schema": "https://raw.githubusercontent.com/TypeScriptToLua/TypeScriptToLua/master/tsconfig-schema.json",
   "compilerOptions": {
-    "target": "esnext",
-    "lib": ["esnext"],
-    "moduleResolution": "node",
+    "target": "ESNext",
+    "lib": ["ESNext"],
+    "moduleResolution": "Node",
     "types": [],
     "strict": true
   },
@@ -37,13 +49,48 @@ Basic recommended configuration:
 }
 ```
 
-Check out [Configuration](configuration.md) page for more information.
+If your target Lua environment is not [LuaJIT](https://luajit.org/), make sure to change the value of `luaTarget`. Valid values are `JIT`, `5.3`, `5.2`, `5.1`, `5.0`, and `universal`.
+
+:::note
+You can find out the version of your Lua environment by running: `print(_VERSION)`
+:::
+
+Check out [configuration page](configuration.md) for more information.
+
+### Strictest Configuration
+
+If you want the TypeScript compiler to be as strict as possible, then you need to enable some additional flags. Handily, we can extend from [the "strictest" TypeScript community config](https://github.com/tsconfig/bases/blob/main/bases/strictest.json) to abstract this away by adding this to top of the `tsconfig.json` file:
+
+```json
+  // We extend the strictest base config:
+  // https://github.com/tsconfig/bases/blob/main/bases/strictest.json
+  "extends": "@tsconfig/strictest/tsconfig.json",
+```
 
 ## Building your project
 
-Our command line interface is called `tstl` and it works almost exactly as TypeScript's `tsc`.
+Our command line interface is called `tstl` and it works almost exactly the same as TypeScript's `tsc`.
 
-Since `tstl` is installed locally to your project, you cannot run it as a bare command in your terminal, so it's recommended to use it with [npm scripts](https://docs.npmjs.com/misc/scripts).
+Since `tstl` is installed locally to your project, you cannot run it as a bare command in your terminal. Instead, use:
+
+```bash
+# If you use npm:
+npx tstl
+
+# If you use yarn (yarn also uses npx):
+npx tstl
+
+# If you use pnpm:
+pnpm exec tstl
+```
+
+:::note
+The binary is installed to `node_modules/.bin/tstl`, so you can also run it directly from that path if needed. (But this is not recommended.)
+:::
+
+### npm scripts
+
+You can also run `tstl` as an [npm script](https://docs.npmjs.com/misc/scripts). Using npm scripts for this sort of thing is idiomatic in JavaScript/TypeScript projects. This is accomplished by adding a `scripts` field to the `package.json` file:
 
 ```json title=package.json
 {
@@ -58,6 +105,8 @@ Since `tstl` is installed locally to your project, you cannot run it as a bare c
 }
 ```
 
+Then, you can run the script like this:
+
 ```bash
 # Build
 npm run build
@@ -66,21 +115,34 @@ npm run build
 npm run dev
 ```
 
-:::note
-For testing purposes you also can run `tstl` directly from your terminal with `node_modules/.bin/tstl` or `npx tstl`.
-:::
+## Type Declarations
 
-## Declarations
+The best way to use TypeScript is to provide it with information about the format/types of the external functions and variables that you will be using (specific to your environment). This allows the compiler to check your code for mistakes when compiling, instead of having to run the code to find issues. To give TypeScript this information, you will need to provide it with type declarations. You can write these declarations yourself or, if available, install an existing type declarations package for your environment from npm.
 
-The real power of this transpiler is usage together with good declarations for the Lua API provided. Some examples of Lua interface declarations can be found here:
+For instructions on how to install type declaration packages, see the readme file for the individual package in question. In short, you need to install the package from npm, and then add the `types` field to the `compilerOptions` in the `tsconfig.json` file.
 
-- [Lua Standard Library](https://github.com/TypeScriptToLua/lua-types)
-- [Dota 2 Custom Games](https://github.com/ModDota/API/tree/master/declarations/server) ([template](https://github.com/ModDota/TypeScriptAddonTemplate))
-- [Defold Game Engine Scripting](https://github.com/ts-defold/types)
-- [LÖVE 2D Game Development](https://github.com/hazzard993/love-typescript-definitions)
-- [World of Warcraft - Addon Development](https://github.com/wartoshika/wow-declarations)
-- [World of Warcraft Classic - Addon Development](https://github.com/wartoshika/wow-classic-declarations)
-- [Typed Factorio](https://github.com/GlassBricks/typed-factorio)
+### Type Declaration Packages - Official
+
+We provide an official type declaration package for [the Lua standard library](https://github.com/TypeScriptToLua/lua-types).
+
+These declarations do not come with `tstl` by default because most of the time, you should not be using the Lua standard library directly. In other words, you can just write idiomatic TypeScript and `tstl` will convert things properly. (For example, it converts `Math.round` to `math.round`.) However, if you want to do some low-level Lua stuff and work with the Lua standard library, then you will need to install these type declarations so that the TypeScript compiler can understand what you are doing.
+
+### Type Declaration Packages - Unofficial
+
+Type declarations exist for some common Lua environments:
+
+- [Defold Game Engine](https://github.com/ts-defold/types)
+- [LÖVE 2D Game Engine](https://github.com/hazzard993/love-typescript-definitions)
+
+Additionally, type declarations exist for some games:
+
 - [The Binding of Isaac: Rebirth](https://isaacscript.github.io)
-- [Retro Gadget](https://github.com/DarkMio/retro-gadgets-typedefs) ([template](https://github.com/DarkMio/retro-gadgets-template))
+- [ComputerCraft (Minecraft)](https://github.com/MCJack123/cc-tstl-template)
+- [Dota 2](https://github.com/ModDota/API/tree/master/declarations/server) ([template](https://github.com/ModDota/TypeScriptAddonTemplate))
+- [Factorio](https://github.com/GlassBricks/typed-factorio)
 - [Garry's Mod](https://github.com/lolleko/gmod-typescript)
+- [Retro Gadget](https://github.com/DarkMio/retro-gadgets-typedefs) ([template](https://github.com/DarkMio/retro-gadgets-template))
+- [World of Warcraft](https://github.com/wartoshika/wow-declarations)
+- [World of Warcraft Classic](https://github.com/wartoshika/wow-classic-declarations)
+
+(If you have created type declarations for a new game, you can click on the "Edit this page" link below to add it to the list.)
