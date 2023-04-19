@@ -118,6 +118,7 @@ Additionally, type declarations exist for some games:
 - [Factorio](https://github.com/GlassBricks/typed-factorio)
 - [Garry's Mod](https://github.com/lolleko/gmod-typescript)
 - [Retro Gadget](https://github.com/DarkMio/retro-gadgets-typedefs) ([template](https://github.com/DarkMio/retro-gadgets-template))
+- [Tabletop Simulator](https://github.com/stevenlafl/tts-typescript)
 - [World of Warcraft](https://github.com/wartoshika/wow-declarations)
 - [World of Warcraft Classic](https://github.com/wartoshika/wow-classic-declarations)
 
