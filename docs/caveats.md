@@ -73,7 +73,7 @@ for (const key of Object.keys(foo)) {
 
 This code will print out all 3 keys. In JavaScript, if you want to get rid of an object key, then you have to use the special `delete` operator (e.g. `delete foo.someProp3`).
 
-Lua does not have a special `delete` operator. Instead, in Lua, table keys are deleted by assigning a value of `nil` to the key (e.g. `foo.someProp3 = nil`). Since both `undefined` and `null` transpile to `nil`, this means that TSTL programs that if we ran the above code in a TSTL program, instead of printing out all 3 keys, only the first key would be printed out.
+Lua does not have a special `delete` operator. Instead, in Lua, table keys are deleted by assigning a value of `nil` to the key (e.g. `foo.someProp3 = nil`). Since both `undefined` and `null` transpile to `nil`, this means that if we ran the above code in a TSTL program, instead of printing out all 3 keys, only the first key would be printed out.
 
 In most cases, this difference should not cause any problems. However, if you are using `null` or `undefined` to represent an initialized zero-value inside of your object, and then you need to read the keys of that object later on, then you will have a problem. To work around this, you could use a value of `-1` or `"__TSTL_NULL"` instead of `null`. (You could also use something like `const Null = {}`.)
 
