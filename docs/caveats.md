@@ -55,19 +55,27 @@ We recommend that you use the [`eqeqeq`](https://eslint.org/docs/latest/rules/eq
 
 `nil` is the Lua equivalent for `undefined`, so TSTL converts `undefined` to `nil`. However, there is no Lua equivlanet for `null`, so TSTL converts `null` to `nil` as well.
 
-This means that TSTL programs with `null` will have different behavior than JavaScript/TypeScript programs. For example:
+In most TypeScript programs, you can use `null` and `undefined` interchangably. For this reason, we recommend keeping `null` out of your TSTL codebases in favor of `undefined`. Not only will this represent the transpiled Lua code better, but [it is more idiomatic in TypeScript to prefer `undefined` over `null` when both would accomplish the same thing](https://basarat.gitbook.io/typescript/recap/null-undefined).
 
-```ts
-const foo = {
-  someProp1: 123,
-  someProp2: null,
-  someProp3: undefined,
-};
+### Table Key Deletion & Existence
+
+In JavaScript, object keys can exist with any value, including `undefined` and `null`. For example:
+
+```js
+const foo = {};
+foo.someProp1 = 123;
+foo.someProp2 = undefined;
+foo.someProp3 = null;
+for (const key of Object.keys(foo)) {
+  console.log(key);
+}
 ```
 
-If we iterated over `foo` in a TSTL program, we would _only_ get `someProp1`, instead of both `someProp1` and `someProp2` like we would in a JavaScript/TypeScript program.
+This code will print out all 3 keys. In JavaScript, if you want to get rid of an object key, then you have to use the special `delete` operator (e.g. `delete foo.someProp3`).
 
-In general, we recommend keeping `null` out of your TSTL codebases in favor of `undefined`. Not only will this represent the transpiled Lua code better, but [it is more idiomatic in TypeScript to prefer `undefined` over `null` when both would accomplish the same thing](https://basarat.gitbook.io/typescript/recap/null-undefined).
+Lua does not have a special `delete` operator. Instead, in Lua, table keys are deleted by assigning a value of `nil` to the key (e.g. `foo.someProp3 = nil`). Since both `undefined` and `null` transpile to `nil`, this means that TSTL programs that if we ran the above code in a TSTL program, instead of printing out all 3 keys, only the first key would be printed out.
+
+In most cases, this difference should not cause any problems. However, if you are using `null` or `undefined` to represent an initialized zero-value inside of your object, and then you need to read the keys of that object later on, then you will have a problem. To work around this, you could use a value of `-1` or `"__TSTL_NULL"` instead of `null`. (You could also use something like `const Null = {}`.)
 
 ### Array Length
 
