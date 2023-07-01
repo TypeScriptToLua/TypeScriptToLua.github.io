@@ -1,6 +1,5 @@
 import { useColorMode } from "@docusaurus/theme-common";
 import clsx from "clsx";
-import { Console as ConsoleFeed } from "console-feed";
 import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 import { JSONTree } from "react-json-tree";
 import MonacoEditor from "react-monaco-editor";
@@ -11,7 +10,7 @@ import { getInitialCode, updateCodeHistory } from "./code";
 import { ConsoleMessage, executeLua } from "./execute";
 import { monaco, useMonacoTheme } from "./monaco";
 import styles from "./styles.module.scss";
-import { consoleFeedTheme, jsonTreeTheme } from "./themes";
+import { jsonTreeTheme } from "./themes";
 import type { CustomTypeScriptWorker } from "./ts.worker";
 
 enum PanelKind {
@@ -122,24 +121,32 @@ function LuaAST({ ast }: { ast: object }) {
     );
 }
 
+function formatLuaOutputData(data: any): string {
+    return data.toString();
+}
+
+function consoleOutputRowClass(data: ConsoleMessage) {
+    let rowClass = styles.luaOutputTerminalRow;
+
+    if (data.method === "error") {
+        rowClass += " " + styles.luaOutputTerminalError;
+    }
+
+    return rowClass;
+}
+
 function LuaOutput() {
-    const { colorMode } = useColorMode();
-    const isDarkTheme = colorMode === "dark";
     const { results } = useContext(EditorContext);
 
     return (
         <div className={styles.luaOutput}>
             <div className={styles.luaOutputLineNumbers}>{">_"}</div>
             <div className={styles.luaOutputTerminal}>
-                <ConsoleFeed
-                    logs={results.map((r, i) => ({
-                        id: i.toString(),
-                        data: r.data?.map((d) => d.toString()) ?? [],
-                        method: r.method,
-                    }))}
-                    variant={isDarkTheme ? "dark" : "light"}
-                    styles={consoleFeedTheme(isDarkTheme)}
-                />
+                {results.map((r, i) => (
+                    <div className={consoleOutputRowClass(r)} key={i}>
+                        {r.data.map(formatLuaOutputData).join("\t")}
+                    </div>
+                ))}
             </div>
         </div>
     );

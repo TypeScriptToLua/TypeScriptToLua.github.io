@@ -1,8 +1,10 @@
 import setupCode from "!!raw-loader!./setup.lua";
-import type { Message as ConsoleMessage } from "console-feed/lib/definitions/Console";
 import { interop, lauxlib, lua, lualib, to_luastring } from "fengari-web";
 
-export type { ConsoleMessage };
+export interface ConsoleMessage {
+    data: unknown[];
+    method: string;
+}
 
 const workerContext = globalThis as typeof globalThis & { printStream: any[] };
 
