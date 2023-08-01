@@ -144,6 +144,7 @@ const plugin: tstl.Plugin = {
     emitHost: tstl.EmitHost,
     result: tstl.ProcessedFile[],
   ) {
+    // Add a comment to the start of all created Lua files
     for (const file of result) {
       file.code = "-- Comment added by afterPrint plugin\n" + file.code;
     }
@@ -163,12 +164,35 @@ import * as tstl from "typescript-to-lua";
 
 const plugin: tstl.Plugin = {
   beforeEmit(program: ts.Program, options: tstl.CompilerOptions, emitHost: tstl.EmitHost, result: tstl.EmitFile[]) {
-    void program;
-    void options;
-    void emitHost;
-
+    // Add a comment to the start of all output files
     for (const file of result) {
       file.code = "-- Comment added by beforeEmit plugin\n" + file.code;
+    }
+  },
+};
+
+export default plugin;
+```
+
+### `moduleResolution`
+
+You can use the `moduleResolution` function to modify how the tstl module resolution works. It provides you with the require path, the file requiring that module, the tsconfig options used to compile the project, and the tstl EmitHost.
+
+You can use this to intercept the regular module resolution and provide your own. If this function returns `undefined`, tstl will fall back on its own module resolution and try to resolve the file as usual.
+
+```ts
+import * as tstl from "typescript-to-lua";
+
+const plugin: tstl.Plugin = {
+  moduleResolution(
+    moduleIdentifier: string,
+    requiringFile: string,
+    options: tstl.CompilerOptions,
+    emitHost: tstl.EmitHost,
+  ) {
+    // If "foo" is required, resolve it as 'bar.lua'
+    if (moduleIdentifier === "foo") {
+      return "bar";
     }
   },
 };
