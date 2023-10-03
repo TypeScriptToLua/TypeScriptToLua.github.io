@@ -47,6 +47,22 @@ function transformLuaValue(rootValue: any) {
     return transform(rootValue);
 }
 
+function formatErrorData(errorObject: unknown): string {
+    if (!errorObject) {
+        return "<empty error>";
+    }
+
+    if (typeof errorObject === "object") {
+        if ("message" in errorObject) {
+            return errorObject["message"] as string;
+        } else {
+            return JSON.stringify(errorObject);
+        }
+    } else {
+        return errorObject.toString();
+    }
+}
+
 function executeLua(code: string) {
     workerContext.printStream = [];
 
@@ -64,8 +80,14 @@ function executeLua(code: string) {
         if (value !== undefined) {
             messages.push({ method: "log", data: ["Module exports:", value] });
         }
+    } else if (status === lua.LUA_ERRRUN) {
+        let errorString = formatErrorData(value);
+        if (errorString.length === 0) {
+            errorString = "<empty error message>";
+        }
+        messages.push({ method: "error", data: [`Lua execution error:\n`, errorString] });
     } else {
-        messages.push({ method: "error", data: [value] });
+        messages.push({ method: "error", data: [JSON.stringify(value)] });
     }
 
     return messages;
