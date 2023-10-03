@@ -113,6 +113,20 @@ Even though iterating over object keys with `for ... in` does not guarantee orde
 
 **Note:** If a specific order is required, it is better to use ordered collections like arrays instead.
 
+### Array.fill 'end' parameter
+
+In the ECMAScript spec for [Array.prototype.fill](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/fill) is stated that if `end >= array.length`, then array.length is used instead. In Lua, the concept of array length is a bit more complex (see [Array Length](#array-length)). Therefore we decided to use just fill the array until the end index - whatever is provided - regardless of the original array length.
+
+As a bonus this serves as a standin for the creation of an array of a specific length via `new Array(length)` (not implemented). With this modification to `Array.fill`, you can instead use `([] as number[]).fill(defaultValue, 0, length)`.
+
+```ts
+// const myNewArray = new Array(5); - new Array is not supported by typescript-to-lua
+
+// Instead, use:
+
+const myNewArray2 = ([] as number[]).fill(0, 0, 5); // Using this will create an array with 5 0's
+```
+
 ### Iterating an array with `for ... in`
 
 Not allowed. Use a `for of` loop instead to iterate over an array.
