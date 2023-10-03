@@ -122,7 +122,7 @@ function LuaAST({ ast }: { ast: object }) {
 }
 
 function formatLuaOutputData(data: any): string {
-    return data.toString();
+    return data?.toString() ?? "";
 }
 
 function consoleOutputRowClass(data: ConsoleMessage) {
