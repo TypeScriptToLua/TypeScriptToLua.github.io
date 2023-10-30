@@ -174,6 +174,57 @@ local module = require("mymodule");
 
 </SideBySide>
 
+## @customName
+
+**Target elements:** Any declaration statement
+
+This annotation can be used to rename variables, identifiers, etc. Which is quite handy to get around reserved keywords in Typescript, which you might need to use in Lua.
+
+<SideBySide>
+
+```typescript title=input.ts
+/** @customName test2 */
+function test() {}
+
+test();
+```
+
+```lua title=output.lua
+...
+function test2(self)
+end
+test2(_G)
+```
+
+</SideBySide>
+
+<SideBySide>
+
+```typescript title=input.ts
+/** @customName Test2 **/
+namespace Test {
+  /** @customName Func2 **/
+  export function Func(): string {
+    return "hi";
+  }
+}
+
+Test.Func();
+```
+
+```lua title=output.lua
+...
+Test2 = Test2 or ({})
+do
+  function Test2.Func2(self)
+    return "hi"
+  end
+end
+Test2:Func2()
+```
+
+</SideBySide>
+
 ## @noSelf
 
 **Target elements:** `declare class`, `(declare) interface` or `declare namespace`
