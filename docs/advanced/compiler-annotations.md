@@ -182,7 +182,7 @@ This decorator can be used to rename variables, identifiers, etc. Meaning that y
 
 This can be quite handy to get around some reserved keywords in Typescript, which you might need/want to use in Lua.
 
-### Example
+**Example**
 
 <SideBySide>
 
