@@ -178,7 +178,11 @@ local module = require("mymodule");
 
 **Target elements:** Any declaration statement
 
-This annotation can be used to rename variables, identifiers, etc. Which is quite handy to get around reserved keywords in Typescript, which you might need to use in Lua.
+This decorator can be used to rename variables, identifiers, etc. Meaning that you can name something `x` in your Typescript environment, but then have it compile under the name `y`.
+
+This can be quite handy to get around some reserved keywords in Typescript, which you might need/want to use in Lua.
+
+### Example
 
 <SideBySide>
 
