@@ -174,6 +174,61 @@ local module = require("mymodule");
 
 </SideBySide>
 
+## @customName
+
+**Target elements:** Any declaration statement
+
+This decorator can be used to rename variables, identifiers, etc. Meaning that you can name something `x` in your Typescript environment, but then have it compile under the name `y`.
+
+This can be quite handy to get around some reserved keywords in Typescript, which you might need/want to use in Lua.
+
+**Example**
+
+<SideBySide>
+
+```typescript title=input.ts
+/** @customName test2 */
+function test() {}
+
+test();
+```
+
+```lua title=output.lua
+...
+function test2(self)
+end
+test2(_G)
+```
+
+</SideBySide>
+
+<SideBySide>
+
+```typescript title=input.ts
+/** @customName Test2 **/
+namespace Test {
+  /** @customName Func2 **/
+  export function Func(): string {
+    return "hi";
+  }
+}
+
+Test.Func();
+```
+
+```lua title=output.lua
+...
+Test2 = Test2 or ({})
+do
+  function Test2.Func2(self)
+    return "hi"
+  end
+end
+Test2:Func2()
+```
+
+</SideBySide>
+
 ## @noSelf
 
 **Target elements:** `declare class`, `(declare) interface` or `declare namespace`
