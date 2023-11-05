@@ -109,6 +109,7 @@ Type declarations exist for some common Lua environments:
 
 - [Defold Game Engine](https://github.com/ts-defold/types)
 - [LÖVE 2D Game Engine](https://github.com/hazzard993/love-typescript-definitions)
+- [Minetest](https://github.com/RepComm/mt-api)
 
 Additionally, type declarations exist for some games:
 
