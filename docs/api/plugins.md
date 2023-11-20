@@ -174,6 +174,25 @@ const plugin: tstl.Plugin = {
 export default plugin;
 ```
 
+### `afterEmit`
+
+The `afterEmit` function is called after all output files have been written to disk. This might be useful if you need to somehow post-process the output Lua, for example by feeding it to a Lua minifier.
+
+```ts
+import * as ts from "typescript";
+import * as tstl from "typescript-to-lua";
+
+const plugin: tstl.Plugin = {
+  afterEmit(program: ts.Program, options: tstl.CompilerOptions, emitHost: tstl.EmitHost, result: tstl.EmitFile[]) {
+    for (const emittedFile of result) {
+      console.log(`Emitted file ${emittedFile.outputPath}`);
+    }
+  },
+};
+
+export default plugin;
+```
+
 ### `moduleResolution`
 
 You can use the `moduleResolution` function to modify how the tstl module resolution works. It provides you with the require path, the file requiring that module, the tsconfig options used to compile the project, and the tstl EmitHost.
