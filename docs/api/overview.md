@@ -92,20 +92,38 @@ console.log(result.transpiledFiles);
 
 On the contrast with high-level API, low-level API requires you to to manage TypeScript project yourself. See [Using the Compiler API](https://github.com/microsoft/TypeScript/wiki/Using-the-Compiler-API) page for the introduction to TypeScript API.
 
-### Transpile
+### Transpiler class
 
-**Arguments:**
+The `Transpiler` class creates an instance of the tstl transpiler that is used to implement the high-level API. The transpiler allows passing a raw tstl program object and providing different transpilation parameters, such as the EmitHost object to be used to read/write files.
 
-- program: ts.Program - The TypeScript program to transpile (note: unlike the high-level API, compilerOptions is part of the program and cannot be supplied separately).
+The main usage of the Transpiler is as follows:
+
+```ts
+import * as tstl from "typescript-to-lua";
+
+const { emitSkipped, diagnostics } = new tstl.Transpiler().emit(emitOptions);
+
+// Provide a custom emitHost for custom reading/writing of files:
+const { emitSkipped, diagnostics } = new tstl.Transpiler(customEmitHost).emit(emitOptions);
+```
+
+**Emit options:**
+
+The Transpiler class `emit` accepts one argument which is an options object you can use to customize the behavior of the transpiler. The options in this object are:
+
+- program: ts.Program - The TypeScript program to transpile (note: unlike the high-level API, `compilerOptions`` is part of the program and cannot be supplied separately).
 - _[Optional]_ sourceFiles: ts.SourceFile[] - A collection of `SourceFile`s to transpile, `program.getSourceFiles()` by default.
 - _[Optional]_ customTransformers: ts.CustomTransformers - List of extra [TypeScript transformers](../configuration.md#transformers).
 - _[Optional]_ plugins: tstl.Plugin[] - List of [TypeScriptToLua plugins](plugins.md).
-- _[Optional]_ emitHost: tstl.EmitHost - Provides the methods for reading/writing files, useful in cases where you need something other than regular reading from disk. Defaults to `ts.sys`.
+- _[Optional]_ writeFile: ts.WriteFileCallback - Provides a callback to use to emit the final file result, instead of trying to write them to disk.
 
 **Example:**
 
 ```ts
-const reportDiagnostic = tstl.createDiagnosticReporter(true);
+import * as ts from "typescript";
+import * as tstl from "typescript-to-lua";
+
+// Parse existing tsconfig.json
 const configFileName = path.resolve(__dirname, "tsconfig.json");
 const parsedCommandLine = tstl.parseConfigFileWithSystem(configFileName);
 if (parsedCommandLine.errors.length > 0) {
@@ -113,12 +131,39 @@ if (parsedCommandLine.errors.length > 0) {
   return;
 }
 
+// Set tstl-specific configuration options
+parsedCommandLine.options.luaTarget = tstl.LuaTarget.Lua54;
+
+// Create a TS program to feed to the transpiler
 const program = ts.createProgram(parsedCommandLine.fileNames, parsedCommandLine.options);
-const { transpiledFiles, diagnostics: transpileDiagnostics } = tstl.transpile({ program });
 
-const emitResult = tstl.emitTranspiledFiles(options, transpiledFiles);
-emitResult.forEach(({ name, text }) => ts.sys.writeFile(name, text));
+// Create in-memory source file
+const extraSourceFile = ts.createSourceFile("my-source-file.ts", "// my ts code");
 
+const emitResults: Record<string, string> = {};
+
+// Call the Typescript-to-Lua transpiler with emit options
+const { diagnostics } = new tstl.Transpiler().transpile({
+  program, // Provide the program to transpile, including compiler options!
+  sourceFiles: [extraSourceFile],
+  writeFile(fileName, data) {
+    emitResults[fileName] = data; // Instead of writing to file, emit files to this object in memory
+  },
+  plugins: [
+    // We can even provide plugins directly
+    {
+      beforeTransform(program, CompilerOptions, emitHost) {
+        console.log("before transforming plugin hook!");
+      },
+      afterPrint(program, options, emitHost, result) {
+        console.log("after printing plugin hook!");
+      },
+    },
+  ],
+});
+
+// Use TS to report all diagnostics to console
+const reportDiagnostic = tstl.createDiagnosticReporter(true);
 const diagnostics = ts.sortAndDeduplicateDiagnostics([...ts.getPreEmitDiagnostics(program), ...transpileDiagnostics]);
 diagnostics.forEach(reportDiagnostic);
 ```
