@@ -121,6 +121,7 @@ Additionally, type declarations exist for some games:
 - [Retro Gadget](https://github.com/DarkMio/retro-gadgets-typedefs) ([template](https://github.com/DarkMio/retro-gadgets-template))
 - [Tabletop Simulator](https://github.com/stevenlafl/tts-typescript)
 - [World of Warcraft](https://github.com/wartoshika/wow-declarations)
+- [World of Warcraft WOTLK](https://github.com/araxiaonline/wow-wotlk-declarations) ([eluna module builder](https://github.com/araxiaonline/wow-eluna-ts-module))
 - [World of Warcraft Classic](https://github.com/wartoshika/wow-classic-declarations)
 
 (If you have created type declarations for a new game, you can click on the "Edit this page" link below to add it to the list.)
