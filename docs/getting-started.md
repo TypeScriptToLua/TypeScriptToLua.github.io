@@ -124,4 +124,8 @@ Additionally, type declarations exist for some games:
 - [World of Warcraft WOTLK](https://github.com/araxiaonline/wow-wotlk-declarations) ([eluna module builder](https://github.com/araxiaonline/wow-eluna-ts-module))
 - [World of Warcraft Classic](https://github.com/wartoshika/wow-classic-declarations)
 
+Type declarations for databases:
+
+- [Tarantool](https://github.com/vitaliy-art/tarantoolscript)
+
 (If you have created type declarations for a new game, you can click on the "Edit this page" link below to add it to the list.)
