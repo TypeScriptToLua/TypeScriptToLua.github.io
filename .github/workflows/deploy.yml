@@ -27,9 +27,9 @@ jobs:
       - run: npm ci
       - run: npm run build
       - name: Create gh-pages artifact
-        uses: actions/upload-pages-artifact@v1
+        uses: actions/upload-pages-artifact@v3
         with:
           path: build
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v1
+        uses: actions/deploy-pages@v4
