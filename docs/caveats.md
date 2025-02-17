@@ -226,9 +226,9 @@ console.log("after");
 ECMAScript JS output:
 
 ```
-promise construct
-after promise
-done <-- note that even though resolve was called synchronously after 'construct', it is deferred until after 'done'
+construct
+after
+done <-- note: resolve called synchronously after 'construct' but deferred until after 'done'
 ```
 
 Due to technical constraints (TSTL does not implement [a task queue](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/await#control_flow_effects_of_await) because it would be environment specific), TSTL promises will simply immediately resolve or reject promises as soon as the resolve or reject function is called. This means that for the above code, TSTL will instead produce:
