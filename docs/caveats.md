@@ -209,3 +209,36 @@ for (const featureClass of FEATURE_CLASSES) {
 ```
 
 Importatly, once we have a barrel file, we do not have to artificially split up the number of classes. This is because TSTL does not transpile exports with any local variables at all. Thus, we can have an unlimited number of exports inside of the barrel file without ever hitting the Lua local variable limit.
+
+### Promises & Async/Await execution order
+
+There is a very subtle difference in behaviour of promises and async/await (which is based on promises) between ECMAScript and TSTL's implementation. In the [ECMAScript specification](https://tc39.es/ecma262/#sec-triggerpromisereactions), resolving or rejecting of promises is deferred until any other user code has finished running. See the following example showing how this affects execution order:
+
+```ts
+const p = new Promise((resolve) => {
+  console.log("construct");
+  resolve("done");
+});
+p.then((r) => console.log(r));
+console.log("after");
+```
+
+ECMAScript JS output:
+
+```
+promise construct
+after promise
+done <-- note that even though resolve was called synchronously after 'construct', it is deferred until after 'done'
+```
+
+Due to technical constraints (TSTL does not implement [a task queue](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/await#control_flow_effects_of_await) because it would be environment specific), TSTL promises will simply immediately resolve or reject promises as soon as the resolve or reject function is called. This means that for the above code, TSTL will instead produce:
+
+TSTL output:
+
+```
+construct
+done <-- promise already resolved during construction
+after
+```
+
+In practice, this difference should rarely make any difference. TSTL's behaviour is consistent and predictable, and totally follows the Promise abstraction, aside from the ECMAScript 'implementation choice' to defer resolves/rejects. Still, it is a difference to keep in mind if you are comparing `tsc` vs `tstl` output runtime behaviour.
