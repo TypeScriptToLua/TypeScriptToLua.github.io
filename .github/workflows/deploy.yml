@@ -20,14 +20,14 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - name: Use Node.js 16
+      - name: Use Node.js 22
         uses: actions/setup-node@v1
         with:
-          node-version: 16
+          node-version: 22
       - run: npm ci
       - run: npm run build
       - name: Create gh-pages artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v4
         with:
           path: build
       - name: Deploy to GitHub Pages
