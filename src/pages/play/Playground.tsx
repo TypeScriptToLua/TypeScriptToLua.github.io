@@ -67,6 +67,12 @@ function EditorContextProvider({ children }: { children: React.ReactNode }) {
 
         setState({ source, target, lua, ast, sourceMap, results: [] });
         const results = await executeLua(lua);
+        if (target !== LuaTarget.Lua54) {
+            results.unshift({
+                method: "warning",
+                data: ["Web execution expects Lua 5.4 and might not work for other targets"],
+            });
+        }
         setState({ source, target, lua, ast, sourceMap, results });
     }, []);
 
@@ -107,7 +113,6 @@ function InputPane({ onWorkerSet }: { onWorkerSet(updateTarget: (target: LuaTarg
         onWorkerSet((newTarget) => {
             target = newTarget;
             updateInputs(myEditor?.getModel()?.getValue() ?? "", newTarget);
-            updateModel(myWorker!, editor.getModel()!, newTarget);
         });
     };
 
@@ -191,6 +196,9 @@ function consoleOutputRowClass(data: ConsoleMessage) {
 
     if (data.method === "error") {
         rowClass += " " + styles.luaOutputTerminalError;
+    }
+    if (data.method === "warning") {
+        rowClass += " " + styles.luaOutputTerminalWarning;
     }
 
     return rowClass;

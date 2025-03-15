@@ -123,6 +123,13 @@ $output-height: 180px;
     border-bottom: 1px solid rgb(91, 0, 0);
 }
 
+.luaOutputTerminalWarning {
+    color: rgb(254, 188, 127);
+    background-color: rgb(53, 49, 0);
+    border-top: 1px solid rgb(85, 83, 0);
+    border-bottom: 1px solid rgb(91, 62, 0);
+}
+
 .playgroundTarget {
     float: left;
 }
