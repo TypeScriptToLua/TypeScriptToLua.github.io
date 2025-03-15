@@ -13,6 +13,7 @@ import styles from "./styles.module.scss";
 import { jsonTreeTheme } from "./themes";
 import type { CustomTypeScriptWorker } from "./ts.worker";
 import { baseCompilerOptions } from "./compilerConfig";
+import { LuaTarget } from "typescript-to-lua";
 
 enum PanelKind {
     Input,
@@ -34,6 +35,7 @@ function PanelContextProvider({ children }: { children: React.ReactNode }) {
 }
 interface EditorState {
     source: string;
+    target: LuaTarget;
     lua: string;
     sourceMap: string;
     ast: object;
@@ -42,19 +44,30 @@ interface EditorState {
 
 const EditorContext = React.createContext<EditorContext>(null!);
 interface EditorContext extends EditorState {
-    updateModel(worker: monaco.languages.typescript.TypeScriptWorker, model: monaco.editor.ITextModel): void;
+    updateModel(
+        worker: monaco.languages.typescript.TypeScriptWorker,
+        model: monaco.editor.ITextModel,
+        target: LuaTarget,
+    ): void;
 }
 
 function EditorContextProvider({ children }: { children: React.ReactNode }) {
-    const [state, setState] = useState<EditorState>({ source: "", lua: "", ast: {}, sourceMap: "", results: [] });
-    const updateModel = useCallback<EditorContext["updateModel"]>(async (worker, model) => {
+    const [state, setState] = useState<EditorState>({
+        source: "",
+        target: LuaTarget.Lua54,
+        lua: "",
+        ast: {},
+        sourceMap: "",
+        results: [],
+    });
+    const updateModel = useCallback<EditorContext["updateModel"]>(async (worker, model, target) => {
         const client = worker as CustomTypeScriptWorker;
-        const { lua, ast, sourceMap } = await client.getTranspileOutput(model.uri.toString());
+        const { lua, ast, sourceMap } = await client.getTranspileOutput(model.uri.toString(), target);
         const source = model.getValue();
 
-        setState({ source, lua, ast, sourceMap, results: [] });
+        setState({ source, target, lua, ast, sourceMap, results: [] });
         const results = await executeLua(lua);
-        setState({ source, lua, ast, sourceMap, results });
+        setState({ source, target, lua, ast, sourceMap, results });
     }, []);
 
     return <EditorContext.Provider value={{ updateModel, ...state }}>{children}</EditorContext.Provider>;
@@ -67,26 +80,40 @@ const commonMonacoOptions: monaco.editor.IEditorConstructionOptions = {
     fixedOverflowWidgets: true,
 };
 
-function InputPane() {
+function InputPane({ onWorkerSet }: { onWorkerSet(updateTarget: (target: LuaTarget) => void): void }) {
     const theme = useMonacoTheme();
     const { updateModel } = useContext(EditorContext);
 
+    const { activePanel } = useContext(PanelContext);
+    const [initialCode, initialTarget] = getInitialCode();
+
     let myWorker: monaco.languages.typescript.TypeScriptWorker | undefined = undefined;
     let myEditor: monaco.editor.IStandaloneCodeEditor | undefined = undefined;
+    let target = initialTarget;
+
+    function updateInputs(code: string, target: LuaTarget) {
+        if (myWorker && myEditor) {
+            updateCodeHistory(code, target);
+            updateModel(myWorker, myEditor.getModel()!, target);
+        }
+    }
 
     const onMount: OnMount = async (editor, monaco) => {
         myEditor = editor;
         const workerGetter = await monaco.languages.typescript.getTypeScriptWorker();
         myWorker = await workerGetter(editor.getModel()!.uri);
-        updateModel(myWorker, editor.getModel()!);
+        updateModel(myWorker, editor.getModel()!, target);
+
+        onWorkerSet((newTarget) => {
+            target = newTarget;
+            updateInputs(myEditor?.getModel()?.getValue() ?? "", newTarget);
+            updateModel(myWorker!, editor.getModel()!, newTarget);
+        });
     };
 
     const onChange: OnChange = useCallback(
         debounce((newValue) => {
-            if (myWorker && myEditor) {
-                updateCodeHistory(newValue ?? "");
-                updateModel(myWorker, myEditor.getModel()!);
-            }
+            updateInputs(newValue ?? "", target);
         }, 250),
         [],
     );
@@ -119,14 +146,12 @@ function InputPane() {
         }
     };
 
-    const { activePanel } = useContext(PanelContext);
-
     return (
         <div className={clsx(styles.contentPane, activePanel != PanelKind.Input && styles.contentPaneHiddenMobile)}>
             <MonacoEditor
                 theme={theme}
                 language="typescript"
-                defaultValue={getInitialCode()}
+                defaultValue={initialCode}
                 options={commonMonacoOptions}
                 beforeMount={beforeMount}
                 onMount={onMount}
@@ -242,13 +267,14 @@ function OutputPane() {
     );
 }
 
-function PlaygroundNavbar() {
+function PlaygroundNavbar({ onTargetChange }: { onTargetChange(target: LuaTarget): void }) {
     const tstlLink = "https://github.com/TypeScriptToLua/TypeScriptToLua/blob/master/CHANGELOG.md";
     const tsMajor = tsPackageJson.version?.split(".")[0];
     const tsMinor = tsPackageJson.version?.split(".")[1];
     const tsLink = `https://www.typescriptlang.org/docs/handbook/release-notes/typescript-${tsMajor}-${tsMinor}.html`;
 
     const { activePanel, setActivePanel } = useContext(PanelContext);
+    const [_, initialTarget] = getInitialCode();
 
     return (
         <nav className={styles.navbar}>
@@ -262,6 +288,19 @@ function PlaygroundNavbar() {
                 <a href={tsLink} target="_blank" rel="noopener">
                     <b>v{tsPackageJson.version}</b>
                 </a>
+            </div>
+            <div className={styles.playgroundTarget}>
+                Lua target:{" "}
+                <select defaultValue={initialTarget} onChange={(e) => onTargetChange(e.target.value as LuaTarget)}>
+                    <option value={LuaTarget.Lua50}>5.0</option>
+                    <option value={LuaTarget.Lua51}>5.1</option>
+                    <option value={LuaTarget.Lua52}>5.2</option>
+                    <option value={LuaTarget.Lua53}>5.3</option>
+                    <option value={LuaTarget.Lua54}>5.4</option>
+                    <option value={LuaTarget.LuaJIT}>JIT</option>
+                    <option value={LuaTarget.Luau}>Luau</option>
+                    <option value={LuaTarget.Universal}>Universal</option>
+                </select>
             </div>
             <div className={styles.navBarPanelSelection}>
                 <button
@@ -282,13 +321,23 @@ function PlaygroundNavbar() {
 }
 
 export default function Playground() {
+    let updateModelTarget: ((target: LuaTarget) => void) | undefined;
+    const onTargetChange = useCallback((target: LuaTarget) => {
+        if (updateModelTarget) {
+            updateModelTarget(target);
+        }
+    }, []);
+    const onWorkerSet = useCallback((cb: (target: LuaTarget) => void) => {
+        updateModelTarget = cb;
+    }, []);
+
     return (
         <>
             <PanelContextProvider>
-                <PlaygroundNavbar />
+                <PlaygroundNavbar onTargetChange={onTargetChange} />
                 <div className={styles.content}>
                     <EditorContextProvider>
-                        <InputPane />
+                        <InputPane onWorkerSet={onWorkerSet} />
                         <OutputPane />
                     </EditorContextProvider>
                 </div>

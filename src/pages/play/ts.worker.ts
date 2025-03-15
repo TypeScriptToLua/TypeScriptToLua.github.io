@@ -20,6 +20,11 @@ const emitHost: tstl.EmitHost = {
             return require("typescript-to-lua/dist/lualib/universal/lualib_module_info.json.raw!=!raw-loader!typescript-to-lua/dist/lualib/universal/lualib_module_info.json")
                 .default;
         }
+        if (fileName.endsWith("5.0/lualib_module_info.json")) {
+            // Make sure this json is read as raw file and not as ESM JSON module.
+            return require("typescript-to-lua/dist/lualib/5.0/lualib_module_info.json.raw!=!raw-loader!typescript-to-lua/dist/lualib/5.0/lualib_module_info.json")
+                .default;
+        }
 
         const [, featureName] = fileName.match(/\/dist\/lualib\/(.+)\.lua$/) || [];
         if (featureName === undefined) {
@@ -36,22 +41,25 @@ const transpiler = new tstl.Transpiler({ emitHost });
 export class CustomTypeScriptWorker extends TypeScriptWorker {
     private lastResult?: { diagnostics: readonly ts.Diagnostic[]; ast: tstl.File; lua: string; sourceMap: string };
 
-    public async getTranspileOutput(fileName: string) {
-        const { ast, lua, sourceMap } = this.transpileLua(fileName);
+    public async getTranspileOutput(fileName: string, target: tstl.LuaTarget) {
+        const { ast, lua, sourceMap } = this.transpileLua(fileName, target);
         return { ast, lua, sourceMap };
     }
 
     public async getSemanticDiagnostics(fileName: string) {
         const diagnostics = await super.getSemanticDiagnostics(fileName);
-        const { diagnostics: transpileDiagnostics } = this.lastResult ?? this.transpileLua(fileName);
+        const { diagnostics: transpileDiagnostics } =
+            this.lastResult ?? this.transpileLua(fileName, tstl.LuaTarget.Lua54);
         return [
             ...diagnostics,
             ...TypeScriptWorker.clearFiles(transpileDiagnostics.map((diag) => ({ ...diag, code: diag.source as any }))),
         ];
     }
 
-    private transpileLua(fileName: string) {
+    private transpileLua(fileName: string, target: tstl.LuaTarget) {
         const program = this._languageService.getProgram()!;
+        const options = program.getCompilerOptions() as tstl.CompilerOptions;
+        options.luaTarget = target;
         const sourceFile = program.getSourceFile(fileName)!;
 
         let ast: tstl.File | undefined;
