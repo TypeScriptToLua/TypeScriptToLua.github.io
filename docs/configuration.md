@@ -51,9 +51,10 @@ Most of the standard [TypeScript options](https://www.typescriptlang.org/docs/ha
 
 Some options do not apply to TypeScriptToLua and are ignored:
 
-- `outFile` - use `luaBundle` instead.
-- `importHelpers`, `noEmitHelpers` - use `luaLibImport` instead.
-- `target`, `module` - it's only effect is limiting some features, so prefer to set it to `esnext`. If TypeScript requires you to specify different `module` type because you want to bundle your declarations with `outFile`, consider using [API Extractor](https://api-extractor.com/) instead.
+- `outFile` - Use `luaBundle` instead.
+- `importHelpers` / `noEmitHelpers` - Use `luaLibImport` instead.
+- `target` - In normal TypeScript projects, this represents the JavaScript compilation target. TSTL users should always set this to `ESNext`, which allows your source code to use every [ECMAScript feature](https://github.com/sudheerj/ECMAScript-features).
+- `module` - In normal TypeScript projects, this specifies the module system. TSTL users should omit this option, since it will default to `ES2015`.
 
 ## Transformers
 
