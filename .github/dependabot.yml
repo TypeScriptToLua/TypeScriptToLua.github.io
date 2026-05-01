@@ -7,3 +7,9 @@ updates:
     allow:
       - dependency-name: "typescript-to-lua"
       - dependency-name: "lua-types"
+      - dependency-name: "typescript"
+    groups:
+      typescript-to-lua:
+        patterns:
+          - "typescript-to-lua"
+          - "typescript"
