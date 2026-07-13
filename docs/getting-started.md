@@ -125,6 +125,7 @@ Additionally, type declarations exist for some games:
 - [World of Warcraft](https://github.com/wartoshika/wow-declarations)
 - [World of Warcraft WOTLK](https://github.com/araxiaonline/wow-wotlk-declarations) ([eluna module builder](https://github.com/araxiaonline/wow-eluna-ts-module))
 - [World of Warcraft Classic](https://github.com/wartoshika/wow-classic-declarations)
+- [Noita](https://github.com/necauqua/noita-ts)
 
 Type declarations for databases:
 
