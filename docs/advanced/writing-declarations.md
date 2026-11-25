@@ -174,14 +174,13 @@ Here are some commonly used TSDoc tags used in comments:
 
 TypeScriptToLua takes this further. Some "tags" change how the transpiler translates certain pieces of code. These are referred to as [annotations](advanced/compiler-annotations.md).
 
-As an example, `@tupleReturn` marks a function as something which returns multiple values instead of its array.
+As an example, the `LuaMultiReturn` type marks a function as something which returns multiple values instead of its array.
 
 ```ts
 /**
  * Returns multiple values
- * @tupleReturn
  */
-declare function tuple(): [number, number];
+declare function tuple(): LuaMultiReturn<[number, number]>;
 
 let [a, b] = tuple();
 // local a, b = tuple()
@@ -197,7 +196,7 @@ let [c, d] = array();
 // local c, d = unpack(array())
 ```
 
-See [Compiler Annotations](advanced/compiler-annotations.md) page for more information.
+See [Language Extensions](advanced/language-extensions.md#luamultireturn-type) and [Compiler Annotations](advanced/compiler-annotations.md) pages for more information.
 
 ## Environmental Declarations
 
@@ -249,8 +248,7 @@ assert();
 
 ```ts title=image.d.ts
 interface Image {
-  /** @tupleReturn */
-  getDimensions(): [number, number];
+  getDimensions(): LuaMultiReturn<[number, number]>;
 }
 
 // This interface merges with its previous declaration
@@ -271,8 +269,7 @@ let o = image.getFlags();
 ```ts title=love.d.ts
 declare namespace love {
   export let update: (delta: number) => void;
-  /** @tupleReturn */
-  export function getVersion(delta: number): [number, number, number, string];
+  export function getVersion(delta: number): LuaMultiReturn<[number, number, number, string]>;
   export namespace graphics {
     function newImage(filename: string): Image;
   }
